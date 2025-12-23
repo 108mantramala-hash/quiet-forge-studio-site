@@ -1,11 +1,176 @@
 <!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>Quiet Forge Studio</title>
-  </head>
-  <body>
-    <h1>Quiet Forge Studio</h1>
-    <p>Website coming soon.</p>
-  </body>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Quiet Forge Studio</title>
+  <meta name="description" content="Quiet Forge Studio builds calm, purposeful apps and tools—crafted with clarity, simplicity, and respect for attention." />
+  <meta name="theme-color" content="#0b0c0f" />
+  <style>
+    :root { color-scheme: dark; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background: #0b0c0f;
+      color: #e9e9ee;
+    }
+    a { color: inherit; text-decoration: none; }
+    .wrap { max-width: 980px; margin: 0 auto; padding: 72px 20px; }
+    .top {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      margin-bottom: 42px;
+    }
+    .brand { display: flex; flex-direction: column; gap: 6px; }
+    .badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 10px; border: 1px solid #2a2c35; border-radius: 999px;
+      font-size: 13px; color: #c9cad4; width: fit-content;
+      background: rgba(255,255,255,0.02);
+    }
+    .dot { width: 7px; height: 7px; border-radius: 999px; background: #8ff0a4; display: inline-block; }
+    h1 {
+      font-size: 48px; line-height: 1.06; margin: 0;
+      letter-spacing: -0.03em;
+    }
+    .lead {
+      margin: 18px 0 0;
+      font-size: 18px; line-height: 1.75;
+      color: #c9cad4; max-width: 62ch;
+    }
+    .cta { margin-top: 24px; display: flex; gap: 12px; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 11px 14px; border-radius: 14px;
+      border: 1px solid #2a2c35;
+      background: rgba(255,255,255,0.02);
+      color: #e9e9ee;
+      font-size: 14px;
+    }
+    .btn.primary {
+      background: #e9e9ee; color: #0b0c0f; border-color: #e9e9ee;
+    }
+    .btn:hover { transform: translateY(-1px); transition: 120ms ease; }
+    .section-title {
+      margin: 54px 0 14px;
+      font-size: 14px; letter-spacing: .12em;
+      text-transform: uppercase; color: #9b9dac;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+    }
+    .card {
+      border: 1px solid #2a2c35;
+      border-radius: 18px;
+      padding: 18px;
+      background: rgba(255,255,255,0.02);
+    }
+    .card h3 { margin: 0 0 6px; font-size: 18px; }
+    .card p { margin: 0; font-size: 15px; line-height: 1.7; color: #c9cad4; }
+    .meta {
+      margin-top: 12px; display: inline-flex; gap: 10px; flex-wrap: wrap;
+      font-size: 12px; color: #9b9dac;
+    }
+    .pill {
+      padding: 5px 9px; border-radius: 999px;
+      border: 1px solid #2a2c35;
+      background: rgba(255,255,255,0.01);
+    }
+    .about {
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 14px;
+    }
+    @media (max-width: 860px) { .about { grid-template-columns: 1fr; } }
+
+    footer {
+      margin-top: 64px;
+      padding-top: 18px;
+      border-top: 1px solid #2a2c35;
+      display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+      font-size: 13px; color: #9b9dac;
+    }
+    footer a { color: #c9cad4; border-bottom: 1px dotted #3a3d49; }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <div class="top">
+      <div class="brand">
+        <span class="badge"><span class="dot"></span> Independent studio • Toronto</span>
+        <h1>Quiet Forge Studio</h1>
+        <p class="lead">
+          We build calm, purposeful apps and tools—crafted with clarity, simplicity, and respect for attention.
+        </p>
+        <div class="cta">
+          <a class="btn primary" href="#products">View products</a>
+          <a class="btn" href="mailto:admin@quietforgestudio.org">Contact</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title" id="products">Products</div>
+    <section class="grid" aria-label="Products">
+      <article class="card">
+        <h3>Mantramala</h3>
+        <p>Daily mantra counter & timer—minimal, focused, and designed for practice.</p>
+        <div class="meta">
+          <span class="pill">Status: Live</span>
+          <span class="pill">Android</span>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3>MantraRise</h3>
+        <p>Wake with mantra—gentle routines to start the day with clarity. (Coming soon)</p>
+        <div class="meta">
+          <span class="pill">Status: In progress</span>
+          <span class="pill">Android / iOS</span>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3>Watch Faces</h3>
+        <p>Mechanical-inspired Pixel watch faces with a premium, restrained aesthetic. (Exploring)</p>
+        <div class="meta">
+          <span class="pill">Status: Exploring</span>
+          <span class="pill">Wear OS</span>
+        </div>
+      </article>
+    </section>
+
+    <div class="section-title">About</div>
+    <section class="about" aria-label="About">
+      <div class="card">
+        <h3>Built with intention</h3>
+        <p>
+          Quiet Forge Studio is an independent product studio focused on simple tools that feel good to use.
+          We favor clarity over complexity, and quiet confidence over noise.
+        </p>
+      </div>
+      <div class="card">
+        <h3>Get in touch</h3>
+        <p>
+          For partnerships, feedback, or press:
+          <br /><br />
+          <a href="mailto:admin@quietforgestudio.org">admin@quietforgestudio.org</a>
+        </p>
+      </div>
+    </section>
+
+    <footer>
+      <span>© <span id="y"></span> Quiet Forge Studio</span>
+      <span>
+        <a href="#products">Products</a> ·
+        <a href="mailto:admin@quietforgestudio.org">Contact</a>
+      </span>
+    </footer>
+  </main>
+
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+  </script>
+</body>
 </html>
