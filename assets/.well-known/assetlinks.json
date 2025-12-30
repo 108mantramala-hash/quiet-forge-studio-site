@@ -1,0 +1,15 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls",
+      "delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.mantramala.timer",
+      "sha256_cert_fingerprints": [
+        "03:08:B7:BC:6F:DB:2E:2E:F7:BC:10:38:93:85:92:12:69:B1:77:AF:6B:43:BF:48:20:4D:85:F6:96:E6"
+      ]
+    }
+  }
+]
