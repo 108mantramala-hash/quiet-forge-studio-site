@@ -2,127 +2,240 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Privacy Policy • Quiet Forge Studio</title>
-  <meta name="description" content="Privacy Policy for Quiet Forge Studio apps and services." />
-  <meta name="theme-color" content="#0b0c0f" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Privacy Policy – SnapContact (Quiet Forge Studio)</title>
+  <meta name="description" content="Privacy Policy for SnapContact by Quiet Forge Studio." />
   <style>
-    :root { color-scheme: dark; }
-    *{box-sizing:border-box}
-    body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;background:#0b0c0f;color:#e9e9ee}
-    a{color:#f2ead2;text-decoration:none;border-bottom:1px dotted #3a3d49}
-    .wrap{max-width:900px;margin:0 auto;padding:56px 20px}
-    h1{margin:0 0 10px;font-size:36px;letter-spacing:-.02em;color:#f2ead2}
-    p,li{color:#c9cad4;line-height:1.75}
-    .meta{color:#9b9dac;font-size:13px;margin:8px 0 24px}
-    .card{border:1px solid #2a2c35;border-radius:18px;padding:18px;background:rgba(255,255,255,.02);margin:14px 0}
-    .nav{display:flex;gap:14px;flex-wrap:wrap;margin:0 0 18px}
-    .nav a{border:1px solid #2a2c35;border-bottom:none;border-radius:12px;padding:8px 12px;color:#e9e9ee;background:rgba(255,255,255,.02)}
-    footer{margin-top:36px;padding-top:18px;border-top:1px solid #2a2c35;color:#9b9dac;font-size:13px}
+    :root {
+      --bg: #0b0b0c;
+      --card: #141416;
+      --text: #f2f2f3;
+      --muted: #b6b6bb;
+      --accent: #d4af37;
+      --border: rgba(255,255,255,0.10);
+      --link: #9bd0ff;
+    }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    .wrap {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 32px 18px 64px;
+    }
+    header {
+      margin-bottom: 18px;
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: 30px;
+      letter-spacing: 0.2px;
+    }
+    .sub {
+      color: var(--muted);
+      margin: 0;
+      font-size: 14px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      margin: 16px 0;
+    }
+    h2 {
+      margin: 0 0 10px;
+      font-size: 18px;
+    }
+    h3 {
+      margin: 14px 0 8px;
+      font-size: 16px;
+      color: var(--text);
+    }
+    p, li {
+      color: var(--text);
+    }
+    .muted {
+      color: var(--muted);
+    }
+    a {
+      color: var(--link);
+      text-decoration: none;
+    }
+    a:hover { text-decoration: underline; }
+    ul {
+      padding-left: 18px;
+      margin: 8px 0 0;
+    }
+    .badge {
+      display: inline-block;
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(212,175,55,0.12);
+      border: 1px solid rgba(212,175,55,0.35);
+      color: #ffe7a3;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+    footer {
+      margin-top: 28px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .hr {
+      height: 1px;
+      background: var(--border);
+      margin: 16px 0;
+    }
   </style>
 </head>
 <body>
-  <main class="wrap">
-    <div class="nav">
-      <a href="/">Home</a>
-      <a href="/terms.html">Terms</a>
-      <a href="mailto:admin@quietforgestudio.org">Contact</a>
-    </div>
+  <div class="wrap">
+    <header>
+      <h1>Privacy Policy <span class="badge">SnapContact</span></h1>
+      <p class="sub"><strong>Quiet Forge Studio</strong> • Last updated: <span>[add today’s date]</span></p>
+    </header>
 
-    <h1>Privacy Policy</h1>
-    <div class="meta">
-      Effective date: <strong>2025-12-18</strong> • Quiet Forge Studio (“we”, “our”)
-    </div>
-
-    <div class="card">
+    <section class="card">
       <p>
-        Quiet Forge Studio builds calm, purposeful apps and tools. This Privacy Policy explains what information we
-        collect (if any), how we use it, and your choices.
+        Quiet Forge Studio (“we”, “our”, or “us”) built the <strong>SnapContact</strong> app as a utility application.
+        This Privacy Policy explains how SnapContact handles information when you use the app.
       </p>
-    </div>
+      <p class="muted">
+        We are committed to protecting your privacy and being transparent about how data is handled.
+      </p>
+    </section>
 
-    <h2>Information we collect</h2>
-    <div class="card">
-      <p><strong>We do not require an account</strong> to use our apps.</p>
-      <ul>
-        <li><strong>Information you provide:</strong> If you email us, we receive your email address and the content of your message.</li>
-        <li><strong>App data stored on your device:</strong> Some apps may store settings locally on your device (e.g., timer preferences). This data stays on your device unless you delete the app or clear storage.</li>
-        <li><strong>Analytics:</strong> If we enable analytics in an app, it will be used only to understand crashes and basic usage trends. When enabled, this may collect device/app identifiers and event data. We aim to keep analytics minimal.</li>
-      </ul>
-    </div>
+    <section class="card">
+      <h2>Information We Collect</h2>
 
-    <h2>How we use information</h2>
-    <div class="card">
-      <ul>
-        <li>To respond to support requests and emails.</li>
-        <li>To improve reliability (e.g., crash diagnostics) and understand what features are useful.</li>
-        <li>To maintain security and prevent abuse.</li>
-      </ul>
-    </div>
-
-    <h2>Sharing of information</h2>
-    <div class="card">
+      <h3>Photos &amp; Face Detection</h3>
       <p>
-        We do not sell your personal information. We may share limited information only:
+        SnapContact requests access to your device’s photo library <strong>only when you choose to select a photo</strong>.
       </p>
       <ul>
-        <li>With service providers used for app distribution and operations (e.g., Google Play, Apple App Store, crash reporting), if enabled.</li>
-        <li>To comply with legal obligations or protect our rights and users.</li>
+        <li>Face detection is performed <strong>entirely on your device</strong></li>
+        <li>Photos are <strong>never uploaded</strong>, transmitted, or stored on any server</li>
+        <li>SnapContact <strong>does not perform face recognition</strong></li>
+        <li>The app does <strong>not</strong> identify individuals, infer identity, or store facial data</li>
       </ul>
-    </div>
-
-    <h2>Third-party services</h2>
-    <div class="card">
       <p>
-        Our apps may rely on third-party platforms (e.g., app stores) that have their own privacy policies.
-        If an app includes optional third-party analytics or crash reporting, that provider may collect data under their policy.
+        All photo processing happens locally and only to help you manually crop and save contact photos.
       </p>
-    </div>
 
-    <h2>Data retention</h2>
-    <div class="card">
+      <div class="hr"></div>
+
+      <h3>Contacts</h3>
+      <p>
+        SnapContact saves contact photos <strong>only when you explicitly choose to save them</strong>.
+        The app does not read, modify, or transmit your contacts without your direct action.
+      </p>
+
+      <div class="hr"></div>
+
+      <h3>Analytics &amp; Crash Data (Optional)</h3>
+      <p>
+        To improve app stability and performance, we may collect <strong>limited, non-personal usage data</strong>, such as:
+      </p>
       <ul>
-        <li>Emails you send us may be retained as long as needed to provide support and keep records.</li>
-        <li>Crash/analytics data (if enabled) is retained according to the provider’s retention settings.</li>
+        <li>App crashes</li>
+        <li>Basic event counts (e.g., feature usage)</li>
       </ul>
-    </div>
-
-    <h2>Your choices</h2>
-    <div class="card">
+      <p>
+        This data:
+      </p>
       <ul>
-        <li>You can stop all collection by uninstalling the app.</li>
-        <li>If analytics is offered as an in-app toggle (future), you can disable it.</li>
-        <li>You may contact us to request deletion of emails/support conversations.</li>
+        <li>Does <strong>not</strong> include photos or contact details</li>
+        <li>Is <strong>not linked</strong> to personal identity</li>
+        <li>Is used solely to improve app quality</li>
       </ul>
-    </div>
+      <p>Analytics are optional and minimal.</p>
+    </section>
 
-    <h2>Children’s privacy</h2>
-    <div class="card">
-      <p>
-        Our apps are not directed to children under 13. If you believe a child provided us personal information, contact us and we will delete it.
-      </p>
-    </div>
+    <section class="card">
+      <h2>Information We Do NOT Collect</h2>
+      <p>SnapContact does <strong>not</strong> collect, store, or transmit:</p>
+      <ul>
+        <li>Contact photos</li>
+        <li>Facial features or biometric data</li>
+        <li>Face identifiers</li>
+        <li>Personal identity information</li>
+        <li>Photo metadata</li>
+        <li>Location data</li>
+      </ul>
+    </section>
 
-    <h2>Changes to this policy</h2>
-    <div class="card">
-      <p>
-        We may update this policy from time to time. We will revise the “Effective date” above when changes are made.
-      </p>
-    </div>
+    <section class="card">
+      <h2>How We Use Information</h2>
+      <p>Information is used only to:</p>
+      <ul>
+        <li>Enable face detection and photo cropping locally</li>
+        <li>Save photos to contacts at your request</li>
+        <li>Improve app stability and performance (if analytics are enabled)</li>
+      </ul>
+    </section>
 
-    <h2>Contact</h2>
-    <div class="card">
+    <section class="card">
+      <h2>Data Storage &amp; Security</h2>
+      <ul>
+        <li>All photo processing happens <strong>on your device</strong></li>
+        <li>No images or face data are stored on our servers</li>
+        <li>Any optional analytics data is handled securely by trusted service providers</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>User Control</h2>
+      <p>You are always in control:</p>
+      <ul>
+        <li>You choose which photo to use</li>
+        <li>You choose which face to crop</li>
+        <li>You choose whether to save a contact photo</li>
+        <li>You may revoke photo permissions at any time via your device settings</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>Children’s Privacy</h2>
+      <p>SnapContact is not intended for children under the age of 13. We do not knowingly collect personal data from children.</p>
+    </section>
+
+    <section class="card">
+      <h2>Changes to This Privacy Policy</h2>
       <p>
-        Email: <a href="mailto:admin@quietforgestudio.org">admin@quietforgestudio.org</a>
+        We may update this Privacy Policy from time to time. Changes will be reflected on this page with an updated revision date.
       </p>
-    </div>
+    </section>
+
+    <section class="card">
+      <h2>Contact Us</h2>
+      <p>If you have any questions or concerns about this Privacy Policy, please contact us:</p>
+      <ul>
+        <li>Email: <a href="mailto:support@quietforgestudio.org">support@quietforgestudio.org</a></li>
+        <li>Website: <a href="https://quietforgestudio.org">https://quietforgestudio.org</a></li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>Summary for App Store Review</h2>
+      <ul>
+        <li>SnapContact performs <strong>face detection only</strong>, not face recognition</li>
+        <li>All processing is <strong>on-device</strong></li>
+        <li>Photos are <strong>never uploaded</strong></li>
+        <li>Contacts are saved <strong>only with user confirmation</strong></li>
+      </ul>
+    </section>
 
     <footer>
-      © <span id="y"></span> Quiet Forge Studio
+      <p class="muted">
+        Tip: Replace <strong>[add today’s date]</strong> at the top before publishing.
+      </p>
     </footer>
-  </main>
-
-  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+  </div>
 </body>
 </html>
-
