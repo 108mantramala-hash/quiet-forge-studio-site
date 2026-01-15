@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -27,9 +28,7 @@
       margin: 0 auto;
       padding: 32px 18px 64px;
     }
-    header {
-      margin-bottom: 18px;
-    }
+    header { margin-bottom: 18px; }
     h1 {
       margin: 0 0 8px;
       font-size: 30px;
@@ -47,30 +46,13 @@
       padding: 20px;
       margin: 16px 0;
     }
-    h2 {
-      margin: 0 0 10px;
-      font-size: 18px;
-    }
-    h3 {
-      margin: 14px 0 8px;
-      font-size: 16px;
-      color: var(--text);
-    }
-    p, li {
-      color: var(--text);
-    }
-    .muted {
-      color: var(--muted);
-    }
-    a {
-      color: var(--link);
-      text-decoration: none;
-    }
+    h2 { margin: 0 0 10px; font-size: 18px; }
+    h3 { margin: 14px 0 8px; font-size: 16px; color: var(--text); }
+    p, li { color: var(--text); }
+    .muted { color: var(--muted); }
+    a { color: var(--link); text-decoration: none; }
     a:hover { text-decoration: underline; }
-    ul {
-      padding-left: 18px;
-      margin: 8px 0 0;
-    }
+    ul { padding-left: 18px; margin: 8px 0 0; }
     .badge {
       display: inline-block;
       font-size: 12px;
@@ -82,23 +64,16 @@
       margin-left: 6px;
       vertical-align: middle;
     }
-    footer {
-      margin-top: 28px;
-      color: var(--muted);
-      font-size: 13px;
-    }
-    .hr {
-      height: 1px;
-      background: var(--border);
-      margin: 16px 0;
-    }
+    .hr { height: 1px; background: var(--border); margin: 16px 0; }
+    footer { margin-top: 28px; color: var(--muted); font-size: 13px; }
   </style>
 </head>
+
 <body>
   <div class="wrap">
     <header>
       <h1>Privacy Policy <span class="badge">SnapContact</span></h1>
-      <p class="sub"><strong>Quiet Forge Studio</strong> • Last updated: <span>[January 06, 2026]</span></p>
+      <p class="sub"><strong>Quiet Forge Studio</strong> • Last updated: <span>January 15, 2026</span></p>
     </header>
 
     <section class="card">
@@ -121,51 +96,52 @@
       <ul>
         <li>Face detection is performed <strong>entirely on your device</strong></li>
         <li>Photos are <strong>never uploaded</strong>, transmitted, or stored on any server</li>
-        <li>SnapContact <strong>does not perform face recognition</strong></li>
-        <li>The app does <strong>not</strong> identify individuals, infer identity, or store facial data</li>
+        <li>SnapContact performs <strong>face detection only</strong>, not face recognition</li>
+        <li>The app does <strong>not</strong> identify individuals or infer identity</li>
       </ul>
       <p>
-        All photo processing happens locally and only to help you manually crop and save contact photos.
+        Photos are processed locally only to help you manually crop and save a contact photo.
+      </p>
+
+      <div class="hr"></div>
+
+      <h3>Face Data Handling</h3>
+      <p>
+        SnapContact does <strong>not collect, store, retain, or transmit face data</strong>.
+      </p>
+      <ul>
+        <li>No biometric templates are created</li>
+        <li>No facial measurements or identifiers are stored</li>
+        <li>No face data is saved after photo processing</li>
+      </ul>
+      <p>
+        Face detection results exist only temporarily in memory to assist with photo cropping and are discarded immediately after use.
       </p>
 
       <div class="hr"></div>
 
       <h3>Contacts</h3>
       <p>
-        SnapContact saves contact photos <strong>only when you explicitly choose to save them</strong>.
-        The app does not read, modify, or transmit your contacts without your direct action.
-      </p>
-
-      <div class="hr"></div>
-
-      <h3>Analytics &amp; Crash Data (Optional)</h3>
-      <p>
-        To improve app stability and performance, we may collect <strong>limited, non-personal usage data</strong>, such as:
+        SnapContact accesses your contacts <strong>only when you explicitly choose to save a photo</strong> to a new or existing contact.
       </p>
       <ul>
-        <li>App crashes</li>
-        <li>Basic event counts (e.g., feature usage)</li>
+        <li>Contacts are stored only on your device</li>
+        <li>No contact data is uploaded to any server</li>
+        <li>No contact data is shared with third parties</li>
       </ul>
-      <p>
-        This data:
-      </p>
-      <ul>
-        <li>Does <strong>not</strong> include photos or contact details</li>
-        <li>Is <strong>not linked</strong> to personal identity</li>
-        <li>Is used solely to improve app quality</li>
-      </ul>
-      <p>Analytics are optional and minimal.</p>
     </section>
 
     <section class="card">
       <h2>Information We Do NOT Collect</h2>
       <p>SnapContact does <strong>not</strong> collect, store, or transmit:</p>
       <ul>
-        <li>Contact photos</li>
-        <li>Facial features or biometric data</li>
+        <li>Contact data to our servers</li>
+        <li>Contact photos to our servers</li>
+        <li>Face data or face detection results</li>
+        <li>Facial features, biometric data, or biometric templates</li>
         <li>Face identifiers</li>
         <li>Personal identity information</li>
-        <li>Photo metadata</li>
+        <li>Photo metadata (e.g., EXIF) for tracking purposes</li>
         <li>Location data</li>
       </ul>
     </section>
@@ -174,9 +150,25 @@
       <h2>How We Use Information</h2>
       <p>Information is used only to:</p>
       <ul>
-        <li>Enable face detection and photo cropping locally</li>
-        <li>Save photos to contacts at your request</li>
-        <li>Improve app stability and performance (if analytics are enabled)</li>
+        <li>Enable face detection and photo cropping locally on your device</li>
+        <li>Save a photo to a contact only at your request</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>Data Sharing</h2>
+      <p>
+        SnapContact does <strong>not</strong> share photos, face data, or contact data with third parties.
+        The app does not upload photos or contacts to any server.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>Data Retention</h2>
+      <ul>
+        <li><strong>Photos:</strong> Used only while you are selecting/cropping; not retained by the app after the action.</li>
+        <li><strong>Face detection results:</strong> Processed ephemerally in memory and discarded immediately after use.</li>
+        <li><strong>Contacts:</strong> Saved to your device’s system Contacts only when you confirm saving.</li>
       </ul>
     </section>
 
@@ -184,8 +176,8 @@
       <h2>Data Storage &amp; Security</h2>
       <ul>
         <li>All photo processing happens <strong>on your device</strong></li>
-        <li>No images or face data are stored on our servers</li>
-        <li>Any optional analytics data is handled securely by trusted service providers</li>
+        <li>No images, face data, or contacts are stored on our servers</li>
+        <li>SnapContact does not require accounts or sign-in</li>
       </ul>
     </section>
 
@@ -194,15 +186,18 @@
       <p>You are always in control:</p>
       <ul>
         <li>You choose which photo to use</li>
-        <li>You choose which face to crop</li>
+        <li>You choose which person/face to select and crop</li>
         <li>You choose whether to save a contact photo</li>
-        <li>You may revoke photo permissions at any time via your device settings</li>
+        <li>You may revoke photo or contacts permissions at any time via your device settings</li>
+        <li>You can delete or edit contacts using your device’s Contacts app</li>
       </ul>
     </section>
 
     <section class="card">
       <h2>Children’s Privacy</h2>
-      <p>SnapContact is not intended for children under the age of 13. We do not knowingly collect personal data from children.</p>
+      <p>
+        SnapContact is not intended for children under the age of 13. We do not knowingly collect personal data from children.
+      </p>
     </section>
 
     <section class="card">
@@ -217,6 +212,7 @@
       <p>If you have any questions or concerns about this Privacy Policy, please contact us:</p>
       <ul>
         <li>Email: <a href="mailto:support@quietforgestudio.org">support@quietforgestudio.org</a></li>
+        <li>Support page: <a href="https://quietforgestudio.org/snapcontact-support">https://quietforgestudio.org/snapcontact-support</a></li>
         <li>Website: <a href="https://quietforgestudio.org">https://quietforgestudio.org</a></li>
       </ul>
     </section>
@@ -225,14 +221,15 @@
       <h2>Summary for App Store Review</h2>
       <ul>
         <li>SnapContact performs <strong>face detection only</strong>, not face recognition</li>
+        <li>SnapContact does <strong>not collect, store, retain, or transmit face data</strong></li>
         <li>All processing is <strong>on-device</strong></li>
         <li>Photos are <strong>never uploaded</strong></li>
-        <li>Contacts are saved <strong>only with user confirmation</strong></li>
+        <li>No contacts are uploaded or shared; contacts are saved <strong>only with user confirmation</strong></li>
       </ul>
     </section>
 
     <footer>
-
+      <p class="muted">© 2026 Quiet Forge Studio. All rights reserved.</p>
     </footer>
   </div>
 </body>
