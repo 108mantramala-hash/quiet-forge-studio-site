@@ -4,8 +4,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>SnapContact — Face to Contacts</title>
-  <meta name="description" content="SnapContact makes it fast and effortless to add a clean face photo to your contacts. On-device face detection. No uploads. No servers." />
+  <title>Quiet Forge Studio</title>
+  <meta name="description" content="Quiet Forge Studio builds calm, purposeful apps and tools—crafted with clarity, simplicity, and respect for attention." />
   <meta name="theme-color" content="#0b0c0f" />
 
   <style>
@@ -32,9 +32,10 @@
       position: relative;
       padding: 72px 0 56px;
       background:
-        radial-gradient(1200px 500px at 20% 0%, rgba(242,234,210,0.12) 0%, rgba(11,12,15,0.0) 55%),
-        radial-gradient(900px 420px at 80% 10%, rgba(212,175,55,0.12) 0%, rgba(11,12,15,0.0) 60%),
-        linear-gradient(180deg, rgba(11,12,15,0.55) 0%, rgba(11,12,15,0.92) 70%, #0b0c0f 100%);
+        linear-gradient(180deg, rgba(11,12,15,0.35) 0%, rgba(11,12,15,0.85) 70%, #0b0c0f 100%),
+        url("assets/header2.jpg");
+      background-size: cover;
+      background-position: center;
       border-bottom: 1px solid #1f212a;
     }
 
@@ -91,7 +92,7 @@
       font-size: 18px;
       line-height: 1.75;
       color: rgba(242,234,210,0.86);
-      max-width: 72ch;
+      max-width: 62ch;
       text-shadow: 0 10px 30px rgba(0,0,0,0.55);
     }
 
@@ -107,7 +108,7 @@
     .btn {
       display: inline-flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       padding: 11px 16px;
       border-radius: 14px;
       border: 1px solid rgba(255,255,255,0.14);
@@ -121,7 +122,6 @@
       background: #f2ead2;
       color: #0b0c0f;
       border-color: #f2ead2;
-      font-weight: 700;
     }
 
     .btn:hover { transform: translateY(-1px); transition: 120ms ease; }
@@ -155,6 +155,7 @@
     .card h3 { margin: 0 0 6px; font-size: 18px; color: #e9e9ee; }
     .card p { margin: 0; font-size: 15px; line-height: 1.7; color: #c9cad4; }
 
+    /* keep pills aligned on one line */
     .meta {
       margin-top: 12px;
       display: inline-flex;
@@ -173,12 +174,13 @@
       background: rgba(255,255,255,0.01);
     }
 
+    /* green glowing live pill */
     .pill-live {
       color: #0b1f14;
       background: rgba(52,168,83,0.25);
       border: 1px solid rgba(52,168,83,0.55);
       box-shadow: 0 0 8px rgba(52,168,83,0.45), 0 0 18px rgba(52,168,83,0.25);
-      font-weight: 700;
+      font-weight: 600;
     }
 
     .about {
@@ -210,17 +212,6 @@
       color: #f2ead2;
       border-bottom: 1px dotted #3a3d49;
     }
-
-    .bullets { margin: 10px 0 0; padding-left: 18px; }
-    .bullets li { color: #c9cad4; margin: 6px 0; }
-
-    .download {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-top: 14px;
-      align-items: center;
-    }
   </style>
 </head>
 
@@ -229,22 +220,20 @@
     <div class="wrap">
       <div class="top">
         <div class="logo">
-          <img src="/assets/logo-512.jpg" alt="SnapContact app icon" />
+          <img src="/assets/logo-512.jpg" alt="Quiet Forge Studio logo" />
         </div>
 
         <div>
-          <span class="badge"><span class="dot"></span> Quiet Forge Studio • Toronto</span>
-          <h1>SnapContact</h1>
+          <span class="badge"><span class="dot"></span> Independent studio • Toronto</span>
+          <h1>Quiet Forge Studio</h1>
           <p class="lead">
-            SnapContact makes it fast and effortless to add a clean face photo to your contacts.
-            Choose a photo, let SnapContact detect faces directly on your device, select the right person, refine the crop if needed,
-            and save it to a new or existing contact — all in just a few taps.
+            We build calm, purposeful apps and tools—crafted with clarity, simplicity, and respect for attention.
           </p>
 
           <div class="cta">
-            <a class="btn primary" href="#about">How it works</a>
+            <a class="btn primary" href="#products">View products</a>
 
-            <a class="btn" href="https://play.google.com/store/apps/details?id=com.snapcontact.app" target="_blank" rel="noopener">
+            <a class="btn" href="https://play.google.com/store/apps/dev?id=5025783351476242242&hl=en-US" target="_blank" rel="noopener">
               <svg class="store-icon" viewBox="0 0 512 512" aria-hidden="true">
                 <path fill="#34A853" d="M325.3 234.3L104.6 13.6c-5.4-5.4-12.7-8.4-20.3-8.4v502.6c7.6 0 14.9-3 20.3-8.4l220.7-220.7z"/>
                 <path fill="#FBBC04" d="M432.4 256l-107.1-61.8-120.7 120.7 120.7 120.7L432.4 256z"/>
@@ -254,17 +243,13 @@
               Google Play
             </a>
 
-            <a class="btn" href="https://apps.apple.com/us/app/snapcontact-face-to-contacts/id6757821313" target="_blank" rel="noopener">
-              <svg class="store-icon" viewBox="0 0 24 24" aria-hidden="true">
-                <path fill="#f2ead2" d="M16.365 1.43c.027 1.13-.412 2.207-1.19 3.03-.8.85-2.12 1.51-3.18 1.42-.12-1.08.42-2.22 1.19-3.02.84-.9 2.28-1.54 3.18-1.43zM20.82 17.04c-.62 1.45-.92 2.1-1.72 3.38-1.11 1.77-2.68 3.98-4.63 4-1.74.02-2.19-1.14-4.55-1.13-2.36.01-2.85 1.15-4.6 1.12-1.95-.03-3.44-2.02-4.55-3.78C-.61 16.89-.8 12.45 1.01 9.64c1.28-1.99 3.31-3.16 5.22-3.16 1.94 0 3.16 1.13 4.76 1.13 1.55 0 2.5-1.13 4.74-1.13 1.7 0 3.5.93 4.78 2.54-4.19 2.3-3.51 8.27.31 10.02z"/>
-              </svg>
-              App Store
-            </a>
-
             <a class="btn" href="mailto:support@quietforgestudio.org">Contact</a>
             <a class="btn" href="/privacy.html">Privacy</a>
             <a class="btn" href="/terms.html">Terms</a>
             <a class="btn" href="/snapcontact-support.html">Support</a>
+
+            <!-- Hidden by default; shown only when visiting /?admin=1 -->
+            <a id="golivepocket-btn" class="btn" href="/projects/golive_pocket.html">GoLivePocket</a>
           </div>
         </div>
       </div>
@@ -273,65 +258,76 @@
 
   <main class="content">
     <div class="wrap">
-      <div class="section-title" id="about">About SnapContact</div>
+      <div class="section-title" id="products">Products</div>
 
       <section class="grid">
+        <!-- ONLY PRODUCT CARD: SnapContact -->
         <article class="card">
-          <h3>What it does</h3>
-          <p>
-            SnapContact helps you quickly identify the correct face from a photo and turn it into a polished contact photo.
-            Perfect for events, meetups, and group photos.
-          </p>
-          <ul class="bullets">
-            <li>Works with single and group photos</li>
-            <li>Auto-crop with manual crop and zoom controls</li>
-            <li>Save to new or existing contacts</li>
-          </ul>
-        </article>
+          <h3>SnapContact</h3>
 
-        <article class="card">
-          <h3>Privacy-first</h3>
           <p>
-            Built with privacy and speed in mind.
+            SnapContact makes it fast and effortless to add a clean face photo to your contacts.
           </p>
-          <ul class="bullets">
-            <li>On-device face detection — no uploads, no servers</li>
-            <li>Your photos never leave your device</li>
-            <li>Contacts are saved only when you choose</li>
-          </ul>
+          <p style="margin-top:10px;">
+            Choose a photo, let SnapContact detect faces directly on your device, select the right person,
+            refine the crop if needed, and save it to a new or existing contact — all in just a few taps.
+          </p>
+          <p style="margin-top:10px;">
+            Ideal for events, meetups, or any situation where group photos make saving contacts harder than it should be.
+            Whether it’s a solo photo or a group picture, SnapContact helps you quickly identify the correct face and turn it into a
+            polished contact photo.
+          </p>
+
+          <p style="margin-top:12px;">
+            Built with privacy and speed in mind:
+          </p>
+          <p style="margin-top:8px; color:#c9cad4; line-height:1.7;">
+            • On-device face detection — no uploads, no servers<br/>
+            • Works with both single and group photos<br/>
+            • Auto-crop with manual crop and zoom controls<br/>
+            • Save photos to new or existing contacts<br/>
+            • Minimal, premium interface designed for fast workflows
+          </p>
+
+          <p style="margin-top:10px;">
+            Your photos never leave your device. All processing happens locally, and contacts are only saved when you choose.
+            SnapContact is a focused, professional tool for keeping your contacts clear, recognizable, and organized.
+          </p>
+
+          <p style="margin-top:12px;">
+            <a href="https://play.google.com/store/apps/details?id=com.snapcontact.app" target="_blank" rel="noopener">
+              👉 Available on Google Play →
+            </a>
+          </p>
+          <p style="margin-top:8px;">
+            <a href="https://apps.apple.com/us/app/snapcontact-face-to-contacts/id6757821313" target="_blank" rel="noopener">
+              👉 Available on the App Store →
+            </a>
+          </p>
 
           <div class="meta">
             <span class="pill pill-live">Status: Live</span>
-            <span class="pill">iOS + Android</span>
+            <span class="pill">Android</span>
+            <span class="pill">iOS</span>
           </div>
-        </article>
-
-        <article class="card">
-          <h3>Designed for fast workflows</h3>
-          <p>
-            A minimal, premium interface designed for quick results — open, pick, crop, save.
-          </p>
-          <ul class="bullets">
-            <li>Clean UI, fewer steps</li>
-            <li>Great for frequent contact updates</li>
-            <li>Built for reliability</li>
-          </ul>
         </article>
       </section>
 
-      <div class="section-title">Download</div>
-      <section class="card">
-        <p>
-          Whether it’s a solo photo or a group picture, SnapContact helps you keep your contacts clear, recognizable, and organized.
-        </p>
+      <div class="section-title">About</div>
+      <section class="about">
+        <div class="card">
+          <h3>Built with intention</h3>
+          <p>
+            Quiet Forge Studio is an independent product studio focused on simple tools that feel good to use.
+            We favor clarity over complexity, and quiet confidence over noise.
+          </p>
+        </div>
 
-        <div class="download">
-          <a class="btn primary" href="https://play.google.com/store/apps/details?id=com.snapcontact.app" target="_blank" rel="noopener">
-            Get on Google Play
-          </a>
-          <a class="btn" href="https://apps.apple.com/us/app/snapcontact-face-to-contacts/id6757821313" target="_blank" rel="noopener">
-            Get on the App Store
-          </a>
+        <div class="card">
+          <h3>Get in touch</h3>
+          <p>
+            <a href="mailto:support@quietforgestudio.org">support@quietforgestudio.org</a>
+          </p>
         </div>
       </section>
 
@@ -349,6 +345,21 @@
 
   <script>
     document.getElementById('y').textContent = new Date().getFullYear();
+  </script>
+
+  <script>
+    // Show GoLivePocket only when ?admin=1 is present (e.g., https://quietforgestudio.org/?admin=1)
+    (function () {
+      const btn = document.getElementById("golivepocket-btn");
+      if (!btn) return;
+
+      const params = new URLSearchParams(window.location.search);
+      const isAdmin = params.get("admin") === "1";
+
+      if (!isAdmin) {
+        btn.style.display = "none";
+      }
+    })();
   </script>
 </body>
 </html>
