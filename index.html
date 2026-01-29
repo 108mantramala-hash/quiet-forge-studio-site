@@ -13,7 +13,7 @@
 
     body {
       margin: 0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
       background: #0b0c0f;
       color: #e9e9ee;
     }
@@ -28,93 +28,79 @@
 
     /* HERO */
     .hero {
-      position: relative;
       padding: 72px 0 56px;
       background:
-        linear-gradient(180deg, rgba(11,12,15,0.35) 0%, rgba(11,12,15,0.85) 70%, #0b0c0f 100%),
+        linear-gradient(180deg, rgba(11,12,15,0.4), #0b0c0f),
         url("assets/header2.jpg");
       background-size: cover;
-      background-position: center;
       border-bottom: 1px solid #1f212a;
     }
 
     .top {
       display: flex;
-      align-items: center;
       gap: 18px;
       flex-wrap: wrap;
+      align-items: center;
     }
 
-    /* Logo */
     .logo {
       width: 72px;
       height: 72px;
       border-radius: 18px;
       overflow: hidden;
       border: 1px solid rgba(255,255,255,0.14);
-      background: rgba(0,0,0,0.25);
-      flex: 0 0 auto;
     }
     .logo img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      display: block;
     }
 
     .badge {
       display: inline-flex;
-      align-items: center;
       gap: 8px;
       padding: 6px 10px;
       border: 1px solid rgba(255,255,255,0.14);
       border-radius: 999px;
       font-size: 13px;
       color: #e7e2cf;
-      width: fit-content;
-      background: rgba(0,0,0,0.28);
-      backdrop-filter: blur(6px);
+      background: rgba(0,0,0,0.35);
     }
-    .dot { width: 7px; height: 7px; border-radius: 999px; background: #8ff0a4; display: inline-block; }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #8ff0a4;
+    }
 
     h1 {
       font-size: 48px;
-      line-height: 1.06;
       margin: 10px 0 0;
-      letter-spacing: -0.03em;
       color: #f2ead2;
-      text-shadow: 0 10px 30px rgba(0,0,0,0.55);
     }
 
     .lead {
-      margin: 16px 0 0;
+      margin-top: 14px;
       font-size: 18px;
-      line-height: 1.75;
       color: rgba(242,234,210,0.86);
-      max-width: 62ch;
-      text-shadow: 0 10px 30px rgba(0,0,0,0.55);
+      max-width: 60ch;
     }
 
-    /* CTA */
     .cta {
       margin-top: 22px;
       display: flex;
       gap: 12px;
       flex-wrap: wrap;
-      align-items: center;
     }
 
     .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
       padding: 11px 16px;
       border-radius: 14px;
       border: 1px solid rgba(255,255,255,0.14);
-      background: rgba(0,0,0,0.28);
+      background: rgba(0,0,0,0.35);
       color: #f2ead2;
       font-size: 14px;
-      backdrop-filter: blur(6px);
     }
 
     .btn.primary {
@@ -122,8 +108,6 @@
       color: #0b0c0f;
       border-color: #f2ead2;
     }
-
-    .btn:hover { transform: translateY(-1px); transition: 120ms ease; }
 
     /* CONTENT */
     .content { padding: 54px 0 72px; }
@@ -138,34 +122,102 @@
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 14px;
+      grid-template-columns: minmax(0,1fr);
     }
 
     .card {
-      border: 1px solid #2a2c35;
+      border: 1px solid rgba(212,175,55,0.25);
       border-radius: 18px;
-      padding: 18px;
+      padding: 20px;
       background: rgba(255,255,255,0.02);
-      position: relative;
+      box-shadow: inset 0 0 0 1px rgba(212,175,55,0.08);
+    }
+
+    .snap-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .snap-left {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .app-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
       overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.14);
     }
 
-    /* slight premium gold accent */
-    .card.snap {
-      border-color: rgba(212,175,55,0.22);
-      box-shadow: 0 0 0 1px rgba(212,175,55,0.08) inset;
+    .app-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
-    .card h3 { margin: 0 0 6px; font-size: 18px; color: #e9e9ee; }
-    .card p { margin: 0; font-size: 15px; line-height: 1.7; color: #c9cad4; }
+    .snappy {
+      width: 88px;
+      height: 88px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .snappy img {
+      width: 96px;
+      height: auto;
+      filter: drop-shadow(0 12px 28px rgba(0,0,0,0.55));
+    }
+
+    .download-row {
+      margin-top: 18px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .store-badge {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.04);
+    }
+
+    .store-badge:hover {
+      border-color: rgba(212,175,55,0.45);
+      background: rgba(212,175,55,0.08);
+    }
+
+    .store-badge .text {
+      line-height: 1.1;
+    }
+
+    .small {
+      font-size: 11px;
+      color: #b9bac5;
+    }
+
+    .big {
+      font-size: 14px;
+      font-weight: 700;
+      color: #f2ead2;
+    }
 
     .meta {
-      margin-top: 12px;
-      display: inline-flex;
+      margin-top: 14px;
+      display: flex;
       gap: 10px;
       flex-wrap: wrap;
-      align-items: center;
       font-size: 12px;
       color: #9b9dac;
     }
@@ -173,151 +225,9 @@
     .pill {
       padding: 5px 9px;
       border-radius: 999px;
-      border: 1px solid #2a2c35;
-      background: rgba(255,255,255,0.01);
-      white-space: nowrap;
-    }
-
-    .pill-live {
-      color: #1a1306;
-      background: rgba(212,175,55,0.22);
-      border: 1px solid rgba(212,175,55,0.45);
-      box-shadow: 0 0 10px rgba(212,175,55,0.18);
-      font-weight: 700;
-    }
-
-    /* SnapContact header inside card */
-    .snap-top {
-      display: flex;
-      gap: 16px;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .snap-title {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      min-width: 0;
-    }
-
-    .app-icon {
-      width: 46px;
-      height: 46px;
-      border-radius: 12px;
-      overflow: hidden;
-      border: 1px solid rgba(255,255,255,0.14);
-      background: rgba(0,0,0,0.25);
-      flex: 0 0 auto;
-    }
-    .app-icon img { width: 100%; height: 100%; object-fit: cover; display: block; }
-
-    .snap-name {
-      min-width: 0;
-    }
-    .snap-name h3 {
-      margin: 0;
-      font-size: 18px;
-      letter-spacing: -0.01em;
-    }
-    .snap-sub {
-      margin-top: 2px;
-      font-size: 13px;
-      color: #9b9dac;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 52ch;
-    }
-
-    /* Snappy mascot */
-    .snappy {
-      width: 88px;
-      height: 88px;
-      border-radius: 18px;
-      background: radial-gradient(60% 60% at 30% 25%, rgba(212,175,55,0.14), rgba(0,0,0,0) 70%);
-      border: 1px solid rgba(212,175,55,0.18);
-      display: grid;
-      place-items: center;
-      flex: 0 0 auto;
-    }
-    .snappy img {
-      width: 96px;
-      height: 96px;
-      object-fit: contain;
-      transform: translateY(2px);
-      filter: drop-shadow(0 10px 24px rgba(0,0,0,0.45));
-    }
-
-    /* Store badges (high-end) */
-    .download-row {
-      margin-top: 14px;
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: flex-start;
-    }
-
-    .store-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      padding: 10px 14px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,0.14);
-      background: rgba(255,255,255,0.04);
-      transition: transform 120ms ease, border-color 120ms ease, background 120ms ease;
-    }
-
-    .store-badge:hover {
-      transform: translateY(-1px);
-      border-color: rgba(212,175,55,0.35);
-      background: rgba(212,175,55,0.08);
-    }
-
-    .store-badge .icon {
-      width: 28px;
-      height: 28px;
-      display: inline-block;
-      opacity: 0.95;
-      flex: 0 0 auto;
-    }
-
-    .store-badge .text {
-      display: grid;
-      line-height: 1.1;
-    }
-    .store-badge .small {
-      font-size: 11px;
-      color: #b9bac5;
-      letter-spacing: .02em;
-    }
-    .store-badge .big {
-      font-size: 14px;
-      font-weight: 700;
-      color: #f2ead2;
-      letter-spacing: -0.01em;
-    }
-
-    /* nicer center on mobile */
-    @media (max-width: 680px) {
-      h1 { font-size: 40px; }
-      .snap-top { flex-direction: column; align-items: flex-start; }
-      .snappy { width: 76px; height: 76px; }
-      .snappy img { width: 84px; height: 84px; }
-      .download-row { justify-content: center; }
-      .card.snap { text-align: left; }
-    }
-
-    .about {
-      display: grid;
-      grid-template-columns: 1.2fr .8fr;
-      gap: 14px;
-    }
-
-    @media (max-width: 860px) {
-      .about { grid-template-columns: 1fr; }
+      border: 1px solid rgba(212,175,55,0.35);
+      background: rgba(212,175,55,0.18);
+      font-weight: 600;
     }
 
     footer {
@@ -326,184 +236,109 @@
       border-top: 1px solid #2a2c35;
       display: flex;
       justify-content: space-between;
-      gap: 12px;
       flex-wrap: wrap;
       font-size: 13px;
       color: #9b9dac;
     }
 
-    footer a { color: #c9cad4; border-bottom: 1px dotted #3a3d49; }
-
-    .card a {
-      color: #f2ead2;
-      border-bottom: 1px dotted #3a3d49;
-    }
+    footer a { color: #c9cad4; }
   </style>
 </head>
 
 <body>
-  <header class="hero">
-    <div class="wrap">
-      <div class="top">
-        <div class="logo">
-          <img src="/assets/logo-512.jpg" alt="Quiet Forge Studio logo" />
-        </div>
-
-        <div>
-          <span class="badge"><span class="dot"></span> Independent studio • Toronto</span>
-          <h1>Quiet Forge Studio</h1>
-          <p class="lead">
-            We build calm, purposeful apps and tools—crafted with clarity, simplicity, and respect for attention.
-          </p>
-
-          <div class="cta">
-            <a class="btn primary" href="#products">View products</a>
-            <a class="btn" href="mailto:support@quietforgestudio.org">Contact</a>
-            <a class="btn" href="/privacy.html">Privacy</a>
-            <a class="btn" href="/terms.html">Terms</a>
-            <a class="btn" href="/snapcontact-support.html">Support</a>
-
-            <!-- Hidden by default; shown only when visiting /?admin=1 -->
-            <a id="golivepocket-btn" class="btn" href="/projects/golive_pocket.html">GoLivePocket</a>
-          </div>
+<header class="hero">
+  <div class="wrap">
+    <div class="top">
+      <div class="logo">
+        <img src="assets/logo-512.jpg" alt="Quiet Forge Studio logo">
+      </div>
+      <div>
+        <span class="badge"><span class="dot"></span> Independent studio • Toronto</span>
+        <h1>Quiet Forge Studio</h1>
+        <p class="lead">We build calm, purposeful apps and tools—crafted with clarity, simplicity, and respect for attention.</p>
+        <div class="cta">
+          <a class="btn primary" href="#products">View products</a>
+          <a class="btn" href="mailto:support@quietforgestudio.org">Contact</a>
+          <a class="btn" href="/privacy.html">Privacy</a>
+          <a class="btn" href="/terms.html">Terms</a>
         </div>
       </div>
     </div>
-  </header>
+  </div>
+</header>
 
-  <main class="content">
-    <div class="wrap">
-      <div class="section-title" id="products">Products</div>
+<main class="content">
+  <div class="wrap">
+    <div class="section-title" id="products">Products</div>
 
-      <section class="grid">
-        <article class="card snap">
-          <div class="snap-top">
-            <div class="snap-title">
-              <div class="app-icon" aria-hidden="true">
-                <!-- If you have the SnapContact icon, replace path below with your icon file -->
-                <img src="/assets/snapcontact-icon-512.png" alt="SnapContact app icon" onerror="this.style.display='none'">
-              </div>
-              <div class="snap-name">
-                <h3>SnapContact</h3>
-                <div class="snap-sub">Face to Contacts • Clean contact photos in seconds</div>
-              </div>
+    <section class="grid">
+      <article class="card">
+        <div class="snap-top">
+          <div class="snap-left">
+            <div class="app-icon">
+              <img src="assets/Untitled%20design%20(27).png" alt="SnapContact logo">
             </div>
-
-            <!-- Snappy mascot -->
-            <div class="snappy" title="Snappy (SnapContact mascot)">
-              <!-- Save your mascot as /assets/Snappy1.png -->
-              <img src="/assets/Snappy1.png" alt="Snappy mascot" />
+            <div>
+              <h3>SnapContact</h3>
+              <div style="font-size:13px;color:#9b9dac;">Face to Contacts</div>
             </div>
           </div>
 
-          <p style="margin-top:12px;">
-            SnapContact makes it fast and effortless to add a clean face photo to your contacts.
-          </p>
-
-          <p style="margin-top:10px;">
-            Choose a photo, let SnapContact detect faces directly on your device, select the right person, refine the crop if needed, and save it to a new or existing contact — all in just a few taps.
-          </p>
-
-          <p style="margin-top:10px;">
-            Ideal for events, meetups, or any situation where group photos make saving contacts harder than it should be.
-          </p>
-
-          <p style="margin-top:10px;">
-            Built with privacy and speed in mind:
-            • On-device face detection — no uploads, no servers
-            • Works with both single and group photos
-            • Auto-crop with manual crop and zoom controls
-            • Save photos to new or existing contacts
-            • Minimal, premium interface designed for fast workflows
-          </p>
-
-          <p style="margin-top:10px;">
-            Your photos never leave your device. All processing happens locally, and contacts are only saved when you choose.
-          </p>
-
-          <div class="download-row" aria-label="Download SnapContact">
-            <!-- App Store badge -->
-            <a class="store-badge" href="https://apps.apple.com/us/app/snapcontact-face-to-contacts/id6757821313" target="_blank" rel="noopener">
-              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-                <path fill="currentColor" d="M16.7 13.2c0 2 1.7 2.7 1.7 2.7s-1.3 3.7-3.1 3.7c-.8 0-1.4-.5-2.2-.5s-1.5.5-2.4.5c-1.7 0-3-3.2-3-5.8c0-2.8 1.6-4.2 3.1-4.2c.8 0 1.6.6 2.1.6c.5 0 1.4-.6 2.4-.6c.4 0 1.6.1 2.4 1.2c-.1.1-1.4.8-1.4 2.4ZM14.9 7.2c.5-.6.8-1.4.7-2.2c-.7 0-1.6.5-2.1 1.1c-.5.6-.9 1.4-.7 2.2c.8.1 1.6-.4 2.1-1.1Z"/>
-              </svg>
-              <span class="text">
-                <span class="small">Download on the</span>
-                <span class="big">App Store</span>
-              </span>
-            </a>
-
-            <!-- Google Play badge -->
-            <a class="store-badge" href="https://play.google.com/store/apps/details?id=com.snapcontact.app" target="_blank" rel="noopener">
-              <svg class="icon" viewBox="0 0 512 512" aria-hidden="true">
-                <path fill="#34A853" d="M325.3 234.3L104.6 13.6c-5.4-5.4-12.7-8.4-20.3-8.4v502.6c7.6 0 14.9-3 20.3-8.4l220.7-220.7z"/>
-                <path fill="#FBBC04" d="M432.4 256l-107.1-61.8-120.7 120.7 120.7 120.7L432.4 256z"/>
-                <path fill="#EA4335" d="M325.3 277.7L104.6 498.4c-5.4 5.4-12.7 8.4-20.3 8.4l241-241z"/>
-                <path fill="#4285F4" d="M104.6 13.6l220.7 220.7-241-241c7.6 0 14.9 3 20.3 8.4z"/>
-              </svg>
-              <span class="text">
-                <span class="small">Get it on</span>
-                <span class="big">Google Play</span>
-              </span>
-            </a>
+          <div class="snappy">
+            <img src="assets/sanppy1.png" alt="Snappy mascot">
           </div>
-
-          <div class="meta">
-            <span class="pill pill-live">Status: Live</span>
-            <span class="pill">Android</span>
-            <span class="pill">iOS</span>
-            <span class="pill">On-device processing</span>
-          </div>
-
-          <p style="margin-top:12px; font-size:13px; color:#9b9dac;">
-            Need help? <a href="/snapcontact-support.html">Support</a> or email <a href="mailto:support@quietforgestudio.org">support@quietforgestudio.org</a>
-          </p>
-        </article>
-      </section>
-
-      <div class="section-title">About</div>
-      <section class="about">
-        <div class="card">
-          <h3>Built with intention</h3>
-          <p>
-            Quiet Forge Studio is an independent product studio focused on simple tools that feel good to use.
-            We favor clarity over complexity, and quiet confidence over noise.
-          </p>
         </div>
 
-        <div class="card">
-          <h3>Get in touch</h3>
-          <p>
-            <a href="mailto:support@quietforgestudio.org">support@quietforgestudio.org</a>
-          </p>
+        <p style="margin-top:14px;">
+          SnapContact makes it fast and effortless to add a clean face photo to your contacts.
+        </p>
+
+        <p style="margin-top:10px;">
+          Choose a photo, detect faces on-device, refine the crop, and save it to a new or existing contact in seconds.
+        </p>
+
+        <p style="margin-top:10px;">
+          No uploads. No servers. Your photos never leave your device.
+        </p>
+
+        <div class="download-row">
+          <a class="store-badge" href="https://apps.apple.com/us/app/snapcontact-face-to-contacts/id6757821313" target="_blank">
+            <div class="text">
+              <div class="small">Download on the</div>
+              <div class="big">App Store</div>
+            </div>
+          </a>
+
+          <a class="store-badge" href="https://play.google.com/store/apps/details?id=com.snapcontact.app" target="_blank">
+            <div class="text">
+              <div class="small">Get it on</div>
+              <div class="big">Google Play</div>
+            </div>
+          </a>
         </div>
-      </section>
 
-      <footer>
-        <span>© <span id="y"></span> Quiet Forge Studio</span>
-        <span>
-          <a href="/privacy.html">Privacy</a> ·
-          <a href="/terms.html">Terms</a> ·
-          <a href="/snapcontact-support.html">Support</a> ·
-          <a href="mailto:support@quietforgestudio.org">Contact</a>
-        </span>
-      </footer>
-    </div>
-  </main>
+        <div class="meta">
+          <span class="pill">Live</span>
+          <span class="pill">Android</span>
+          <span class="pill">iOS</span>
+          <span class="pill">On-device AI</span>
+        </div>
+      </article>
+    </section>
 
-  <script>
-    document.getElementById('y').textContent = new Date().getFullYear();
-  </script>
+    <footer>
+      <span>© <span id="y"></span> Quiet Forge Studio</span>
+      <span>
+        <a href="/privacy.html">Privacy</a> ·
+        <a href="/terms.html">Terms</a> ·
+        <a href="/snapcontact-support.html">Support</a>
+      </span>
+    </footer>
+  </div>
+</main>
 
-  <script>
-    // Show GoLivePocket only when ?admin=1 is present (e.g., https://quietforgestudio.org/?admin=1)
-    (function () {
-      const btn = document.getElementById("golivepocket-btn");
-      if (!btn) return;
-      const params = new URLSearchParams(window.location.search);
-      const isAdmin = params.get("admin") === "1";
-      if (!isAdmin) btn.style.display = "none";
-    })();
-  </script>
+<script>
+  document.getElementById('y').textContent = new Date().getFullYear();
+</script>
 </body>
 </html>
