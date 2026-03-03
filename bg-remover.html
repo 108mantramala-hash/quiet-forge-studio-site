@@ -52,14 +52,18 @@
 /** =========================
  *  CONFIG (EDIT THESE)
  *  ========================= */
-const RUNPOD_API_KEY = "rpa_LIQGOOGIROGQHJ9IZG7HV5EPK68YD6FQXE9M1YTG1d02sh";         // <-- put your key here
-const ENDPOINT_ID    = "lizi0h8382i05l";            // <-- put your endpoint id here
+const RUNPOD_API_KEY = "rpa_LIQGOOGIROGQHJ9IZG7HV5EPK68YD6FQXE9M1YTG1d02sh"; // <-- your RunPod API key
+const ENDPOINT_ID    = "lizi0h8382i05l";                                      // <-- your endpoint id
+
+// ✅ IMPORTANT: This must match RunPod env var CLIENT_TOKEN (set in endpoint settings)
+const CLIENT_TOKEN   = "snappy19051983;
+
 const RUN_URL        = `https://api.runpod.ai/v2/${ENDPOINT_ID}/run`;
 const STATUS_URL     = (id) => `https://api.runpod.ai/v2/${ENDPOINT_ID}/status/${id}`;
 
 // Polling
 const POLL_INTERVAL_MS = 1500;
-const MAX_POLL_MS = 120000; // 2 minutes
+const MAX_POLL_MS = 180000; // 3 minutes
 
 /** =========================
  *  UI / Helpers
@@ -96,7 +100,10 @@ function fileToBase64(f) {
 }
 
 function base64ToPngUrl(b64) {
-  const bin = atob(b64);
+  // handle possible "data:image/png;base64,..." (just in case)
+  const clean = String(b64).includes(",") ? String(b64).split(",")[1] : String(b64);
+
+  const bin = atob(clean);
   const bytes = new Uint8Array(bin.length);
   for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
   const blob = new Blob([bytes], { type: "image/png" });
@@ -140,16 +147,23 @@ Type: ${file.type}`);
  *  RunPod calls
  *  ========================= */
 async function runJob(imageBase64) {
+  const payload = {
+    input: {
+      image_base64: imageBase64,
+      // ✅ This is what your serverless handler should validate
+      client_token: CLIENT_TOKEN
+    }
+  };
+
   const resp = await fetch(RUN_URL, {
     method: "POST",
     headers: {
       "Authorization": `Bearer ${RUNPOD_API_KEY}`,
       "Content-Type": "application/json"
     },
-    body: JSON.stringify({ input: { image_base64: imageBase64 } })
+    body: JSON.stringify(payload)
   });
 
-  // if RunPod returns non-JSON, we still want to see it
   const text = await resp.text();
   let json = null;
   try { json = JSON.parse(text); } catch { json = { raw: text }; }
@@ -198,7 +212,12 @@ goEl.addEventListener("click", async () => {
     const runResp = await runJob(imgB64);
     const jobId = runResp.id;
 
-    log(`Job submitted.\nID: ${jobId}\nInitial status: ${runResp.status || "unknown"}\n\nPolling status...\n`);
+    log(`Job submitted.
+ID: ${jobId}
+Initial status: ${runResp.status || "unknown"}
+
+Polling status...
+`);
 
     const pollStart = Date.now();
     let statusResp;
@@ -212,7 +231,9 @@ goEl.addEventListener("click", async () => {
       statusResp = await getStatus(jobId);
 
       const st = statusResp.status || "unknown";
-      log(`Job ID: ${jobId}\nStatus: ${st}\n`);
+      log(`Job ID: ${jobId}
+Status: ${st}
+`);
 
       if (st === "COMPLETED" || st === "FAILED") break;
     }
@@ -224,6 +245,7 @@ goEl.addEventListener("click", async () => {
     // Your handler returns output_base64 inside .output
     const outB64 = statusResp?.output?.output_base64;
     if (!outB64) {
+      // If your handler returns {"ok":false,"error":"Unauthorized"} this will be missing
       throw new Error(`COMPLETED but missing output.output_base64:\n${JSON.stringify(statusResp, null, 2)}`);
     }
 
