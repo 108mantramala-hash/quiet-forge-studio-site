@@ -13,11 +13,11 @@
       border: 1px solid #eee;
     }
     button { padding: 10px 14px; border-radius: 10px; border: 1px solid #ccc; cursor: pointer; }
-    button:disabled { opacity: 0.5; cursor: not-allowed; }
     .small { color: #444; font-size: 13px; white-space: pre-wrap; line-height: 1.4; }
     .warn { color: #b45309; }
     .ok { color: #166534; }
-    .err { color: #b91c1c; }
+    .bad { color: #b91c1c; }
+    code { background:#f7f7f7; padding:2px 6px; border-radius:6px; }
   </style>
 </head>
 <body>
@@ -54,29 +54,27 @@
 /** =========================
  *  CONFIG (EDIT THESE)
  *  ========================= */
-const RUNPOD_API_KEY = "rpa_LIQGOOGIROGQHJ9IZG7HV5EPK68YD6FQXE9M1YTG1d02sh"; // your RunPod API key
-const ENDPOINT_ID    = "lizi0h8382i05l";                                      // your endpoint id
+const RUNPOD_API_KEY = "rpa_LIQGOOGIROGQHJ9IZG7HV5EPK68YD6FQXE9M1YTG1d02sh"; // <-- your RunPod API key
+const ENDPOINT_ID    = "lizi0h8382i05l"; // <-- your endpoint id (exactly as shown in RunPod UI)
+const CLIENT_TOKEN   = "snapcontact_web_test_2026"; // <-- MUST match RunPod env CLIENT_TOKEN
 
-// IMPORTANT: Must match RunPod env var CLIENT_TOKEN exactly
-const CLIENT_TOKEN   = "snapcontact_web_test_2026"; // <-- set this AND RunPod env CLIENT_TOKEN to same value
-
-const RUN_URL    = `https://api.runpod.ai/v2/${ENDPOINT_ID}/run`;
-const STATUS_URL = (id) => `https://api.runpod.ai/v2/${ENDPOINT_ID}/status/${id}`;
+const RUN_URL        = `https://api.runpod.ai/v2/${ENDPOINT_ID}/run`;
+const STATUS_URL     = (id) => `https://api.runpod.ai/v2/${ENDPOINT_ID}/status/${id}`;
 
 // Polling
 const POLL_INTERVAL_MS = 1500;
-const MAX_POLL_MS      = 180000; // 3 minutes
+const MAX_POLL_MS = 180000; // 3 minutes (cold starts can be slow)
 
 /** =========================
  *  UI / Helpers
  *  ========================= */
-const fileEl  = document.getElementById("file");
-const goEl    = document.getElementById("go");
+const fileEl = document.getElementById("file");
+const goEl = document.getElementById("go");
 const clearEl = document.getElementById("clear");
-const logEl   = document.getElementById("log");
-const origEl  = document.getElementById("orig");
-const outEl   = document.getElementById("out");
-const dlEl    = document.getElementById("download");
+const logEl = document.getElementById("log");
+const origEl = document.getElementById("orig");
+const outEl = document.getElementById("out");
+const dlEl = document.getElementById("download");
 
 let file;
 let polling = false;
@@ -85,6 +83,7 @@ function log(msg, cls="") {
   logEl.className = "small " + cls;
   logEl.textContent = msg;
 }
+
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
 function fileToBase64(f) {
@@ -138,17 +137,20 @@ fileEl.addEventListener("change", () => {
 
   log(`Selected: ${file.name}
 Size: ${file.size} bytes
-Type: ${file.type}`);
+Type: ${file.type}
+
+Ready. Click "Remove Background".`);
 });
 
 /** =========================
  *  RunPod calls
  *  ========================= */
 async function runJob(imageBase64) {
-  const body = {
+  // IMPORTANT: include client_token to satisfy handler enforcement
+  const payload = {
     input: {
       image_base64: imageBase64,
-      client_token: CLIENT_TOKEN   // ✅ REQUIRED by your handler
+      client_token: CLIENT_TOKEN
     }
   };
 
@@ -158,7 +160,7 @@ async function runJob(imageBase64) {
       "Authorization": `Bearer ${RUNPOD_API_KEY}`,
       "Content-Type": "application/json"
     },
-    body: JSON.stringify(body)
+    body: JSON.stringify(payload)
   });
 
   const text = await resp.text();
@@ -171,7 +173,7 @@ async function runJob(imageBase64) {
   if (!json.id) {
     throw new Error(`RUN response missing id:\n${JSON.stringify(json, null, 2)}`);
   }
-  return json;
+  return json; // {id, status}
 }
 
 async function getStatus(jobId) {
@@ -200,11 +202,18 @@ goEl.addEventListener("click", async () => {
 
   try {
     const t0 = performance.now();
-    log("Encoding...\n");
+    log("Encoding image to base64...\n");
 
     const imgB64 = await fileToBase64(file);
 
-    log("Calling RunPod /run ...\n");
+    log(
+`Calling RunPod /run ...
+Endpoint: ${ENDPOINT_ID}
+Using CLIENT_TOKEN: ${CLIENT_TOKEN}
+
+Submitting job...`
+    );
+
     const runResp = await runJob(imgB64);
     const jobId = runResp.id;
 
@@ -212,7 +221,7 @@ goEl.addEventListener("click", async () => {
 ID: ${jobId}
 Initial status: ${runResp.status || "unknown"}
 
-Polling status...`);
+Polling /status/{id} ...`);
 
     const pollStart = Date.now();
     let statusResp;
@@ -233,15 +242,7 @@ Status: ${st}`);
     }
 
     if (statusResp.status === "FAILED") {
-      const err = statusResp?.error || statusResp?.output?.error || "Unknown error";
-      if (String(err).toLowerCase().includes("unauthorized")) {
-        throw new Error(
-          `Job FAILED: Unauthorized.\n` +
-          `This means CLIENT_TOKEN mismatch.\n\n` +
-          `RunPod env CLIENT_TOKEN must equal HTML CLIENT_TOKEN.\n` +
-          `HTML CLIENT_TOKEN: ${CLIENT_TOKEN}\n`
-        );
-      }
+      // Many handlers set error inside output or error; show everything
       throw new Error(`Job FAILED:\n${JSON.stringify(statusResp, null, 2)}`);
     }
 
@@ -256,13 +257,20 @@ Status: ${st}`);
     dlEl.style.display = "inline-block";
 
     const t1 = performance.now();
+    const meta = statusResp?.output?.meta;
+    const serverElapsed = meta?.elapsed_ms ? `\nServer elapsed: ${meta.elapsed_ms} ms` : "";
+
     log(`✅ Done!
-Roundtrip: ${(t1 - t0).toFixed(0)} ms
+Roundtrip: ${(t1 - t0).toFixed(0)} ms${serverElapsed}
 PNG size (approx): ${(outB64.length * 0.75 / 1024).toFixed(1)} KB`, "ok");
 
   } catch (e) {
     console.error(e);
-    log(`❌ Error:\n${String(e.message || e)}`, "err");
+    const msg = String(e?.message || e);
+    const tokenHint = msg.includes("Unauthorized")
+      ? `\n\nHint: Unauthorized usually means CLIENT_TOKEN mismatch.\nRunPod env CLIENT_TOKEN must equal HTML CLIENT_TOKEN.`
+      : "";
+    log(`❌ Error:\n${msg}${tokenHint}`, "bad");
   } finally {
     polling = false;
     goEl.disabled = !file;
