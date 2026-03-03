@@ -11,7 +11,6 @@
     img { max-width: 100%; height: auto; border-radius: 10px;
       background: repeating-conic-gradient(#eee 0% 25%, #fff 0% 50%) 50%/20px 20px;
       border: 1px solid #eee;
-      min-height: 180px;
     }
     button { padding: 10px 14px; border-radius: 10px; border: 1px solid #ccc; cursor: pointer; }
     button:disabled { opacity: 0.5; cursor: not-allowed; }
@@ -40,11 +39,11 @@
   <div class="row" style="margin-top:16px;">
     <div class="card">
       <h3>Original</h3>
-      <img id="orig" alt="original preview" />
+      <img id="orig" />
     </div>
     <div class="card">
       <h3>Result (PNG w/ alpha)</h3>
-      <img id="out" alt="output preview" />
+      <img id="out" />
       <div style="margin-top:10px;">
         <a id="download" style="display:none" download="out.png">Download out.png</a>
       </div>
@@ -55,21 +54,37 @@
 /** =========================
  *  CONFIG (EDIT THESE)
  *  ========================= */
-const RUNPOD_API_KEY = "rpa_LIQGOOGIROGQHJ9IZG7HV5EPK68YD6FQXE9M1YTG1d02sh";
-const ENDPOINT_ID    = "lizi0h8382i05l";
+const RUNPOD_API_KEY = "rpa_LIQGOOGIROGQHJ9IZG7HV5EPK68YD6FQXE9M1YTG1d02sh"; // your RunPod API key
+const ENDPOINT_ID    = "lizi0h8382i05l";                                      // your endpoint id
 
-// IMPORTANT: must match RunPod env var CLIENT_TOKEN (if you enabled it in your handler)
-const CLIENT_TOKEN   = "snappy19051983";
+// IMPORTANT: Must match RunPod env var CLIENT_TOKEN exactly
+const CLIENT_TOKEN   = "snapcontact_web_test_2026";  // <-- set this AND RunPod env CLIENT_TOKEN to same value
 
-const RUN_URL        = `https://api.runpod.ai/v2/${ENDPOINT_ID}/run`;
-const STATUS_URL     = (id) => `https://api.runpod.ai/v2/${ENDPOINT_ID}/status/${id}`;
+const RUN_URL    = `https://api.runpod.ai/v2/${ENDPOINT_ID}/run`;
+const STATUS_URL = (id) => `https://api.runpod.ai/v2/${ENDPOINT_ID}/status/${id}`;
 
+// Polling
 const POLL_INTERVAL_MS = 1500;
-const MAX_POLL_MS = 180000; // 3 minutes
+const MAX_POLL_MS      = 180000; // 3 minutes
 
 /** =========================
- *  Helpers
+ *  UI / Helpers
  *  ========================= */
+const fileEl  = document.getElementById("file");
+const goEl    = document.getElementById("go");
+const clearEl = document.getElementById("clear");
+const logEl   = document.getElementById("log");
+const origEl  = document.getElementById("orig");
+const outEl   = document.getElementById("out");
+const dlEl    = document.getElementById("download");
+
+let file;
+let polling = false;
+
+function log(msg, cls="") {
+  logEl.className = "small " + cls;
+  logEl.textContent = msg;
+}
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
 function fileToBase64(f) {
@@ -86,19 +101,54 @@ function fileToBase64(f) {
 }
 
 function base64ToPngUrl(b64) {
-  const clean = String(b64).includes(",") ? String(b64).split(",")[1] : String(b64);
-  const bin = atob(clean);
+  const bin = atob(b64);
   const bytes = new Uint8Array(bin.length);
   for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
   const blob = new Blob([bytes], { type: "image/png" });
   return URL.createObjectURL(blob);
 }
 
+function resetOutput() {
+  outEl.removeAttribute("src");
+  dlEl.style.display = "none";
+  dlEl.removeAttribute("href");
+}
+
+function clearAll() {
+  fileEl.value = "";
+  file = null;
+  goEl.disabled = true;
+  clearEl.disabled = true;
+  origEl.removeAttribute("src");
+  resetOutput();
+  log("");
+}
+
+clearEl.addEventListener("click", clearAll);
+
+fileEl.addEventListener("change", () => {
+  file = fileEl.files?.[0];
+  if (!file) return;
+
+  goEl.disabled = false;
+  clearEl.disabled = false;
+
+  origEl.src = URL.createObjectURL(file);
+  resetOutput();
+
+  log(`Selected: ${file.name}
+Size: ${file.size} bytes
+Type: ${file.type}`);
+});
+
+/** =========================
+ *  RunPod calls
+ *  ========================= */
 async function runJob(imageBase64) {
-  const payload = {
+  const body = {
     input: {
       image_base64: imageBase64,
-      client_token: CLIENT_TOKEN
+      client_token: CLIENT_TOKEN   // ✅ REQUIRED by your handler
     }
   };
 
@@ -108,15 +158,19 @@ async function runJob(imageBase64) {
       "Authorization": `Bearer ${RUNPOD_API_KEY}`,
       "Content-Type": "application/json"
     },
-    body: JSON.stringify(payload)
+    body: JSON.stringify(body)
   });
 
   const text = await resp.text();
   let json;
   try { json = JSON.parse(text); } catch { json = { raw: text }; }
 
-  if (!resp.ok) throw new Error(`RUN failed HTTP=${resp.status}\n${JSON.stringify(json, null, 2)}`);
-  if (!json.id) throw new Error(`RUN response missing id:\n${JSON.stringify(json, null, 2)}`);
+  if (!resp.ok) {
+    throw new Error(`RUN failed HTTP=${resp.status}\n${JSON.stringify(json, null, 2)}`);
+  }
+  if (!json.id) {
+    throw new Error(`RUN response missing id:\n${JSON.stringify(json, null, 2)}`);
+  }
   return json;
 }
 
@@ -130,149 +184,89 @@ async function getStatus(jobId) {
   let json;
   try { json = JSON.parse(text); } catch { json = { raw: text }; }
 
-  if (!resp.ok) throw new Error(`STATUS failed HTTP=${resp.status}\n${JSON.stringify(json, null, 2)}`);
+  if (!resp.ok) {
+    throw new Error(`STATUS failed HTTP=${resp.status}\n${JSON.stringify(json, null, 2)}`);
+  }
   return json;
 }
 
 /** =========================
- *  App
+ *  Main flow
  *  ========================= */
-document.addEventListener("DOMContentLoaded", () => {
-  const fileEl = document.getElementById("file");
-  const goEl = document.getElementById("go");
-  const clearEl = document.getElementById("clear");
-  const logEl = document.getElementById("log");
-  const origEl = document.getElementById("orig");
-  const outEl = document.getElementById("out");
-  const dlEl = document.getElementById("download");
+goEl.addEventListener("click", async () => {
+  if (!file || polling) return;
+  polling = true;
+  goEl.disabled = true;
 
-  let file = null;
-  let polling = false;
+  try {
+    const t0 = performance.now();
+    log("Encoding...\n");
 
-  function log(msg, cls="") {
-    logEl.className = "small " + cls;
-    logEl.textContent = msg;
-  }
+    const imgB64 = await fileToBase64(file);
 
-  function resetOutput() {
-    outEl.removeAttribute("src");
-    dlEl.style.display = "none";
-    dlEl.removeAttribute("href");
-  }
+    log("Calling RunPod /run ...\n");
+    const runResp = await runJob(imgB64);
+    const jobId = runResp.id;
 
-  function clearAll() {
-    fileEl.value = "";
-    file = null;
-    goEl.disabled = true;
-    clearEl.disabled = true;
-    origEl.removeAttribute("src");
-    resetOutput();
-    log("");
-  }
-
-  // Show any JS runtime errors on the page
-  window.addEventListener("error", (e) => {
-    log(`❌ JS Error:\n${e.message}`, "err");
-  });
-
-  clearEl.addEventListener("click", clearAll);
-
-  fileEl.addEventListener("change", () => {
-    try {
-      file = fileEl.files && fileEl.files[0] ? fileEl.files[0] : null;
-      if (!file) {
-        clearAll();
-        return;
-      }
-
-      // Enable buttons FIRST so you never get “stuck disabled”
-      goEl.disabled = false;
-      clearEl.disabled = false;
-
-      resetOutput();
-
-      // Preview
-      if (window.URL && URL.createObjectURL) {
-        origEl.src = URL.createObjectURL(file);
-      }
-
-      log(`Selected: ${file.name}
-Size: ${file.size} bytes
-Type: ${file.type}
-Ready. Click "Remove Background".`);
-    } catch (err) {
-      console.error(err);
-      log(`❌ File selection error:\n${String(err.message || err)}`, "err");
-    }
-  });
-
-  goEl.addEventListener("click", async () => {
-    if (!file || polling) return;
-    polling = true;
-    goEl.disabled = true;
-
-    try {
-      const t0 = performance.now();
-      log("Encoding image...", "");
-
-      const imgB64 = await fileToBase64(file);
-
-      log("Calling RunPod /run ...");
-      const runResp = await runJob(imgB64);
-      const jobId = runResp.id;
-
-      log(`Job submitted.
+    log(`Job submitted.
 ID: ${jobId}
+Initial status: ${runResp.status || "unknown"}
+
 Polling status...`);
 
-      const pollStart = Date.now();
-      let statusResp;
+    const pollStart = Date.now();
+    let statusResp;
 
-      while (true) {
-        if (Date.now() - pollStart > MAX_POLL_MS) {
-          throw new Error("Timed out waiting for RunPod job to complete.");
-        }
+    while (true) {
+      if (Date.now() - pollStart > MAX_POLL_MS) {
+        throw new Error("Timed out waiting for RunPod job to complete.");
+      }
 
-        await sleep(POLL_INTERVAL_MS);
-        statusResp = await getStatus(jobId);
+      await sleep(POLL_INTERVAL_MS);
+      statusResp = await getStatus(jobId);
 
-        const st = statusResp.status || "unknown";
-        log(`Job ID: ${jobId}
+      const st = statusResp.status || "unknown";
+      log(`Job ID: ${jobId}
 Status: ${st}`);
 
-        if (st === "COMPLETED" || st === "FAILED") break;
+      if (st === "COMPLETED" || st === "FAILED") break;
+    }
+
+    if (statusResp.status === "FAILED") {
+      const err = statusResp?.error || statusResp?.output?.error || "Unknown error";
+      if (String(err).toLowerCase().includes("unauthorized")) {
+        throw new Error(
+          `Job FAILED: Unauthorized.\n` +
+          `This means CLIENT_TOKEN mismatch.\n\n` +
+          `RunPod env CLIENT_TOKEN must equal HTML CLIENT_TOKEN.\n` +
+          `HTML CLIENT_TOKEN: ${CLIENT_TOKEN}\n`
+        );
       }
+      throw new Error(`Job FAILED:\n${JSON.stringify(statusResp, null, 2)}`);
+    }
 
-      if (statusResp.status === "FAILED") {
-        throw new Error(`Job FAILED:\n${JSON.stringify(statusResp, null, 2)}`);
-      }
+    const outB64 = statusResp?.output?.output_base64;
+    if (!outB64) {
+      throw new Error(`COMPLETED but missing output.output_base64:\n${JSON.stringify(statusResp, null, 2)}`);
+    }
 
-      const outB64 = statusResp?.output?.output_base64;
-      if (!outB64) {
-        throw new Error(`COMPLETED but missing output.output_base64:\n${JSON.stringify(statusResp, null, 2)}`);
-      }
+    const url = base64ToPngUrl(outB64);
+    outEl.src = url;
+    dlEl.href = url;
+    dlEl.style.display = "inline-block";
 
-      const url = base64ToPngUrl(outB64);
-      outEl.src = url;
-      dlEl.href = url;
-      dlEl.style.display = "inline-block";
-
-      const t1 = performance.now();
-      log(`✅ Done!
+    const t1 = performance.now();
+    log(`✅ Done!
 Roundtrip: ${(t1 - t0).toFixed(0)} ms
 PNG size (approx): ${(outB64.length * 0.75 / 1024).toFixed(1)} KB`, "ok");
 
-    } catch (err) {
-      console.error(err);
-      log(`❌ Error:\n${String(err.message || err)}`, "err");
-    } finally {
-      polling = false;
-      goEl.disabled = !file;
-    }
-  });
-
-  // Initial hint
-  log("Choose an image to begin.");
+  } catch (e) {
+    console.error(e);
+    log(`❌ Error:\n${String(e.message || e)}`, "err");
+  } finally {
+    polling = false;
+    goEl.disabled = !file;
+  }
 });
 </script>
 </body>
