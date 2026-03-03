@@ -1,0 +1,114 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SnapContact BG Remover Test</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 900px; margin: 24px auto; padding: 0 16px; }
+    .row { display: flex; gap: 16px; flex-wrap: wrap; }
+    .card { border: 1px solid #ddd; border-radius: 12px; padding: 12px; flex: 1; min-width: 280px; }
+    img { max-width: 100%; height: auto; background: repeating-conic-gradient(#eee 0% 25%, #fff 0% 50%) 50%/20px 20px; border-radius: 8px; }
+    button { padding: 10px 14px; border-radius: 10px; border: 1px solid #ccc; cursor: pointer; }
+    .small { color: #555; font-size: 13px; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <h2>SnapContact Background Remover (Test)</h2>
+  <p class="small">
+Upload an image → we call your proxy → proxy calls RunPod → returns PNG.
+Shows timing so you can measure performance before Flutter integration.
+  </p>
+
+  <div class="card">
+    <input id="file" type="file" accept="image/*" />
+    <button id="go" disabled>Remove Background</button>
+    <div id="log" class="small"></div>
+  </div>
+
+  <div class="row">
+    <div class="card">
+      <h3>Original</h3>
+      <img id="orig" />
+    </div>
+    <div class="card">
+      <h3>Result (PNG w/ alpha)</h3>
+      <img id="out" />
+      <a id="download" style="display:none" download="out.png">Download out.png</a>
+    </div>
+  </div>
+
+<script>
+const PROXY_URL = "https://YOUR-WORKER-URL/remove-bg"; // <-- set this after Worker is created
+
+const fileEl = document.getElementById("file");
+const goEl = document.getElementById("go");
+const logEl = document.getElementById("log");
+const origEl = document.getElementById("orig");
+const outEl = document.getElementById("out");
+const dlEl = document.getElementById("download");
+
+let file;
+
+fileEl.addEventListener("change", () => {
+  file = fileEl.files?.[0];
+  if (!file) return;
+  goEl.disabled = false;
+  origEl.src = URL.createObjectURL(file);
+  outEl.removeAttribute("src");
+  dlEl.style.display = "none";
+  logEl.textContent = `Selected: ${file.name}\nSize: ${file.size} bytes\nType: ${file.type}`;
+});
+
+function fileToBase64(f) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const s = reader.result; // data:...base64,xxxx
+      const b64 = String(s).split(",")[1];
+      resolve(b64);
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(f);
+  });
+}
+
+goEl.addEventListener("click", async () => {
+  if (!file) return;
+
+  logEl.textContent = "Encoding...\n";
+  const t0 = performance.now();
+  const imgB64 = await fileToBase64(file);
+
+  logEl.textContent += "Calling proxy...\n";
+  const resp = await fetch(PROXY_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ image_base64: imgB64 })
+  });
+
+  const t1 = performance.now();
+  const data = await resp.json().catch(() => ({}));
+
+  if (!resp.ok || data.ok === false) {
+    logEl.textContent += `ERROR HTTP=${resp.status}\n${JSON.stringify(data, null, 2)}\n`;
+    return;
+  }
+
+  const outB64 = data.output_base64;
+  const bin = atob(outB64);
+  const bytes = new Uint8Array(bin.length);
+  for (let i=0; i<bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  const blob = new Blob([bytes], { type: "image/png" });
+  const url = URL.createObjectURL(blob);
+
+  outEl.src = url;
+  dlEl.href = url;
+  dlEl.style.display = "inline-block";
+
+  logEl.textContent += `Done!\nRoundtrip ms: ${(t1 - t0).toFixed(0)}\n`;
+  if (data.meta) logEl.textContent += `Server elapsed ms: ${data.meta.elapsed_ms}\n`;
+});
+</script>
+</body>
+</html>
