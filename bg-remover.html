@@ -3,30 +3,38 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>SnapContact BG Remover Test</title>
+  <title>SnapContact BG Remover (Direct RunPod)</title>
   <style>
-    body { font-family: system-ui, sans-serif; max-width: 900px; margin: 24px auto; padding: 0 16px; }
+    body { font-family: system-ui, sans-serif; max-width: 980px; margin: 24px auto; padding: 0 16px; }
     .row { display: flex; gap: 16px; flex-wrap: wrap; }
-    .card { border: 1px solid #ddd; border-radius: 12px; padding: 12px; flex: 1; min-width: 280px; }
-    img { max-width: 100%; height: auto; background: repeating-conic-gradient(#eee 0% 25%, #fff 0% 50%) 50%/20px 20px; border-radius: 8px; }
+    .card { border: 1px solid #ddd; border-radius: 12px; padding: 12px; flex: 1; min-width: 300px; }
+    img { max-width: 100%; height: auto; border-radius: 10px;
+      background: repeating-conic-gradient(#eee 0% 25%, #fff 0% 50%) 50%/20px 20px;
+      border: 1px solid #eee;
+    }
     button { padding: 10px 14px; border-radius: 10px; border: 1px solid #ccc; cursor: pointer; }
-    .small { color: #555; font-size: 13px; white-space: pre-wrap; }
+    .small { color: #444; font-size: 13px; white-space: pre-wrap; line-height: 1.4; }
+    .warn { color: #b45309; }
+    .ok { color: #166534; }
   </style>
 </head>
 <body>
   <h2>SnapContact Background Remover (Test)</h2>
-  <p class="small">
-Upload an image → we call your proxy → proxy calls RunPod → returns PNG.
-Shows timing so you can measure performance before Flutter integration.
+  <p class="small warn">
+    Direct RunPod mode (no proxy). Your RunPod API key is in this page.
+    Keep this page private. If you ever go public, switch back to a proxy.
   </p>
 
   <div class="card">
-    <input id="file" type="file" accept="image/*" />
-    <button id="go" disabled>Remove Background</button>
-    <div id="log" class="small"></div>
+    <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+      <input id="file" type="file" accept="image/*" />
+      <button id="go" disabled>Remove Background</button>
+      <button id="clear" disabled>Clear</button>
+    </div>
+    <div id="log" class="small" style="margin-top:10px;"></div>
   </div>
 
-  <div class="row">
+  <div class="row" style="margin-top:16px;">
     <div class="card">
       <h3>Original</h3>
       <img id="orig" />
@@ -34,31 +42,45 @@ Shows timing so you can measure performance before Flutter integration.
     <div class="card">
       <h3>Result (PNG w/ alpha)</h3>
       <img id="out" />
-      <a id="download" style="display:none" download="out.png">Download out.png</a>
+      <div style="margin-top:10px;">
+        <a id="download" style="display:none" download="out.png">Download out.png</a>
+      </div>
     </div>
   </div>
 
 <script>
-const PROXY_URL = "https://YOUR-WORKER-URL/remove-bg"; // <-- set this after Worker is created
+/** =========================
+ *  CONFIG (EDIT THESE)
+ *  ========================= */
+const RUNPOD_API_KEY = "rpa_LIQGOOGIROGQHJ9IZG7HV5EPK68YD6FQXE9M1YTG1d02sh";         // <-- put your key here
+const ENDPOINT_ID    = "lizi0h8382i05l";            // <-- put your endpoint id here
+const RUN_URL        = `https://api.runpod.ai/v2/${ENDPOINT_ID}/run`;
+const STATUS_URL     = (id) => `https://api.runpod.ai/v2/${ENDPOINT_ID}/status/${id}`;
 
+// Polling
+const POLL_INTERVAL_MS = 1500;
+const MAX_POLL_MS = 120000; // 2 minutes
+
+/** =========================
+ *  UI / Helpers
+ *  ========================= */
 const fileEl = document.getElementById("file");
 const goEl = document.getElementById("go");
+const clearEl = document.getElementById("clear");
 const logEl = document.getElementById("log");
 const origEl = document.getElementById("orig");
 const outEl = document.getElementById("out");
 const dlEl = document.getElementById("download");
 
 let file;
+let polling = false;
 
-fileEl.addEventListener("change", () => {
-  file = fileEl.files?.[0];
-  if (!file) return;
-  goEl.disabled = false;
-  origEl.src = URL.createObjectURL(file);
-  outEl.removeAttribute("src");
-  dlEl.style.display = "none";
-  logEl.textContent = `Selected: ${file.name}\nSize: ${file.size} bytes\nType: ${file.type}`;
-});
+function log(msg, cls="") {
+  logEl.className = "small " + cls;
+  logEl.textContent = msg;
+}
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
 function fileToBase64(f) {
   return new Promise((resolve, reject) => {
@@ -73,41 +95,158 @@ function fileToBase64(f) {
   });
 }
 
-goEl.addEventListener("click", async () => {
+function base64ToPngUrl(b64) {
+  const bin = atob(b64);
+  const bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  const blob = new Blob([bytes], { type: "image/png" });
+  return URL.createObjectURL(blob);
+}
+
+function resetOutput() {
+  outEl.removeAttribute("src");
+  dlEl.style.display = "none";
+  dlEl.removeAttribute("href");
+}
+
+function clearAll() {
+  fileEl.value = "";
+  file = null;
+  goEl.disabled = true;
+  clearEl.disabled = true;
+  origEl.removeAttribute("src");
+  resetOutput();
+  log("");
+}
+
+clearEl.addEventListener("click", clearAll);
+
+fileEl.addEventListener("change", () => {
+  file = fileEl.files?.[0];
   if (!file) return;
 
-  logEl.textContent = "Encoding...\n";
-  const t0 = performance.now();
-  const imgB64 = await fileToBase64(file);
+  goEl.disabled = false;
+  clearEl.disabled = false;
 
-  logEl.textContent += "Calling proxy...\n";
-  const resp = await fetch(PROXY_URL, {
+  origEl.src = URL.createObjectURL(file);
+  resetOutput();
+
+  log(`Selected: ${file.name}
+Size: ${file.size} bytes
+Type: ${file.type}`);
+});
+
+/** =========================
+ *  RunPod calls
+ *  ========================= */
+async function runJob(imageBase64) {
+  const resp = await fetch(RUN_URL, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ image_base64: imgB64 })
+    headers: {
+      "Authorization": `Bearer ${RUNPOD_API_KEY}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ input: { image_base64: imageBase64 } })
   });
 
-  const t1 = performance.now();
-  const data = await resp.json().catch(() => ({}));
+  // if RunPod returns non-JSON, we still want to see it
+  const text = await resp.text();
+  let json = null;
+  try { json = JSON.parse(text); } catch { json = { raw: text }; }
 
-  if (!resp.ok || data.ok === false) {
-    logEl.textContent += `ERROR HTTP=${resp.status}\n${JSON.stringify(data, null, 2)}\n`;
-    return;
+  if (!resp.ok) {
+    throw new Error(`RUN failed HTTP=${resp.status}\n${JSON.stringify(json, null, 2)}`);
   }
 
-  const outB64 = data.output_base64;
-  const bin = atob(outB64);
-  const bytes = new Uint8Array(bin.length);
-  for (let i=0; i<bin.length; i++) bytes[i] = bin.charCodeAt(i);
-  const blob = new Blob([bytes], { type: "image/png" });
-  const url = URL.createObjectURL(blob);
+  if (!json.id) {
+    throw new Error(`RUN response missing id:\n${JSON.stringify(json, null, 2)}`);
+  }
+  return json; // {id, status}
+}
 
-  outEl.src = url;
-  dlEl.href = url;
-  dlEl.style.display = "inline-block";
+async function getStatus(jobId) {
+  const resp = await fetch(STATUS_URL(jobId), {
+    method: "GET",
+    headers: { "Authorization": `Bearer ${RUNPOD_API_KEY}` }
+  });
 
-  logEl.textContent += `Done!\nRoundtrip ms: ${(t1 - t0).toFixed(0)}\n`;
-  if (data.meta) logEl.textContent += `Server elapsed ms: ${data.meta.elapsed_ms}\n`;
+  const text = await resp.text();
+  let json = null;
+  try { json = JSON.parse(text); } catch { json = { raw: text }; }
+
+  if (!resp.ok) {
+    throw new Error(`STATUS failed HTTP=${resp.status}\n${JSON.stringify(json, null, 2)}`);
+  }
+  return json;
+}
+
+/** =========================
+ *  Main flow
+ *  ========================= */
+goEl.addEventListener("click", async () => {
+  if (!file || polling) return;
+  polling = true;
+  goEl.disabled = true;
+
+  try {
+    const t0 = performance.now();
+    log("Encoding...\n");
+
+    const imgB64 = await fileToBase64(file);
+
+    log("Calling RunPod /run ...\n");
+    const runResp = await runJob(imgB64);
+    const jobId = runResp.id;
+
+    log(`Job submitted.\nID: ${jobId}\nInitial status: ${runResp.status || "unknown"}\n\nPolling status...\n`);
+
+    const pollStart = Date.now();
+    let statusResp;
+
+    while (true) {
+      if (Date.now() - pollStart > MAX_POLL_MS) {
+        throw new Error("Timed out waiting for RunPod job to complete.");
+      }
+
+      await sleep(POLL_INTERVAL_MS);
+      statusResp = await getStatus(jobId);
+
+      const st = statusResp.status || "unknown";
+      log(`Job ID: ${jobId}\nStatus: ${st}\n`);
+
+      if (st === "COMPLETED" || st === "FAILED") break;
+    }
+
+    if (statusResp.status === "FAILED") {
+      throw new Error(`Job FAILED:\n${JSON.stringify(statusResp, null, 2)}`);
+    }
+
+    // Your handler returns output_base64 inside .output
+    const outB64 = statusResp?.output?.output_base64;
+    if (!outB64) {
+      throw new Error(`COMPLETED but missing output.output_base64:\n${JSON.stringify(statusResp, null, 2)}`);
+    }
+
+    const url = base64ToPngUrl(outB64);
+    outEl.src = url;
+    dlEl.href = url;
+    dlEl.style.display = "inline-block";
+
+    const t1 = performance.now();
+    const meta = statusResp?.output?.meta;
+    const serverElapsed = meta?.elapsed_ms ? `\nServer elapsed: ${meta.elapsed_ms} ms` : "";
+
+    log(`✅ Done!
+Roundtrip: ${(t1 - t0).toFixed(0)} ms${serverElapsed}
+PNG size (approx): ${(outB64.length * 0.75 / 1024).toFixed(1)} KB`, "ok");
+
+  } catch (e) {
+    console.error(e);
+    log(`❌ Error:\n${String(e.message || e)}`);
+  } finally {
+    polling = false;
+    goEl.disabled = !file;
+  }
 });
 </script>
 </body>
