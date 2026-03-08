@@ -498,13 +498,20 @@
 
   <script>
     // Show GoLivePocket only when ?admin=1 is present (e.g., https://quietforgestudio.org/?admin=1)
-    (function () {
-      const btn = document.getElementById("golivepocket-btn");
-      if (!btn) return;
-      const params = new URLSearchParams(window.location.search);
-      const isAdmin = params.get("admin") === "1";
-      if (!isAdmin) btn.style.display = "none";
-    })();
+<script>
+(function () {
+  const params = new URLSearchParams(window.location.search);
+  const isAdmin = params.get("admin") === "1";
+
+  const goLive = document.getElementById("golivepocket-btn");
+  const bgRemover = document.getElementById("bg-remover-btn");
+
+  if (!isAdmin) {
+    if (goLive) goLive.style.display = "none";
+    if (bgRemover) bgRemover.style.display = "none";
+  }
+})();
+
   </script>
 </body>
 </html>
