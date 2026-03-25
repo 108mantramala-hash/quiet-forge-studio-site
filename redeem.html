@@ -15,215 +15,462 @@
     :root {
       color-scheme: dark;
       --bg: #0b0c0f;
+      --panel: rgba(255,255,255,0.03);
+      --panel-2: rgba(255,255,255,0.02);
       --text: #e9e9ee;
       --muted: #a3a7b3;
       --gold: #f2ead2;
+      --gold-soft: rgba(242,234,210,0.14);
+      --gold-line: rgba(212,175,55,0.28);
       --line: #23262f;
+      --shadow: 0 10px 40px rgba(0,0,0,0.35);
+      --radius: 22px;
     }
 
     * { box-sizing: border-box; }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       margin: 0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      background: radial-gradient(circle at top, rgba(212,175,55,0.08), transparent 30%), #0b0c0f;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top, rgba(212,175,55,0.08), transparent 30%),
+        linear-gradient(180deg, #101116 0%, #0b0c0f 30%, #0b0c0f 100%);
       color: var(--text);
     }
 
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
     .wrap {
-      max-width: 900px;
-      margin: auto;
-      padding: 20px;
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .hero {
+      position: relative;
+      padding: 84px 0 44px;
+      border-bottom: 1px solid var(--line);
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(11,12,15,0.35), rgba(11,12,15,0.85)),
+        url("assets/insert (3).png") center/cover no-repeat;
+      opacity: 0.35;
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .brand-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    .brand-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.03);
+      backdrop-filter: blur(8px);
+      color: var(--gold);
+      font-size: 13px;
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #87f0a1;
+      box-shadow: 0 0 0 0 rgba(135,240,161,0.6);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(135,240,161,0.6); }
+      70% { box-shadow: 0 0 0 10px rgba(135,240,161,0); }
+      100% { box-shadow: 0 0 0 0 rgba(135,240,161,0); }
     }
 
     h1 {
+      margin: 0;
+      font-size: 48px;
+      line-height: 1.04;
+      letter-spacing: -0.03em;
       color: var(--gold);
-      font-size: 42px;
-      margin: 40px 0 10px;
+      text-shadow: 0 10px 30px rgba(0,0,0,0.45);
+      max-width: 12ch;
     }
 
     .lead {
-      color: #c9cad4;
-      margin-bottom: 30px;
+      margin: 14px 0 0;
+      max-width: 58ch;
+      color: #d0d3dc;
+      font-size: 18px;
+      line-height: 1.75;
+    }
+
+    .content {
+      padding: 42px 0 72px;
     }
 
     .card {
-      border: 1px solid rgba(212,175,55,0.3);
-      border-radius: 20px;
-      padding: 25px;
-      background: rgba(255,255,255,0.03);
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius);
+      border: 1px solid var(--gold-line);
+      background: linear-gradient(180deg, var(--panel), var(--panel-2));
+      box-shadow: var(--shadow), 0 0 0 1px rgba(242,234,210,0.03) inset;
+      padding: 28px;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      background: radial-gradient(circle at top right, rgba(242,234,210,0.07), transparent 28%);
+      pointer-events: none;
+    }
+
+    .app-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+
+    .app-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 18px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.12);
+      flex: 0 0 auto;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.22);
+    }
+
+    .app-icon img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    .app-copy h2 {
+      margin: 0;
+      font-size: 24px;
+      color: var(--gold);
+      letter-spacing: -0.02em;
+    }
+
+    .app-copy p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 14px;
     }
 
     .code-box {
-      margin-top: 20px;
-      padding: 20px;
-      border: 1px dashed rgba(212,175,55,0.5);
-      border-radius: 16px;
+      margin-top: 24px;
+      padding: 22px 18px;
+      border-radius: 18px;
+      border: 1px dashed rgba(242,234,210,0.35);
+      background: linear-gradient(180deg, rgba(212,175,55,0.10), rgba(212,175,55,0.04));
       text-align: center;
-      background: rgba(212,175,55,0.08);
+    }
+
+    .code-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+      margin-bottom: 12px;
     }
 
     .code-value {
-      font-size: 26px;
-      font-weight: bold;
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: 0.16em;
       color: var(--gold);
-      letter-spacing: 2px;
+      word-break: break-word;
+      text-shadow: 0 0 24px rgba(242,234,210,0.08);
     }
 
-    .actions {
-      margin-top: 20px;
+    .status {
+      margin-top: 14px;
+      min-height: 22px;
+      color: #c8ccd6;
+      font-size: 14px;
+    }
+
+    .actions,
+    .feedback-actions {
       display: flex;
       gap: 12px;
       flex-wrap: wrap;
     }
 
+    .actions {
+      margin-top: 22px;
+    }
+
     .btn {
-      padding: 12px 16px;
-      border-radius: 12px;
-      border: 1px solid #333;
-      background: #111;
+      appearance: none;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.03);
       color: var(--gold);
+      border-radius: 14px;
+      padding: 13px 17px;
+      font-size: 14px;
+      font-weight: 600;
       cursor: pointer;
-      text-decoration: none;
-      display: inline-block;
+      transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
     }
 
     .btn:hover {
       transform: translateY(-1px);
+      border-color: rgba(242,234,210,0.26);
+      background: rgba(255,255,255,0.05);
     }
 
     .btn.primary {
       background: var(--gold);
-      color: #000;
-      font-weight: bold;
+      color: #0b0c0f;
+      border-color: var(--gold);
+      box-shadow: 0 0 0 0 rgba(242,234,210,0.22), 0 10px 24px rgba(0,0,0,0.24);
     }
 
-    .status {
-      margin-top: 12px;
-      font-size: 14px;
-      color: var(--muted);
+    .btn.primary:hover {
+      box-shadow: 0 0 0 8px rgba(242,234,210,0.05), 0 10px 24px rgba(0,0,0,0.24);
+      background: #f7f0db;
     }
 
     .help {
-      margin-top: 12px;
-      font-size: 14px;
+      margin-top: 18px;
       color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .help a,
+    footer a {
+      color: #d8dbe3;
+      border-bottom: 1px dotted rgba(216,219,227,0.35);
     }
 
     .feedback {
       margin-top: 30px;
-      padding-top: 20px;
+      padding-top: 22px;
       border-top: 1px solid var(--line);
     }
 
     .feedback h3 {
+      margin: 0 0 10px;
+      font-size: 18px;
       color: var(--gold);
     }
 
     .feedback p {
-      color: #c9cad4;
+      margin: 0 0 10px;
+      color: #c9ced7;
       font-size: 14px;
-      line-height: 1.6;
+      line-height: 1.75;
+      max-width: 70ch;
+    }
+
+    .feedback-actions {
+      margin-top: 14px;
     }
 
     footer {
-      margin-top: 40px;
-      padding-top: 20px;
+      margin-top: 42px;
+      padding-top: 18px;
       border-top: 1px solid var(--line);
-      font-size: 13px;
       color: var(--muted);
+      font-size: 13px;
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .tiny {
+      margin-top: 10px;
+      color: #8d92a0;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 700px) {
+      h1 { font-size: 38px; max-width: 100%; }
+      .lead { font-size: 16px; }
+      .code-value { font-size: 24px; letter-spacing: 0.1em; }
+      .card { padding: 22px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .btn,
+      .pulse-dot {
+        animation: none !important;
+        transition: none !important;
+      }
     }
   </style>
 </head>
-
 <body>
-
-<div class="wrap">
-
-  <h1>Redeem your SnapContact offer</h1>
-  <p class="lead">Use the exclusive Apple offer code below.</p>
-
-  <div class="card">
-
-    <div class="code-box">
-      <div class="code-value">SNAPPYMARCH</div>
-    </div>
-
-    <div class="actions">
-      <button id="redeemBtn" class="btn primary">Redeem in App Store</button>
-      <button id="copyBtn" class="btn">Copy Code</button>
-
-      <!-- NEW BUTTON -->
-      <a href="https://apps.apple.com/app/id6757821313" class="btn">
-         Open App Store
-      </a>
-    </div>
-
-    <div id="status" class="status">Your offer code is ready.</div>
-
-    <div class="help">
-      You can redeem the code or open the App Store directly.
-    </div>
-
-    <!-- Feedback Section -->
-    <div class="feedback">
-      <h3>Enjoying SnapContact?</h3>
-
-      <p>
-        If SnapContact helped you even a little, we’d truly appreciate a moment of your time to rate the app or share your feedback.
-      </p>
-
-      <p>
-        We’re a small, passionate team building this with care — your support helps us grow and create a better experience for everyone.
-      </p>
-
-      <div class="actions">
-        <a href="https://apps.apple.com/app/id6757821313?action=write-review" target="_blank" class="btn primary">
-          ⭐ Rate on App Store
-        </a>
-
-        <a href="mailto:support@quietforgestudio.org" class="btn">
-          💬 Share Feedback
-        </a>
+  <header class="hero">
+    <div class="wrap hero-inner">
+      <div class="brand-row">
+        <span class="brand-badge">
+          <span class="pulse-dot"></span>
+          Exclusive offer • SnapContact
+        </span>
       </div>
 
+      <h1>Redeem your SnapContact offer</h1>
+      <p class="lead">
+        Use the exclusive Apple offer code below to continue in the App Store and enjoy SnapContact.
+      </p>
     </div>
+  </header>
 
-  </div>
+  <main class="content">
+    <div class="wrap">
+      <section class="card">
+        <div class="app-row">
+          <div class="app-icon">
+            <img src="assets/logoold.png" alt="SnapContact app icon" onerror="this.style.display='none'">
+          </div>
 
-  <footer>
-    © <span id="year"></span> Quiet Forge Studio
-  </footer>
+          <div class="app-copy">
+            <h2>SnapContact</h2>
+            <p>Face to Contacts • Clean contact photos in seconds</p>
+          </div>
+        </div>
 
-</div>
+        <div class="code-box">
+          <div class="code-label">Offer Code</div>
+          <div class="code-value" id="codeValue">SNAPPYMARCH</div>
+        </div>
 
-<script>
-  document.getElementById("year").textContent = new Date().getFullYear();
+        <div class="status" id="status">Your offer code is ready.</div>
 
-  const OFFER_CODE = "SNAPPYMARCH";
-  const REDEEM_URL = "https://apps.apple.com/redeem?ctx=offercodes&id=6757821313&code=SNAPPYMARCH";
+        <div class="actions">
+          <button id="redeemBtn" class="btn primary">Redeem in App Store</button>
+          <button id="copyBtn" class="btn">Copy Code</button>
+        </div>
 
-  const redeemBtn = document.getElementById("redeemBtn");
-  const copyBtn = document.getElementById("copyBtn");
-  const statusEl = document.getElementById("status");
+        <div class="help">
+          If the App Store does not open, copy the code and redeem it manually.
+        </div>
 
-  redeemBtn.addEventListener("click", () => {
-    statusEl.textContent = "Opening App Store… thank you for trying SnapContact 🙏";
-    setTimeout(() => {
-      window.location.href = REDEEM_URL;
-    }, 400);
-  });
+        <div class="feedback">
+          <h3>Enjoying SnapContact?</h3>
+          <p>
+            If SnapContact helped you even a little, we’d be truly grateful if you could rate the app or share a few words of feedback.
+          </p>
+          <p>
+            We’re building this with humility, care, and a lot of passion. Your support genuinely helps us grow, improve the product, and create a better experience for everyone.
+          </p>
 
-  copyBtn.addEventListener("click", async () => {
-    try {
-      await navigator.clipboard.writeText(OFFER_CODE);
-      statusEl.textContent = "Code copied to clipboard.";
-    } catch {
-      statusEl.textContent = "Copy failed. Please copy manually.";
+          <div class="feedback-actions">
+            <a
+              class="btn primary"
+              href="https://apps.apple.com/app/id6757821313?action=write-review"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              ⭐ Rate on App Store
+            </a>
+
+            <a
+              class="btn"
+              href="mailto:support@quietforgestudio.org?subject=SnapContact%20Feedback"
+            >
+              💬 Share Feedback
+            </a>
+          </div>
+
+          <div class="tiny">
+            Thank you for supporting independent app development.
+          </div>
+        </div>
+      </section>
+
+      <footer>
+        <span>© <span id="year"></span> Quiet Forge Studio</span>
+        <span>
+          <a href="/privacy.html">Privacy</a> ·
+          <a href="/terms.html">Terms</a> ·
+          <a href="/snapcontact-support.html">Support</a>
+        </span>
+      </footer>
+    </div>
+  </main>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    const OFFER_CODE = "SNAPPYMARCH";
+    const REDEEM_URL = "https://apps.apple.com/redeem?ctx=offercodes&id=6757821313&code=SNAPPYMARCH";
+
+    const redeemBtn = document.getElementById("redeemBtn");
+    const copyBtn = document.getElementById("copyBtn");
+    const statusEl = document.getElementById("status");
+
+    redeemBtn.addEventListener("click", () => {
+      statusEl.textContent = "Opening App Store… thank you for trying SnapContact 🙏";
+      setTimeout(() => {
+        window.location.href = REDEEM_URL;
+      }, 350);
+    });
+
+    copyBtn.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(OFFER_CODE);
+        statusEl.textContent = "Code copied to clipboard.";
+      } catch (err) {
+        statusEl.textContent = "Copy failed. Please copy the code manually.";
+      }
+    });
+
+    // Optional: auto-open App Store shortly after page load on mobile.
+    // Change AUTO_OPEN to false if you want only manual click behavior.
+    const AUTO_OPEN = false;
+
+    if (AUTO_OPEN) {
+      setTimeout(() => {
+        statusEl.textContent = "Opening App Store…";
+        window.location.href = REDEEM_URL;
+      }, 1200);
     }
-  });
-</script>
-
+  </script>
 </body>
 </html>
 
