@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RankVibe — Sharp Cutz</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#0A0B0D; --surf:#0F1115; --card:#141720; --raised:#1A1F2B; --hover:#1F2535;
+  --b:rgba(255,255,255,0.055); --bm:rgba(255,255,255,0.09); --bh:rgba(255,255,255,0.14);
+  --teal:#00C9A7; --teal-d:#009980; --teal-p:rgba(0,201,167,0.07);
+  --gold:#E8A93E; --gold-p:rgba(232,169,62,0.08);
+  --red:#FF5A5F; --red-p:rgba(255,90,95,0.08);
+  --blue:#4B9EF4; --blue-p:rgba(75,158,244,0.08);
+  --txt:#EEF0F3; --txt2:#848C99; --txt3:#3D4455;
+  --sw:240px;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased;}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--txt);display:flex;min-height:100vh;overflow-x:hidden;}
+
+/* SIDEBAR */
+.sb{width:var(--sw);background:var(--surf);border-right:1px solid var(--b);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100;overflow-y:auto;scrollbar-width:none;}
+.sb::-webkit-scrollbar{display:none;}
+.sb::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:repeating-linear-gradient(90deg,var(--teal) 0,var(--teal) 8px,transparent 8px,transparent 13px,var(--red) 13px,var(--red) 21px,transparent 21px,transparent 28px);}
+.sb-logo{padding:20px 18px 15px;border-bottom:1px solid var(--b);display:flex;align-items:center;gap:10px;margin-top:3px;}
+.sb-mark{width:34px;height:34px;background:linear-gradient(135deg,var(--teal),#0891B2);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+.sb-brand{font-family:'Bebas Neue',cursive;font-size:22px;letter-spacing:1px;line-height:1;}
+.sb-brand span{color:var(--teal);}
+.sb-shop{padding:10px 13px;margin:11px 9px 0;background:var(--card);border-radius:10px;border:1px solid var(--b);}
+.sb-sn{font-weight:700;font-size:13px;}
+.sb-sm{font-size:11px;color:var(--txt2);margin-top:2px;display:flex;align-items:center;gap:5px;}
+.sb-dot{width:5px;height:5px;background:var(--teal);border-radius:50%;animation:p 2s infinite;}
+@keyframes p{0%,100%{opacity:1}50%{opacity:.3}}
+.sblbl{font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:1.1px;padding:15px 17px 6px;}
+.sbi{display:flex;align-items:center;gap:9px;padding:8px 10px 8px 14px;margin:1px 7px;border-radius:9px;cursor:pointer;font-size:13px;font-weight:500;color:var(--txt2);position:relative;transition:all .13s;user-select:none;}
+.sbi:hover{background:var(--hover);color:var(--txt);}
+.sbi.on{background:var(--teal-p);color:var(--teal);border:1px solid rgba(0,201,167,0.14);}
+.sbi.on::before{content:'';position:absolute;left:-7px;top:50%;transform:translateY(-50%);width:3px;height:16px;background:var(--teal);border-radius:0 2px 2px 0;}
+.sbi-ic{font-size:14px;width:18px;text-align:center;flex-shrink:0;}
+.sb-bdg{margin-left:auto;font-size:10px;font-weight:800;padding:1px 7px;border-radius:100px;}
+.sb-bdg.t{background:var(--teal);color:#000;}
+.sb-bdg.r{background:var(--red);color:#fff;}
+.sb-foot{margin-top:auto;padding:11px 9px;border-top:1px solid var(--b);}
+.up-box{background:linear-gradient(135deg,rgba(0,201,167,.09),rgba(8,145,178,.05));border:1px solid rgba(0,201,167,.18);border-radius:10px;padding:11px 13px;}
+.up-lbl{font-size:10px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;}
+.up-txt{font-size:11px;color:var(--txt2);margin-bottom:8px;line-height:1.45;}
+.up-btn{width:100%;background:var(--teal);color:#000;border:none;border-radius:8px;padding:7px;font-family:'Outfit',sans-serif;font-weight:700;font-size:12px;cursor:pointer;}
+
+/* MAIN */
+.main{margin-left:var(--sw);flex:1;display:flex;flex-direction:column;}
+.topbar{height:58px;background:var(--surf);border-bottom:1px solid var(--b);display:flex;align-items:center;padding:0 26px;gap:12px;position:sticky;top:0;z-index:50;}
+.topbar-ttl{font-family:'Bebas Neue',cursive;font-size:20px;letter-spacing:1.5px;flex:1;}
+.topbar-ttl span{color:var(--teal);}
+.tb-pill{display:flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--bm);border-radius:8px;padding:5px 12px;font-size:12px;font-weight:500;color:var(--txt2);cursor:pointer;}
+.tb-pill:hover{border-color:var(--teal);color:var(--txt);}
+.tb-btn{background:var(--card);border:1px solid var(--b);border-radius:8px;padding:5px 12px;font-size:12px;font-weight:600;color:var(--txt2);cursor:pointer;font-family:'Outfit',sans-serif;display:flex;align-items:center;gap:5px;}
+.tb-btn:hover{border-color:var(--bm);color:var(--txt);}
+.tb-btn.p{background:var(--teal);border-color:var(--teal);color:#000;font-weight:700;}
+.tb-btn.p:hover{background:var(--teal-d);}
+.tb-av{width:32px;height:32px;background:linear-gradient(135deg,#1a2540,#253050);border-radius:9px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:11px;color:var(--teal);border:1px solid var(--bm);cursor:pointer;}
+
+/* CONTENT */
+.cnt{padding:22px 26px 48px;flex:1;}
+.scr{display:none;animation:fu .28s ease both;}
+.scr.on{display:block;}
+@keyframes fu{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* SHARED */
+.panel{background:var(--card);border:1px solid var(--b);border-radius:14px;overflow:hidden;}
+.ph{display:flex;align-items:center;justify-content:space-between;padding:13px 17px;border-bottom:1px solid var(--b);}
+.pt{font-weight:700;font-size:13px;display:flex;align-items:center;gap:7px;}
+.pt-ic{font-size:14px;}
+.pm{font-size:11px;color:var(--txt3);}
+.pb{padding:16px;}
+
+.g{display:grid;gap:14px;margin-bottom:14px;}
+.g21{grid-template-columns:2fr 1fr;}
+.g12{grid-template-columns:1fr 2fr;}
+.g3{grid-template-columns:repeat(3,1fr);}
+.g2{grid-template-columns:repeat(2,1fr);}
+.g4{grid-template-columns:repeat(4,1fr);}
+.g53{grid-template-columns:5fr 3fr;}
+.g32{grid-template-columns:3fr 2fr;}
+
+.tag{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:700;padding:2px 8px;border-radius:5px;text-transform:uppercase;letter-spacing:.3px;}
+.tag.t{background:var(--teal-p);color:var(--teal);border:1px solid rgba(0,201,167,.2);}
+.tag.r{background:var(--red-p);color:var(--red);border:1px solid rgba(255,90,95,.2);}
+.tag.g{background:var(--gold-p);color:var(--gold);border:1px solid rgba(232,169,62,.2);}
+.tag.b{background:var(--blue-p);color:var(--blue);border:1px solid rgba(75,158,244,.2);}
+
+.btn{padding:6px 13px;border-radius:8px;font-family:'Outfit',sans-serif;font-weight:600;font-size:12px;border:1px solid var(--b);background:var(--raised);color:var(--txt2);cursor:pointer;}
+.btn:hover{border-color:var(--bm);color:var(--txt);}
+.btn.p{background:var(--teal);border-color:var(--teal);color:#000;font-weight:700;}
+.btn.p:hover{background:var(--teal-d);}
+.btn.ghost{background:transparent;border-color:rgba(0,201,167,.28);color:var(--teal);}
+.btn.ghost:hover{background:var(--teal-p);}
+
+.divider{height:1px;background:var(--b);margin:13px 0;}
+
+.prog-track{background:var(--raised);border-radius:100px;height:6px;overflow:hidden;}
+.prog-fill{height:100%;border-radius:100px;}
+
+/* KPI */
+.krow{display:grid;gap:12px;margin-bottom:16px;}
+.k5{grid-template-columns:repeat(5,1fr);}
+.k4{grid-template-columns:repeat(4,1fr);}
+.k3{grid-template-columns:repeat(3,1fr);}
+.kpi{background:var(--card);border:1px solid var(--b);border-radius:13px;padding:15px 16px 12px;position:relative;overflow:hidden;transition:border-color .18s,transform .18s;}
+.kpi:hover{border-color:var(--bm);transform:translateY(-1px);}
+.kpi::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;border-radius:0 0 13px 13px;}
+.kpi.ct::after{background:linear-gradient(90deg,var(--teal),transparent);}
+.kpi.cg::after{background:linear-gradient(90deg,var(--gold),transparent);}
+.kpi.cr::after{background:linear-gradient(90deg,var(--red),transparent);}
+.kpi.cb::after{background:linear-gradient(90deg,var(--blue),transparent);}
+.kpi.cht{background:linear-gradient(135deg,rgba(0,201,167,.06),rgba(0,201,167,.01));border-color:rgba(0,201,167,.22);}
+.kpi-lbl{font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;}
+.kpi-val{font-family:'Bebas Neue',cursive;font-size:38px;letter-spacing:1px;line-height:1;margin-bottom:4px;}
+.kpi-val.t{color:var(--teal);}
+.kpi-val.g{color:var(--gold);}
+.kpi-val.r{color:var(--red);}
+.kpi-val.b{color:var(--blue);}
+.kpi-ch{font-size:11px;font-weight:600;}
+.kpi-ch.up{color:var(--teal);}
+.kpi-ch.dn{color:var(--red);}
+.kpi-sub{font-size:11px;color:var(--txt3);margin-top:2px;}
+
+/* ALERT */
+.alert{background:linear-gradient(90deg,rgba(0,201,167,.07),rgba(0,201,167,.02));border:1px solid rgba(0,201,167,.18);border-radius:12px;padding:11px 15px;display:flex;align-items:center;gap:12px;margin-bottom:18px;}
+.alert-txt{flex:1;font-size:13px;color:var(--txt2);line-height:1.4;}
+.alert-txt strong{color:var(--teal);}
+.alert-txt.r{color:var(--txt2);}
+.alert-txt.r strong{color:var(--red);}
+.alert-cta{background:var(--teal);color:#000;border:none;border-radius:8px;padding:6px 13px;font-family:'Outfit',sans-serif;font-weight:700;font-size:12px;cursor:pointer;white-space:nowrap;flex-shrink:0;}
+.alert-cta.r{background:var(--red);color:#fff;}
+
+/* LEADERBOARD */
+.lb-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--b);}
+.lb-row:last-child{border-bottom:none;}
+.lb-rank{font-family:'Bebas Neue',cursive;font-size:17px;width:20px;text-align:center;flex-shrink:0;}
+.lb-rank.r1{color:var(--gold);}
+.lb-rank.r2{color:#8A9AB0;}
+.lb-rank.r3{color:#B07850;}
+.lb-rank.ry{color:var(--teal);}
+.lb-rank.rn{color:var(--txt3);}
+.lb-av{width:30px;height:30px;border-radius:8px;background:var(--raised);border:1px solid var(--b);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.lb-info{flex:1;min-width:0;}
+.lb-n{font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.lb-m{font-size:11px;color:var(--txt3);margin-top:1px;}
+.lb-you{font-size:9px;font-weight:800;color:var(--teal);background:var(--teal-p);border:1px solid rgba(0,201,167,.2);border-radius:4px;padding:1px 5px;margin-left:5px;text-transform:uppercase;vertical-align:middle;}
+.lb-trend{font-size:11px;font-weight:700;flex-shrink:0;}
+.lb-trend.up{color:var(--teal);}
+.lb-trend.dn{color:var(--red);}
+.lb-bar{width:52px;flex-shrink:0;}
+.lb-btrack{background:var(--raised);border-radius:100px;height:4px;overflow:hidden;margin-top:4px;}
+.lb-bfill{height:100%;border-radius:100px;background:var(--txt3);}
+.lb-bfill.you{background:var(--teal);}
+.lb-you-row{background:rgba(0,201,167,.03);border-radius:8px;margin:0 -3px;padding:8px 3px;position:relative;}
+.lb-you-row::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--teal);border-radius:2px;}
+
+/* REVIEWS */
+.rev{background:var(--raised);border:1px solid var(--b);border-radius:11px;padding:13px;transition:border-color .13s;}
+.rev:hover{border-color:var(--bm);}
+.rev.neg{border-color:rgba(255,90,95,.16);}
+.rev-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:7px;}
+.rev-av{width:30px;height:30px;border-radius:8px;background:var(--card);border:1px solid var(--b);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;color:var(--txt2);flex-shrink:0;}
+.rev-n{font-weight:600;font-size:13px;}
+.rev-d{font-size:11px;color:var(--txt3);}
+.rev-stars{font-size:11px;letter-spacing:1px;}
+.sch{font-size:10px;font-weight:700;padding:2px 8px;border-radius:5px;text-transform:uppercase;letter-spacing:.3px;}
+.sch.pos{background:rgba(0,201,167,.1);color:#6EE7D0;}
+.sch.neu{background:rgba(232,169,62,.1);color:#FCD34D;}
+.sch.neg{background:rgba(255,90,95,.1);color:#FCA5A5;}
+.rev-body{font-size:12px;color:var(--txt2);line-height:1.55;margin-bottom:9px;}
+.ai-box{background:var(--card);border:1px solid rgba(0,201,167,.13);border-radius:8px;padding:9px 11px;margin-bottom:9px;}
+.ai-lbl{font-size:10px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.ai-txt{font-size:12px;color:var(--txt2);line-height:1.5;}
+.rev-acts{display:flex;gap:6px;flex-wrap:wrap;}
+.rbtn{padding:5px 12px;border-radius:7px;font-size:11px;font-weight:600;border:1px solid var(--b);background:var(--card);color:var(--txt2);cursor:pointer;font-family:'Outfit',sans-serif;}
+.rbtn:hover{border-color:var(--bm);color:var(--txt);}
+.rbtn.ok{background:var(--teal);border-color:var(--teal);color:#000;}
+
+/* VS CARD (competitor head-to-head) */
+.vs-card{background:var(--raised);border:1px solid var(--b);border-radius:11px;padding:13px;}
+.vs-names{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
+.vs-name{flex:1;font-weight:700;font-size:14px;}
+.vs-name.you{color:var(--teal);}
+.vs-divider-txt{font-size:11px;font-weight:800;color:var(--txt3);padding:0 4px;}
+.vs-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.vs-lbl{font-size:11px;color:var(--txt3);width:90px;flex-shrink:0;}
+.vs-bars{flex:1;display:flex;align-items:center;gap:6px;}
+.vs-bar-you{height:6px;border-radius:3px 0 0 3px;background:var(--teal);}
+.vs-bar-them{height:6px;border-radius:0 3px 3px 0;background:#3D4455;}
+.vs-vals{display:flex;justify-content:space-between;font-size:11px;font-weight:700;width:100%;}
+.vs-val-you{color:var(--teal);}
+.vs-val-them{color:var(--txt3);}
+
+/* THEME CHIP */
+.tc{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:100px;font-size:12px;font-weight:600;border:1px solid transparent;}
+.tc.pos{background:rgba(0,201,167,.07);border-color:rgba(0,201,167,.18);color:#6EE7D0;}
+.tc.neg{background:rgba(255,90,95,.07);border-color:rgba(255,90,95,.18);color:#FCA5A5;}
+.tc .c{font-size:10px;opacity:.55;}
+
+/* RECOMMENDATION */
+.rec{background:var(--raised);border:1px solid var(--b);border-radius:11px;padding:12px 13px;display:flex;gap:10px;cursor:pointer;transition:border-color .13s;}
+.rec:hover{border-color:var(--bm);}
+.rec.hi{border-left:2px solid var(--teal);}
+.rec.md{border-left:2px solid var(--gold);}
+.rec-ico{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.rec-ttl{font-weight:700;font-size:13px;margin-bottom:2px;}
+.rec-sub{font-size:11px;color:var(--txt3);line-height:1.4;}
+.imp{margin-left:auto;font-size:10px;font-weight:800;padding:2px 7px;border-radius:5px;flex-shrink:0;text-transform:uppercase;align-self:flex-start;}
+.imp.h{background:rgba(0,201,167,.1);color:var(--teal);}
+.imp.m{background:rgba(232,169,62,.1);color:var(--gold);}
+
+/* DATA TABLE */
+.dtbl{width:100%;border-collapse:collapse;}
+.dtbl th{font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.8px;padding:7px 11px;text-align:left;border-bottom:1px solid var(--b);}
+.dtbl td{font-size:12px;color:var(--txt2);padding:9px 11px;border-bottom:1px solid var(--b);vertical-align:middle;}
+.dtbl tr:last-child td{border-bottom:none;}
+.dtbl tr:hover td{background:var(--hover);}
+
+/* FEEDBACK CARD */
+.fb{background:var(--raised);border:1px solid rgba(255,90,95,.13);border-radius:11px;padding:12px 13px;border-left:2px solid var(--red);}
+.fb.res{border-color:rgba(0,201,167,.12);border-left-color:var(--teal);opacity:.55;}
+
+/* TOGGLE */
+.tog{position:relative;width:34px;height:19px;flex-shrink:0;}
+.tog input{opacity:0;width:0;height:0;}
+.tog-sl{position:absolute;cursor:pointer;inset:0;background:var(--raised);border:1px solid var(--b);border-radius:100px;transition:.28s;}
+.tog-sl::before{content:'';position:absolute;height:13px;width:13px;left:2px;bottom:2px;background:var(--txt3);border-radius:50%;transition:.28s;}
+.tog input:checked+.tog-sl{background:var(--teal-p);border-color:rgba(0,201,167,.38);}
+.tog input:checked+.tog-sl::before{transform:translateX(15px);background:var(--teal);}
+
+/* SETTING ROW */
+.srow{display:flex;align-items:center;justify-content:space-between;padding:13px 0;border-bottom:1px solid var(--b);}
+.srow:last-child{border-bottom:none;}
+.slbl{font-weight:600;font-size:13px;margin-bottom:2px;}
+.ssub{font-size:11px;color:var(--txt3);}
+.sinput{background:var(--raised);border:1px solid var(--b);border-radius:8px;padding:7px 11px;font-family:'Outfit',sans-serif;font-size:12px;color:var(--txt);width:190px;}
+.sinput:focus{outline:none;border-color:rgba(0,201,167,.4);}
+
+/* INSIGHT BOX */
+.ins{background:linear-gradient(135deg,rgba(0,201,167,.05),rgba(0,201,167,.02));border:1px solid rgba(0,201,167,.13);border-radius:10px;padding:11px 13px;}
+.ins-ttl{font-weight:700;font-size:13px;color:var(--teal);margin-bottom:3px;}
+.ins-txt{font-size:12px;color:var(--txt3);line-height:1.5;}
+
+/* SECTION HEAD */
+.sh{font-family:'Bebas Neue',cursive;font-size:14px;letter-spacing:1.2px;color:var(--txt3);text-transform:uppercase;margin-bottom:10px;padding-bottom:7px;border-bottom:1px solid var(--b);}
+
+/* VELOCITY */
+.vel{display:flex;align-items:center;gap:9px;margin-bottom:7px;}
+.vel-n{font-size:12px;color:var(--txt2);width:110px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.vel-t{flex:1;background:var(--raised);border-radius:100px;height:5px;overflow:hidden;}
+.vel-f{height:100%;border-radius:100px;}
+.vel-v{font-size:12px;font-weight:700;color:var(--txt3);width:32px;text-align:right;flex-shrink:0;}
+
+/* COMP CARD */
+.comp{background:var(--raised);border:1px solid var(--b);border-radius:11px;padding:13px;transition:border-color .13s;}
+.comp:hover{border-color:var(--bm);}
+.comp.threat{border-color:rgba(255,90,95,.18);}
+.comp.watch{border-color:rgba(232,169,62,.18);}
+.comp.weak{border-color:rgba(0,201,167,.13);}
+.comp-hd{display:flex;align-items:center;gap:9px;margin-bottom:10px;}
+.comp-av{width:36px;height:36px;border-radius:9px;background:var(--card);border:1px solid var(--b);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+.comp-nm{font-weight:700;font-size:14px;}
+.comp-addr{font-size:11px;color:var(--txt3);}
+.comp-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:10px;}
+.comp-s{background:var(--card);border-radius:8px;padding:7px 9px;text-align:center;}
+.comp-sv{font-family:'Bebas Neue',cursive;font-size:19px;line-height:1;}
+.comp-sv.up{color:var(--teal);}
+.comp-sv.dn{color:var(--red);}
+.comp-sl{font-size:10px;color:var(--txt3);margin-top:1px;}
+.comp-themes{display:flex;flex-wrap:wrap;gap:5px;}
+.comp-th{font-size:10px;font-weight:600;padding:3px 8px;border-radius:100px;background:var(--card);border:1px solid var(--b);color:var(--txt2);}
+
+/* MARKET TREND */
+.mkt-card{background:var(--raised);border:1px solid var(--b);border-radius:11px;padding:13px;}
+.mkt-card:hover{border-color:var(--bm);}
+
+/* GAP CHIP */
+.gap-chip{display:inline-flex;align-items:center;gap:5px;background:var(--teal-p);border:1px solid rgba(0,201,167,.18);border-radius:8px;padding:5px 10px;font-size:12px;font-weight:700;color:var(--teal);}
+
+/* BEAT CARD — the "beat this shop" card */
+.beat-card{background:linear-gradient(135deg,var(--raised),var(--card));border:1px solid rgba(0,201,167,.2);border-radius:13px;padding:15px;}
+.beat-rank{font-family:'Bebas Neue',cursive;font-size:56px;line-height:1;color:var(--teal);opacity:.2;position:absolute;right:14px;top:8px;}
+
+/* STACKED GAP LIST */
+.gap-list{display:flex;flex-direction:column;gap:9px;}
+
+/* WEEKLY DIGEST */
+.digest-item{background:var(--raised);border:1px solid var(--b);border-radius:11px;padding:12px 14px;display:flex;align-items:flex-start;gap:11px;}
+.di-num{font-family:'Bebas Neue',cursive;font-size:28px;line-height:1;color:var(--teal);flex-shrink:0;width:24px;text-align:center;}
+.di-ttl{font-weight:700;font-size:13px;margin-bottom:3px;}
+.di-sub{font-size:12px;color:var(--txt3);line-height:1.45;}
+.di-act{margin-top:8px;}
+
+/* SCROLL */
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--hover);border-radius:10px;}
+
+/* TABS */
+.tabs{display:flex;gap:2px;background:var(--raised);border-radius:8px;padding:3px;}
+.tabp{padding:4px 12px;border-radius:6px;font-size:12px;font-weight:600;color:var(--txt3);cursor:pointer;transition:all .13s;}
+.tabp.on{background:var(--card);color:var(--txt);box-shadow:0 1px 4px rgba(0,0,0,.28);}
+.tabp:hover:not(.on){color:var(--txt2);}
+
+/* AVATAR COLOURS */
+.ava{background:#1A2820;color:#6EE7D0;}
+.avb{background:#2A1F18;color:#FCD34D;}
+.avc{background:#18202A;color:#93C5FD;}
+.avd{background:#2A1818;color:#FCA5A5;}
+.ave{background:#1F182A;color:#C4B5FD;}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sb">
+  <div class="sb-logo">
+    <div class="sb-mark">✂️</div>
+    <div class="sb-brand">Rank<span>Vibe</span></div>
+  </div>
+  <div class="sb-shop">
+    <div class="sb-sn">Sharp Cutz Barbershop</div>
+    <div class="sb-sm"><div class="sb-dot"></div> Live · East Side</div>
+  </div>
+
+  <div class="sblbl">My Shop</div>
+  <div class="sbi on"  onclick="nav(this,'home')"><span class="sbi-ic">🗓️</span> Weekly Digest</div>
+  <div class="sbi" onclick="nav(this,'clients')"><span class="sbi-ic">👤</span> Lost Clients <span class="sb-bdg r">3</span></div>
+  <div class="sbi" onclick="nav(this,'reviews')"><span class="sbi-ic">⭐</span> Reviews <span class="sb-bdg t">3</span></div>
+  <div class="sbi" onclick="nav(this,'feedback')"><span class="sbi-ic">🔒</span> Private Feedback <span class="sb-bdg r">5</span></div>
+  <div class="sbi" onclick="nav(this,'ai')"><span class="sbi-ic">✨</span> AI Replies</div>
+
+  <div class="sblbl">Beat Competitors</div>
+  <div class="sbi" onclick="nav(this,'ranking')"><span class="sbi-ic">🏆</span> Ranking & Gaps</div>
+  <div class="sbi" onclick="nav(this,'headtohead')"><span class="sbi-ic">⚔️</span> Head to Head</div>
+  <div class="sbi" onclick="nav(this,'intel')"><span class="sbi-ic">🔍</span> Competitor Intel</div>
+  <div class="sbi" onclick="nav(this,'themes')"><span class="sbi-ic">🧠</span> What Clients Say</div>
+
+  <div class="sblbl">Get More Clients</div>
+  <div class="sbi" onclick="nav(this,'qr')"><span class="sbi-ic">📲</span> QR Funnel</div>
+  <div class="sbi" onclick="nav(this,'recs')"><span class="sbi-ic">📋</span> Action Plan</div>
+  <div class="sbi" onclick="nav(this,'analytics')"><span class="sbi-ic">📊</span> Analytics</div>
+
+  <div class="sblbl">Account</div>
+  <div class="sbi" onclick="nav(this,'settings')"><span class="sbi-ic">⚙️</span> Settings</div>
+
+  <div class="sb-foot">
+    <div class="up-box">
+      <div class="up-lbl">🚀 Starter Plan</div>
+      <div class="up-txt">Unlock competitor deep intel, SMS nudges & head-to-head analysis.</div>
+      <button class="up-btn">Upgrade to Pro →</button>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="topbar">
+    <div class="topbar-ttl" id="tb-ttl">Weekly <span>Digest</span></div>
+    <div class="tb-pill">📅 This week ▾</div>
+    <div style="display:flex;gap:7px">
+      <button class="tb-btn">📤 Export</button>
+      <button class="tb-btn p">⭐ Get Reviews</button>
+    </div>
+    <div class="tb-av">SC</div>
+  </div>
+
+  <div class="cnt">
+
+  <!-- ══════ 1. WEEKLY DIGEST (Home) ══════ -->
+  <div class="scr on" id="tab-home">
+
+    <div class="krow k4">
+      <div class="kpi cht ct"><div class="kpi-lbl">⭐ Google Rating</div><div class="kpi-val t">4.6</div><div class="kpi-ch up">▲ +0.2 this week</div></div>
+      <div class="kpi cg"><div class="kpi-lbl">🏆 Local Rank</div><div class="kpi-val g">#6</div><div class="kpi-sub">of 24 shops · ↑1 this week</div></div>
+      <div class="kpi ct"><div class="kpi-lbl">📈 New Reviews</div><div class="kpi-val">+3</div><div class="kpi-sub">This week · 128 total</div></div>
+      <div class="kpi cr"><div class="kpi-lbl">⚠️ Issues Captured</div><div class="kpi-val r">2</div><div class="kpi-sub">Private · saved from going public</div></div>
+    </div>
+
+    <div class="g g21">
+
+      <!-- LEFT: 3 things to do this week -->
+      <div>
+        <div class="sh">📋 Your 3 actions this week</div>
+        <div class="gap-list" style="margin-bottom:16px">
+          <div class="digest-item">
+            <div class="di-num">1</div>
+            <div style="flex:1">
+              <div class="di-ttl">Reply to Ryan L.'s 2-star review</div>
+              <div class="di-sub">Posted 3 days ago, unanswered. Google penalises shops that ignore negative reviews. A calm, professional reply shows every future client you care.</div>
+              <div class="di-act"><button class="btn ghost" style="font-size:11px">✨ See AI Draft →</button></div>
+            </div>
+          </div>
+          <div class="digest-item">
+            <div class="di-num">2</div>
+            <div style="flex:1">
+              <div class="di-ttl">Print and post QR code at register</div>
+              <div class="di-sub">Elite Cutz got 18 reviews this month vs your 12. Their QR is at checkout. Yours isn't. This single action could close that gap within 30 days.</div>
+              <div class="di-act"><button class="btn ghost" style="font-size:11px">📲 Print Poster →</button></div>
+            </div>
+          </div>
+          <div class="digest-item">
+            <div class="di-num">3</div>
+            <div style="flex:1">
+              <div class="di-ttl">Add 1 barber on Saturday 11am–2pm</div>
+              <div class="di-sub">6 complaints this month mention Saturday wait time. The Razor's Edge just added a Saturday barber — they're gaining on you. This could stop the bleed.</div>
+              <div class="di-act"><button class="btn ghost" style="font-size:11px">See Feedback Pattern →</button></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sh">⚡ What happened this week</div>
+        <div class="gap-list">
+          <div style="background:var(--raised);border:1px solid var(--b);border-radius:11px;padding:12px 14px;">
+            <div style="font-weight:700;font-size:13px;margin-bottom:5px;display:flex;justify-content:space-between;align-items:center">3 new Google reviews <div class="tag t">+3</div></div>
+            <div style="font-size:12px;color:var(--txt3);line-height:1.5">2 positive (Marcus J. 5⭐, James W. 5⭐) · 1 negative (Tyler K. 2⭐). AI replies drafted for all 3. 1 approved, 2 pending your review.</div>
+          </div>
+          <div style="background:var(--raised);border:1px solid rgba(255,90,95,.13);border-radius:11px;padding:12px 14px;border-left:2px solid var(--red);">
+            <div style="font-weight:700;font-size:13px;margin-bottom:5px;display:flex;justify-content:space-between;align-items:center">2 private feedbacks captured <div class="tag r">Saved</div></div>
+            <div style="font-size:12px;color:var(--txt3);line-height:1.5">2 unhappy clients used your QR feedback form instead of going to Google. Both mention wait time. <strong style="color:var(--txt2)">These would have been public 1-star reviews.</strong></div>
+          </div>
+          <div style="background:var(--raised);border:1px solid rgba(232,169,62,.13);border-radius:11px;padding:12px 14px;border-left:2px solid var(--gold);">
+            <div style="font-weight:700;font-size:13px;margin-bottom:5px;display:flex;justify-content:space-between;align-items:center">Razor's Edge jumped to #3 <div class="tag g">Watch</div></div>
+            <div style="font-size:12px;color:var(--txt3);line-height:1.5">They got 11 reviews this week — above their usual pace. They added a Saturday barber and their wait-time complaints dropped to zero. Worth watching.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Beat-the-next-shop card + recent reviews -->
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <!-- Next target -->
+        <div class="panel">
+          <div class="ph"><div class="pt">🎯 Your next target</div><div class="tag t">Closest gap</div></div>
+          <div class="pb">
+            <div style="background:var(--raised);border-radius:10px;padding:12px 13px;margin-bottom:12px;position:relative;overflow:hidden;">
+              <div style="font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px">Beat to reach #5</div>
+              <div style="font-weight:700;font-size:16px;margin-bottom:8px">The Lineup</div>
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">
+                <div style="font-size:12px;color:var(--txt3)">Reviews gap:</div>
+                <div style="font-family:'Bebas Neue';font-size:22px;color:var(--teal);line-height:1">34 reviews</div>
+              </div>
+              <div style="font-size:12px;color:var(--txt3);margin-bottom:10px">At your current +12/mo pace: <strong style="color:var(--txt2)">~3 months</strong><br>With QR at checkout (+25/mo): <strong style="color:var(--teal)">6 weeks</strong></div>
+              <div class="prog-track"><div class="prog-fill" style="width:79%;background:linear-gradient(90deg,var(--teal),#0891B2)"></div></div>
+              <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--txt3);margin-top:3px"><span>You · 128</span><span>The Lineup · 162</span></div>
+            </div>
+
+            <div style="font-size:11px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px">All gaps at a glance</div>
+            <div class="gap-list">
+              <div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--b)">
+                <div style="font-size:12px;font-weight:600;color:var(--txt2);flex:1">The Lineup <span style="font-weight:400;color:var(--txt3)">(#5)</span></div>
+                <div class="gap-chip">34 reviews away</div>
+                <div style="font-size:11px;color:var(--teal);font-weight:700">~6wk</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--b)">
+                <div style="font-size:12px;font-weight:600;color:var(--txt2);flex:1">Kings Barber <span style="font-weight:400;color:var(--txt3)">(#4)</span></div>
+                <div class="gap-chip">53 reviews away</div>
+                <div style="font-size:11px;color:var(--gold);font-weight:700">~4mo</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;padding:7px 0">
+                <div style="font-size:12px;font-weight:600;color:var(--txt2);flex:1">Top 3 threshold <span style="font-weight:400;color:var(--txt3)">(#3)</span></div>
+                <div class="gap-chip">85 reviews away</div>
+                <div style="font-size:11px;color:var(--txt3);font-weight:700">~7mo</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Competitor of the week -->
+        <div class="panel">
+          <div class="ph"><div class="pt">🔍 Competitor of the week</div><div class="tag r">High threat</div></div>
+          <div class="pb">
+            <div style="font-weight:700;font-size:15px;margin-bottom:4px">Elite Cutz Barbershop</div>
+            <div style="font-size:12px;color:var(--txt3);margin-bottom:12px">0.4 miles · #1 locally · +18 reviews this month</div>
+            <div style="font-size:11px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.7px;margin-bottom:7px">What they have that you don't</div>
+            <div class="gap-list">
+              <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid var(--b)">
+                <span style="color:var(--red);font-size:14px;flex-shrink:0">✗</span>
+                <div><div style="font-size:12px;font-weight:600">Online booking system</div><div style="font-size:11px;color:var(--txt3)">Mentioned in 14 of their 5-star reviews. Eliminates wait complaints entirely.</div></div>
+              </div>
+              <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid var(--b)">
+                <span style="color:var(--red);font-size:14px;flex-shrink:0">✗</span>
+                <div><div style="font-size:12px;font-weight:600">Open until 9pm Fri–Sat</div><div style="font-size:11px;color:var(--txt3)">You close at 7pm. 6 reviews mention coming in "after work" as a reason to choose them.</div></div>
+              </div>
+              <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 0">
+                <span style="color:var(--teal);font-size:14px;flex-shrink:0">✓</span>
+                <div><div style="font-size:12px;font-weight:600">Fade quality (your strength too)</div><div style="font-size:11px;color:var(--txt3)">This is even. Don't let them dominate the "fade" narrative — ask happy clients to specifically mention it.</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div><!-- /home -->
+
+
+  <!-- ══════ 2. LOST CLIENTS ══════ -->
+  <div class="scr" id="tab-clients">
+    <div class="alert" style="background:linear-gradient(90deg,rgba(255,90,95,.07),rgba(255,90,95,.02));border-color:rgba(255,90,95,.18)">
+      <span style="font-size:18px">🚨</span>
+      <div class="alert-txt r"><strong>3 clients have gone quiet</strong> — they visited once, gave negative private feedback, and haven't come back. These are recoverable. Here's who and why.</div>
+    </div>
+
+    <div class="krow k4">
+      <div class="kpi cr"><div class="kpi-lbl">👤 At-Risk Clients</div><div class="kpi-val r">3</div><div class="kpi-sub">Visited & gave neg. feedback</div></div>
+      <div class="kpi"><div class="kpi-lbl">🔒 Privately Captured</div><div class="kpi-val">48</div><div class="kpi-sub">Would have been public reviews</div></div>
+      <div class="kpi ct"><div class="kpi-lbl">✅ Recovered</div><div class="kpi-val t">11</div><div class="kpi-sub">Reached out → came back</div></div>
+      <div class="kpi cg"><div class="kpi-lbl">💰 Avg Client Value</div><div class="kpi-val g">$40</div><div class="kpi-sub">Every lost client = $480/yr</div></div>
+    </div>
+
+    <div class="g g53">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="sh">👤 At-Risk — Clients who may not return</div>
+        <div class="gap-list">
+
+          <div class="fb">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+              <div style="display:flex;align-items:center;gap:9px">
+                <div class="rev-av avd">RL</div>
+                <div>
+                  <div style="font-weight:700;font-size:13px">Ryan L.</div>
+                  <div style="font-size:11px;color:var(--txt3)">Last visit: 8 days ago · Feedback submitted</div>
+                </div>
+              </div>
+              <div class="tag r">At risk</div>
+            </div>
+            <div style="font-size:12px;color:var(--txt2);margin-bottom:8px;line-height:1.5">"Waited 45 minutes past my appointment. The cut wasn't what I showed them."</div>
+            <div style="display:flex;gap:6px;margin-bottom:6px">
+              <span class="tag r">⏳ Wait</span>
+              <span class="tag r">❌ Wrong cut</span>
+            </div>
+            <div class="ins" style="margin-bottom:9px"><div class="ins-ttl">💡 Why this matters</div><div class="ins-txt">Ryan also left a 2-star Google review. His friends can see it. One personal outreach message could turn this into a return visit and a review update.</div></div>
+            <div style="display:flex;gap:7px"><button class="btn p" style="font-size:11px">💬 Send Outreach Message</button><button class="btn" style="font-size:11px">✨ Draft with AI</button><button class="btn" style="font-size:11px">✅ Mark Resolved</button></div>
+          </div>
+
+          <div class="fb">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+              <div style="display:flex;align-items:center;gap:9px">
+                <div class="rev-av avb">MK</div>
+                <div>
+                  <div style="font-weight:700;font-size:13px">Marcus K.</div>
+                  <div style="font-size:11px;color:var(--txt3)">Last visit: 12 days ago · Feedback submitted</div>
+                </div>
+              </div>
+              <div class="tag r">At risk</div>
+            </div>
+            <div style="font-size:12px;color:var(--txt2);margin-bottom:8px;line-height:1.5">"Was charged $45 this time. Was $35 last month. No explanation for the difference."</div>
+            <div style="display:flex;gap:6px;margin-bottom:6px"><span class="tag r">💰 Price</span></div>
+            <div class="ins" style="margin-bottom:9px"><div class="ins-ttl">💡 This is a simple fix</div><div class="ins-txt">Pricing confusion is the easiest reason to lose a regular. A quick "we updated our prices, here's why" message keeps them loyal.</div></div>
+            <div style="display:flex;gap:7px"><button class="btn p" style="font-size:11px">💬 Send Outreach Message</button><button class="btn" style="font-size:11px">✨ Draft with AI</button></div>
+          </div>
+
+          <div class="fb">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+              <div style="display:flex;align-items:center;gap:9px">
+                <div class="rev-av ave">SP</div>
+                <div>
+                  <div style="font-weight:700;font-size:13px">Sam P.</div>
+                  <div style="font-size:11px;color:var(--txt3)">Last visit: 15 days ago · Feedback submitted</div>
+                </div>
+              </div>
+              <div class="tag r">At risk</div>
+            </div>
+            <div style="font-size:12px;color:var(--txt2);margin-bottom:8px;line-height:1.5">"Different barber this time. Got a totally different style from what I usually get."</div>
+            <div style="display:flex;gap:6px;margin-bottom:6px"><span class="tag r">🔄 Inconsistent</span></div>
+            <div class="ins" style="margin-bottom:9px"><div class="ins-ttl">💡 Retention risk</div><div class="ins-txt">This client has a regular barber preference. Offer them a dedicated booking slot with their usual barber. This is how you create a loyal weekly customer.</div></div>
+            <div style="display:flex;gap:7px"><button class="btn p" style="font-size:11px">💬 Send Outreach Message</button><button class="btn" style="font-size:11px">✨ Draft with AI</button></div>
+          </div>
+
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="panel">
+          <div class="ph"><div class="pt">💰 The Cost of Losing Clients</div></div>
+          <div class="pb">
+            <div style="text-align:center;padding:8px 0 14px">
+              <div style="font-size:11px;color:var(--txt3);margin-bottom:4px">3 at-risk clients × $480/year</div>
+              <div style="font-family:'Bebas Neue';font-size:52px;color:var(--red);line-height:1">$1,440</div>
+              <div style="font-size:12px;color:var(--txt3)">potential annual revenue at stake</div>
+            </div>
+            <div class="divider"></div>
+            <div style="font-size:12px;color:var(--txt3);line-height:1.6;margin-bottom:12px">Recovering 1 at-risk client with a personal message takes 2 minutes. The 11 clients you've already recovered represent <strong style="color:var(--txt2)">$5,280/yr</strong> in retained revenue.</div>
+            <div class="ins"><div class="ins-ttl">📊 Recovery rate: 78%</div><div class="ins-txt">Of clients you've sent an outreach message to, 78% returned for a follow-up cut. The message works.</div></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="ph"><div class="pt">📈 Issues Trend</div><div class="pm">This month</div></div>
+          <div class="pb"><div style="height:150px"><canvas id="c-issues-trend"></canvas></div></div>
+        </div>
+
+      </div>
+    </div>
+  </div><!-- /clients -->
+
+
+  <!-- ══════ 3. REVIEWS ══════ -->
+  <div class="scr" id="tab-reviews">
+    <div class="krow k4">
+      <div class="kpi cht ct"><div class="kpi-lbl">⭐ Avg Rating</div><div class="kpi-val t">4.6</div><div class="kpi-ch up">▲ +0.2 this month</div></div>
+      <div class="kpi"><div class="kpi-lbl">📊 Total Reviews</div><div class="kpi-val">128</div><div class="kpi-ch up">▲ +12 this month</div></div>
+      <div class="kpi"><div class="kpi-lbl">💬 Reply Rate</div><div class="kpi-val">69%</div><div class="kpi-sub">89 of 128 replied</div></div>
+      <div class="kpi cr"><div class="kpi-lbl">⚠️ Needs Reply</div><div class="kpi-val r">3</div><div class="kpi-sub">Action required</div></div>
+    </div>
+    <div class="g g32" style="margin-bottom:14px">
+      <div class="panel"><div class="ph"><div class="pt"><span class="pt-ic">📈</span> Rating Over Time</div><div class="tabs"><div class="tabp">30D</div><div class="tabp on">90D</div><div class="tabp">1Y</div></div></div><div class="pb"><div style="height:150px"><canvas id="c-rat-time"></canvas></div></div></div>
+      <div class="panel"><div class="ph"><div class="pt"><span class="pt-ic">⭐</span> Star Breakdown</div><div class="pm">128 reviews</div></div><div class="pb"><div style="height:150px"><canvas id="c-stars"></canvas></div></div></div>
+    </div>
+    <div class="panel">
+      <div class="ph"><div class="pt"><span class="pt-ic">💬</span> All Reviews</div><div style="display:flex;gap:7px;align-items:center"><div class="tabs"><div class="tabp on">All</div><div class="tabp">5⭐</div><div class="tabp">1–3⭐</div><div class="tabp">Unreplied</div></div><button class="btn p" style="font-size:12px">✨ AI Reply All</button></div></div>
+      <div class="pb">
+        <div class="gap-list">
+          <div class="rev"><div class="rev-top"><div style="display:flex;align-items:center;gap:8px"><div class="rev-av ava">MJ</div><div><div class="rev-n">Marcus Johnson</div><div class="rev-d">2 days ago · Google · ✅ Replied</div></div></div><div style="display:flex;align-items:center;gap:7px"><div class="rev-stars">⭐⭐⭐⭐⭐</div><div class="sch pos">Positive</div></div></div><div class="rev-body">"Best fade in years. Barber listened and nailed exactly what I was going for. Coming back every two weeks."</div><div class="rev-acts"><button class="rbtn">✏️ Edit Reply</button><div style="margin-left:auto;display:flex;gap:5px"><div class="tag t">✂️ Fade</div></div></div></div>
+          <div class="rev"><div class="rev-top"><div style="display:flex;align-items:center;gap:8px"><div class="rev-av avb">TK</div><div><div class="rev-n">Tyler K.</div><div class="rev-d">4 days ago · Google · ⏳ Unreplied</div></div></div><div style="display:flex;align-items:center;gap:7px"><div class="rev-stars">⭐⭐⭐⭐</div><div class="sch neu">Neutral</div></div></div><div class="rev-body">"Decent cut — wait was a bit long on Saturday but result was clean. Barber was friendly."</div><div class="ai-box"><div class="ai-lbl">✨ AI Draft Reply</div><div class="ai-txt">Thanks Tyler! Appreciate the honest feedback — we're working on the Saturday flow. Glad the cut came through! ✂️</div></div><div class="rev-acts"><button class="rbtn ok">✅ Approve</button><button class="rbtn">✏️ Edit</button><button class="rbtn">🔄 Regen</button></div></div>
+          <div class="rev neg"><div class="rev-top"><div style="display:flex;align-items:center;gap:8px"><div class="rev-av avd">RL</div><div><div class="rev-n">Ryan L.</div><div class="rev-d">1 week ago · Google · ⏳ Unreplied ← urgent</div></div></div><div style="display:flex;align-items:center;gap:7px"><div class="rev-stars">⭐⭐</div><div class="sch neg">Negative</div></div></div><div class="rev-body">"Waited 45 minutes past my appointment. The cut wasn't what I showed them — really disappointed."</div><div class="ai-box" style="border-color:rgba(255,90,95,.18)"><div class="ai-lbl" style="color:var(--red)">✨ AI Draft Reply</div><div class="ai-txt">Hi Ryan, we're genuinely sorry — a 45-min wait is not acceptable. Please DM us so we can make this right. 🙏</div></div><div class="rev-acts"><button class="rbtn ok">✅ Approve</button><button class="rbtn">✏️ Edit</button></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════ 4. FEEDBACK INBOX ══════ -->
+  <div class="scr" id="tab-feedback">
+    <div class="krow k4">
+      <div class="kpi cr"><div class="kpi-lbl">📥 Unread</div><div class="kpi-val r">5</div><div class="kpi-sub">Need attention</div></div>
+      <div class="kpi"><div class="kpi-lbl">📊 Total Captured</div><div class="kpi-val">48</div><div class="kpi-sub">Saved from Google</div></div>
+      <div class="kpi ct"><div class="kpi-lbl">✅ Resolved</div><div class="kpi-val t">43</div><div class="kpi-sub">90% resolution rate</div></div>
+      <div class="kpi cg"><div class="kpi-lbl">⏳ Top Pattern</div><div class="kpi-val g" style="font-size:26px">Wait</div><div class="kpi-sub">6 mentions this month</div></div>
+    </div>
+    <div class="g g32">
+      <div class="panel">
+        <div class="ph"><div class="pt">🔒 Private Feedback</div><div style="display:flex;gap:7px"><div class="tabs"><div class="tabp on">Unread (5)</div><div class="tabp">All</div><div class="tabp">Resolved</div></div></div></div>
+        <div class="pb">
+          <div class="gap-list">
+            <div class="fb"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:7px"><div><div style="display:flex;gap:7px;align-items:center;margin-bottom:3px"><span class="tag r">⏳ Wait Time</span><span style="font-size:11px;color:var(--txt3)">2 days ago</span></div><div style="font-size:12px;color:var(--txt2)">"Waited almost 50 minutes on Saturday. No apology, no heads up."</div></div></div><div style="display:flex;gap:6px;margin-top:8px"><button class="btn p" style="font-size:11px">✅ Resolve</button><button class="btn" style="font-size:11px">💬 Reach Out</button></div></div>
+            <div class="fb"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:7px"><div><div style="display:flex;gap:7px;align-items:center;margin-bottom:3px"><span class="tag r">❌ Wrong Cut</span><span style="font-size:11px;color:var(--txt3)">3 days ago</span></div><div style="font-size:12px;color:var(--txt2)">"Showed a picture clearly — they took way more than I wanted."</div></div></div><div style="display:flex;gap:6px;margin-top:8px"><button class="btn p" style="font-size:11px">✅ Resolve</button><button class="btn" style="font-size:11px">💬 Reach Out</button></div></div>
+            <div class="fb"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:7px"><div><div style="display:flex;gap:7px;align-items:center;margin-bottom:3px"><span class="tag r">💰 Price Issue</span><span style="font-size:11px;color:var(--txt3)">5 days ago</span></div><div style="font-size:12px;color:var(--txt2)">"Was charged $45, used to be $35. Nobody said anything about a price change."</div></div></div><div style="display:flex;gap:6px;margin-top:8px"><button class="btn p" style="font-size:11px">✅ Resolve</button><button class="btn" style="font-size:11px">💬 Reach Out</button></div></div>
+            <div class="fb"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:7px"><div><div style="display:flex;gap:7px;align-items:center;margin-bottom:3px"><span class="tag r">⏳ Wait Time</span><span style="font-size:11px;color:var(--txt3)">6 days ago</span></div><div style="font-size:12px;color:var(--txt2)">"Is there no appointment system? Waited 1.5 hours on a Saturday."</div></div></div><div style="display:flex;gap:6px;margin-top:8px"><button class="btn p" style="font-size:11px">✅ Resolve</button><button class="btn" style="font-size:11px">💬 Reach Out</button></div></div>
+            <div class="fb"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:7px"><div><div style="display:flex;gap:7px;align-items:center;margin-bottom:3px"><span class="tag r">😕 Barber</span><span style="font-size:11px;color:var(--txt3)">1 week ago</span></div><div style="font-size:12px;color:var(--txt2)">"Different barber this time. Totally different style — not what I'm used to."</div></div></div><div style="display:flex;gap:6px;margin-top:8px"><button class="btn p" style="font-size:11px">✅ Resolve</button><button class="btn" style="font-size:11px">💬 Reach Out</button></div></div>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="panel"><div class="ph"><div class="pt">📊 Issue Breakdown</div></div><div class="pb"><div style="height:160px"><canvas id="c-fbissues"></canvas></div></div></div>
+        <div class="panel"><div class="ph"><div class="pt">🧠 Pattern Alert</div></div><div class="pb"><div class="gap-list"><div class="ins"><div class="ins-ttl">🚨 Saturday wait · 6 mentions</div><div class="ins-txt">Complaints spike Sat 11am–2pm. Add 1 barber or booking-only slots during peak hours. Razor's Edge just did this — wait complaints dropped to zero.</div></div><div class="ins"><div class="ins-ttl">⚠️ Inconsistency · 2 mentions</div><div class="ins-txt">Two clients mentioned different barbers giving different results. A shared style reference card could standardise results across your team.</div></div></div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════ 5. AI REPLIES ══════ -->
+  <div class="scr" id="tab-ai">
+    <div class="alert"><span style="font-size:18px">✨</span><div class="alert-txt">You have <strong>3 AI-drafted replies</strong> ready. Shops that reply within 24 hours rank higher on Google — it takes 2 minutes.</div><button class="alert-cta">Approve All →</button></div>
+    <div class="krow k4">
+      <div class="kpi ct"><div class="kpi-lbl">✨ AI Generated</div><div class="kpi-val t">89</div><div class="kpi-sub">All time</div></div>
+      <div class="kpi"><div class="kpi-lbl">✅ Approved</div><div class="kpi-val">82</div><div class="kpi-sub">92% approval rate</div></div>
+      <div class="kpi cg"><div class="kpi-lbl">⏳ Pending</div><div class="kpi-val g">3</div><div class="kpi-sub">Awaiting review</div></div>
+      <div class="kpi"><div class="kpi-lbl">⏱️ Avg Approval Time</div><div class="kpi-val">6h</div><div class="kpi-sub">After draft is ready</div></div>
+    </div>
+    <div class="panel">
+      <div class="ph"><div class="pt">⏳ Pending Approval</div><button class="btn p">✅ Approve All 3</button></div>
+      <div class="pb">
+        <div class="gap-list">
+          <div class="rev"><div class="rev-top"><div style="display:flex;align-items:center;gap:8px"><div class="rev-av avb">TK</div><div><div class="rev-n">Tyler K. · 4⭐ · Neutral</div><div class="rev-d">4 days ago</div></div></div><div class="tag g">Draft Ready</div></div><div class="rev-body">"Decent cut — wait was a bit long on Saturday but result was clean."</div><div class="ai-box"><div class="ai-lbl">✨ AI Draft — Warm & Friendly tone</div><div class="ai-txt">Thanks Tyler! Appreciate the honest feedback — we're actively working on the Saturday flow. Glad the cut came through and we'd love to see you again! ✂️</div></div><div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap"><button class="rbtn ok">✅ Approve</button><button class="rbtn">✏️ Edit</button><button class="rbtn">🔄 Regen</button><div style="margin-left:auto;display:flex;gap:5px;align-items:center"><span style="font-size:11px;color:var(--txt3)">Tone:</span><div class="tabs"><div class="tabp on" style="padding:3px 10px">Warm</div><div class="tabp" style="padding:3px 10px">Formal</div><div class="tabp" style="padding:3px 10px">Playful</div></div></div></div></div>
+          <div class="rev neg"><div class="rev-top"><div style="display:flex;align-items:center;gap:8px"><div class="rev-av avd">RL</div><div><div class="rev-n">Ryan L. · 2⭐ · Negative</div><div class="rev-d">1 week ago</div></div></div><div class="tag r">Urgent</div></div><div class="rev-body">"Waited 45 minutes and the cut wasn't what I showed them."</div><div class="ai-box" style="border-color:rgba(255,90,95,.18)"><div class="ai-lbl" style="color:var(--red)">✨ AI Draft — Apologetic & Professional</div><div class="ai-txt">Hi Ryan, we're genuinely sorry — a 45-min wait and a missed cut is absolutely not who we are. We want to make this right. Please DM us directly. 🙏</div></div><div style="display:flex;gap:7px"><button class="rbtn ok">✅ Approve</button><button class="rbtn">✏️ Edit</button><button class="rbtn">🔄 Regen</button></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════ 6. RANKING & GAPS ══════ -->
+  <div class="scr" id="tab-ranking">
+    <div class="krow k4">
+      <div class="kpi cg"><div class="kpi-lbl">🏆 Your Rank</div><div class="kpi-val g">#6</div><div class="kpi-sub">of 24 shops</div></div>
+      <div class="kpi ct"><div class="kpi-lbl">⚡ Monthly Velocity</div><div class="kpi-val t">+12</div><div class="kpi-sub">You're #2 fastest</div></div>
+      <div class="kpi"><div class="kpi-lbl">📊 Next Target Gap</div><div class="kpi-val">34</div><div class="kpi-sub">to beat The Lineup (#5)</div></div>
+      <div class="kpi"><div class="kpi-lbl">📅 ETA Top 3</div><div class="kpi-val">7mo</div><div class="kpi-sub">Or 3mo with QR active</div></div>
+    </div>
+    <div class="g g32">
+      <div class="panel"><div class="ph"><div class="pt">📊 Review Count — Full Leaderboard</div></div><div class="pb"><div style="height:230px"><canvas id="c-rank-bar"></canvas></div></div></div>
+      <div class="panel"><div class="ph"><div class="pt">📈 Rank History</div><div class="pm">6 months</div></div><div class="pb"><div style="height:230px"><canvas id="c-rank-hist"></canvas></div></div></div>
+    </div>
+    <div class="panel">
+      <div class="ph"><div class="pt">🎯 Gap Analysis — How far to beat each shop</div><div class="pm">Based on current trajectory</div></div>
+      <div class="pb-sm" style="padding:12px 16px">
+        <table class="dtbl">
+          <thead><tr><th>Shop</th><th>Rank</th><th>Rating</th><th>Reviews</th><th>Monthly Growth</th><th>Gap to Beat</th><th>ETA (current pace)</th><th>ETA (with QR)</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Elite Cutz</strong></td><td style="color:var(--gold);font-family:'Bebas Neue';font-size:16px">#1</td><td>4.9⭐</td><td>247</td><td><span style="color:var(--teal);font-weight:700">+18/mo</span></td><td><span class="gap-chip">119 reviews</span></td><td style="color:var(--txt3)">~10 months</td><td style="color:var(--teal);font-weight:600">~5 months</td></tr>
+            <tr><td><strong>Prestige Fades</strong></td><td style="color:#8A9AB0;font-family:'Bebas Neue';font-size:16px">#2</td><td>4.8⭐</td><td>219</td><td>+9/mo</td><td><span class="gap-chip">91 reviews</span></td><td style="color:var(--txt3)">~8 months</td><td style="color:var(--teal);font-weight:600">~4 months</td></tr>
+            <tr><td><strong>Razor's Edge</strong></td><td style="color:#B07850;font-family:'Bebas Neue';font-size:16px">#3</td><td>4.7⭐</td><td>213</td><td><span style="color:var(--red);font-weight:700">+11/mo</span></td><td><span class="gap-chip">85 reviews</span></td><td style="color:var(--txt3)">~7 months</td><td style="color:var(--teal);font-weight:600">~3 months</td></tr>
+            <tr><td>Kings Barber Co</td><td style="color:var(--txt3);font-family:'Bebas Neue';font-size:16px">#4</td><td>4.6⭐</td><td>181</td><td>+6/mo</td><td><span class="gap-chip">53 reviews</span></td><td style="color:var(--txt3)">~5 months</td><td style="color:var(--teal);font-weight:600">~2 months</td></tr>
+            <tr style="background:rgba(0,201,167,.03)"><td><span style="color:var(--teal);font-weight:700">The Lineup</span> <span style="font-size:11px;color:var(--txt3)">← beat this next</span></td><td style="color:var(--txt3);font-family:'Bebas Neue';font-size:16px">#5</td><td>4.6⭐</td><td>162</td><td>+7/mo</td><td><span class="gap-chip" style="background:rgba(0,201,167,.15)">34 reviews</span></td><td style="color:var(--txt3)">~3 months</td><td style="color:var(--teal);font-weight:700">~6 weeks</td></tr>
+            <tr style="background:rgba(0,201,167,.05)"><td><strong style="color:var(--teal)">Sharp Cutz</strong> <span class="lb-you">YOU</span></td><td style="color:var(--teal);font-family:'Bebas Neue';font-size:16px">#6</td><td>4.6⭐</td><td><strong>128</strong></td><td><span style="color:var(--teal);font-weight:700">+12/mo</span></td><td>—</td><td>—</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════ 7. HEAD TO HEAD ══════ -->
+  <div class="scr" id="tab-headtohead">
+    <div class="alert"><span style="font-size:18px">⚔️</span><div class="alert-txt">Pick any competitor and see exactly <strong>where you win, where you lose, and what they're doing differently</strong>.</div></div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px">
+      <div style="font-size:13px;font-weight:600;color:var(--txt2)">Comparing against:</div>
+      <select style="background:var(--card);border:1px solid var(--bm);border-radius:8px;padding:7px 13px;font-family:'Outfit',sans-serif;font-size:13px;color:var(--txt);cursor:pointer">
+        <option>Elite Cutz Barbershop (#1)</option>
+        <option>Prestige Fades (#2)</option>
+        <option>The Razor's Edge (#3)</option>
+        <option>Kings Barber Co (#4)</option>
+        <option>The Lineup (#5)</option>
+      </select>
+    </div>
+
+    <div class="g g2" style="margin-bottom:14px">
+      <div class="panel">
+        <div class="ph"><div class="pt">📊 Head to Head</div><div style="display:flex;gap:8px;align-items:center"><span style="font-weight:700;font-size:13px;color:var(--teal)">Sharp Cutz</span><span style="color:var(--txt3);font-size:12px">vs</span><span style="font-weight:700;font-size:13px">Elite Cutz</span></div></div>
+        <div class="pb">
+          <div class="vs-row"><div class="vs-lbl">Rating</div><div class="vs-bars"><div class="vs-bar-you" style="width:92%"></div><div class="vs-bar-them" style="width:100%"></div></div></div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;font-weight:700;margin-bottom:10px"><span style="color:var(--teal)">4.6</span><span style="color:var(--txt3)">4.9</span></div>
+
+          <div class="vs-row"><div class="vs-lbl">Reviews</div><div class="vs-bars"><div class="vs-bar-you" style="width:52%"></div><div class="vs-bar-them" style="width:100%"></div></div></div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;font-weight:700;margin-bottom:10px"><span style="color:var(--teal)">128</span><span style="color:var(--txt3)">247</span></div>
+
+          <div class="vs-row"><div class="vs-lbl">Mo. growth</div><div class="vs-bars"><div class="vs-bar-you" style="width:67%"></div><div class="vs-bar-them" style="width:100%"></div></div></div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;font-weight:700;margin-bottom:10px"><span style="color:var(--teal)">+12/mo</span><span style="color:var(--txt3)">+18/mo</span></div>
+
+          <div class="vs-row"><div class="vs-lbl">% 5-star</div><div class="vs-bars"><div class="vs-bar-you" style="width:75%"></div><div class="vs-bar-them" style="width:87%"></div></div></div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;font-weight:700;margin-bottom:10px"><span style="color:var(--teal)">75%</span><span style="color:var(--txt3)">87%</span></div>
+
+          <div class="vs-row"><div class="vs-lbl">Reply rate</div><div class="vs-bars"><div class="vs-bar-you" style="width:69%"></div><div class="vs-bar-them" style="width:95%"></div></div></div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;font-weight:700;margin-bottom:14px"><span style="color:var(--teal)">69%</span><span style="color:var(--txt3)">95%</span></div>
+
+          <div style="height:130px"><canvas id="c-h2h-vel"></canvas></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="ph"><div class="pt">🏷️ Theme Battle — What clients say</div></div>
+        <div class="pb">
+          <div style="font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px">You win on:</div>
+          <div class="gap-list" style="margin-bottom:14px">
+            <div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--b)"><span style="color:var(--teal);font-size:13px;flex-shrink:0">▲</span><div style="flex:1"><div style="font-size:13px;font-weight:600">Beard work</div><div style="font-size:11px;color:var(--txt3)">You: ×22 mentions · Them: ×8 mentions</div></div><div class="prog-track" style="width:80px"><div class="prog-fill" style="width:73%;background:var(--teal)"></div></div></div>
+            <div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--b)"><span style="color:var(--teal);font-size:13px;flex-shrink:0">▲</span><div style="flex:1"><div style="font-size:13px;font-weight:600">Friendly vibe</div><div style="font-size:11px;color:var(--txt3)">You: ×19 · Them: ×11</div></div><div class="prog-track" style="width:80px"><div class="prog-fill" style="width:63%;background:var(--teal)"></div></div></div>
+          </div>
+          <div style="font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px">They win on:</div>
+          <div class="gap-list" style="margin-bottom:14px">
+            <div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--b)"><span style="color:var(--red);font-size:13px;flex-shrink:0">▼</span><div style="flex:1"><div style="font-size:13px;font-weight:600">Quick service</div><div style="font-size:11px;color:var(--txt3)">You: ×14 · Them: ×38 · online booking helps them</div></div><div class="prog-track" style="width:80px"><div class="prog-fill" style="width:37%;background:var(--red)"></div></div></div>
+            <div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--b)"><span style="color:var(--red);font-size:13px;flex-shrink:0">▼</span><div style="flex:1"><div style="font-size:13px;font-weight:600">No wait issues</div><div style="font-size:11px;color:var(--txt3)">You: 6 wait complaints · Them: 0</div></div><div class="prog-track" style="width:80px"><div class="prog-fill" style="width:0%;background:var(--red)"></div></div></div>
+            <div style="display:flex;align-items:center;gap:8px;padding:7px 0"><span style="color:var(--red);font-size:13px;flex-shrink:0">▼</span><div style="flex:1"><div style="font-size:13px;font-weight:600">Great fade</div><div style="font-size:11px;color:var(--txt3)">You: ×41 · Them: ×89 — they promote it harder</div></div><div class="prog-track" style="width:80px"><div class="prog-fill" style="width:46%;background:var(--red)"></div></div></div>
+          </div>
+          <div class="ins"><div class="ins-ttl">🎯 Your #1 opportunity</div><div class="ins-txt">You have better beard work and a warmer vibe. Elite Cutz doesn't market either. Ask happy beard clients to mention it in reviews and it becomes your differentiator.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="ph"><div class="pt">🔍 What they have that you don't</div><div class="pm">Actionable gaps</div></div>
+      <div class="pb">
+        <div class="g g3">
+          <div style="background:var(--raised);border:1px solid rgba(255,90,95,.15);border-radius:11px;padding:13px">
+            <div style="font-size:18px;margin-bottom:7px">📅</div>
+            <div style="font-weight:700;font-size:14px;margin-bottom:4px">Online booking</div>
+            <div style="font-size:12px;color:var(--txt3);line-height:1.5;margin-bottom:10px">Mentioned in 14 of their 5-star reviews. Eliminates wait time — their #1 negative theme went from 12 complaints to 0 after adding booking.</div>
+            <div class="tag r" style="margin-bottom:8px">High impact</div><br>
+            <button class="btn ghost" style="font-size:11px;margin-top:6px">Explore booking tools →</button>
+          </div>
+          <div style="background:var(--raised);border:1px solid rgba(255,90,95,.15);border-radius:11px;padding:13px">
+            <div style="font-size:18px;margin-bottom:7px">🕐</div>
+            <div style="font-weight:700;font-size:14px;margin-bottom:4px">Late hours Fri–Sat until 9pm</div>
+            <div style="font-size:12px;color:var(--txt3);line-height:1.5;margin-bottom:10px">6 of their reviews specifically mention coming in "after work" or "on the way home". You close at 7pm. A 2-hour extension on Fridays could capture this segment.</div>
+            <div class="tag r" style="margin-bottom:8px">Medium impact</div>
+          </div>
+          <div style="background:var(--raised);border:1px solid rgba(232,169,62,.13);border-radius:11px;padding:13px">
+            <div style="font-size:18px;margin-bottom:7px">📣</div>
+            <div style="font-weight:700;font-size:14px;margin-bottom:4px">Active Google Q&A</div>
+            <div style="font-size:12px;color:var(--txt3);line-height:1.5;margin-bottom:10px">They've answered 12 Google Q&A questions. You have 0. Q&A answers appear in search results and build trust before clients even click your profile.</div>
+            <div class="tag g" style="margin-bottom:8px">Quick win</div><br>
+            <button class="btn ghost" style="font-size:11px;margin-top:6px">Open Google Q&A →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════ 8. COMPETITOR INTEL ══════ -->
+  <div class="scr" id="tab-intel">
+    <div class="krow k4">
+      <div class="kpi"><div class="kpi-lbl">🔍 Tracked Shops</div><div class="kpi-val">24</div><div class="kpi-sub">In your area</div></div>
+      <div class="kpi cr"><div class="kpi-lbl">⚠️ High Threat</div><div class="kpi-val r">2</div><div class="kpi-sub">Growing faster</div></div>
+      <div class="kpi cg"><div class="kpi-lbl">👁️ Watch List</div><div class="kpi-val g">3</div><div class="kpi-sub">Gaining momentum</div></div>
+      <div class="kpi ct"><div class="kpi-lbl">✅ You Outperform</div><div class="kpi-val t">14</div><div class="kpi-sub">Weaker than you</div></div>
+    </div>
+    <div class="sh">🔴 High Threat</div>
+    <div class="g g2" style="margin-bottom:14px">
+      <div class="comp threat"><div class="comp-hd"><div class="comp-av">✂️</div><div style="flex:1"><div class="comp-nm">Elite Cutz Barbershop</div><div class="comp-addr">📍 0.4 mi · +18/mo · #1</div></div><div class="tag r">High Threat</div></div><div class="comp-stats"><div class="comp-s"><div class="comp-sv">4.9</div><div class="comp-sl">Rating</div></div><div class="comp-s"><div class="comp-sv up">247</div><div class="comp-sl">Reviews</div></div><div class="comp-s"><div class="comp-sv up">+18</div><div class="comp-sl">Mo. Growth</div></div></div><div style="font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Why clients choose them</div><div class="comp-themes"><div class="comp-th">📅 Online booking</div><div class="comp-th">🕐 Open until 9pm</div><div class="comp-th">⚡ Zero wait</div><div class="comp-th">✂️ Consistent fades</div></div><div class="divider"></div><div style="font-size:12px;color:var(--txt3)">💡 They're growing at +18/mo because of booking. You're at +12/mo. Add booking and you likely exceed their velocity within 60 days.</div></div>
+      <div class="comp threat"><div class="comp-hd"><div class="comp-av">🪒</div><div style="flex:1"><div class="comp-nm">The Razor's Edge</div><div class="comp-addr">📍 0.9 mi · +11/mo · #3</div></div><div class="tag r">High Threat</div></div><div class="comp-stats"><div class="comp-s"><div class="comp-sv">4.7</div><div class="comp-sl">Rating</div></div><div class="comp-s"><div class="comp-sv up">213</div><div class="comp-sl">Reviews</div></div><div class="comp-s"><div class="comp-sv up">+11</div><div class="comp-sl">Mo. Growth</div></div></div><div style="font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Why clients choose them</div><div class="comp-themes"><div class="comp-th">📅 Online booking</div><div class="comp-th">🧔 Beard specialist</div><div class="comp-th">💬 Always responsive</div></div><div class="divider"></div><div style="font-size:12px;color:var(--txt3)">💡 They reply to 100% of reviews within 4 hours. Google rewards this heavily. Your 69% rate is dragging you down in search.</div></div>
+    </div>
+    <div class="sh">🟡 Watch List</div>
+    <div class="g g3">
+      <div class="comp watch"><div class="comp-hd"><div class="comp-av">💈</div><div style="flex:1"><div class="comp-nm">Prestige Fades</div><div class="comp-addr">📍 0.6 mi · +9/mo · #2</div></div><div class="tag g">Watch</div></div><div class="comp-stats"><div class="comp-s"><div class="comp-sv">4.8</div><div class="comp-sl">Rating</div></div><div class="comp-s"><div class="comp-sv up">219</div><div class="comp-sl">Reviews</div></div><div class="comp-s"><div class="comp-sv">+9</div><div class="comp-sl">Mo. Growth</div></div></div><div class="comp-themes"><div class="comp-th">🎨 Skin fade</div><div class="comp-th">💰 Premium price</div></div></div>
+      <div class="comp watch"><div class="comp-hd"><div class="comp-av">👑</div><div style="flex:1"><div class="comp-nm">Kings Barber Co</div><div class="comp-addr">📍 1.1 mi · +6/mo · #4</div></div><div class="tag g">Watch</div></div><div class="comp-stats"><div class="comp-s"><div class="comp-sv">4.6</div><div class="comp-sl">Rating</div></div><div class="comp-s"><div class="comp-sv">181</div><div class="comp-sl">Reviews</div></div><div class="comp-s"><div class="comp-sv">+6</div><div class="comp-sl">Mo. Growth</div></div></div><div class="comp-themes"><div class="comp-th">🏆 Loyalty program</div><div class="comp-th">👶 Kids cuts</div></div></div>
+      <div class="comp weak"><div class="comp-hd"><div class="comp-av">🔥</div><div style="flex:1"><div class="comp-nm">The Lineup</div><div class="comp-addr">📍 1.3 mi · +7/mo · #5</div></div><div class="tag t">Weak — beat this</div></div><div class="comp-stats"><div class="comp-s"><div class="comp-sv">4.6</div><div class="comp-sl">Rating</div></div><div class="comp-s"><div class="comp-sv">162</div><div class="comp-sl">Reviews</div></div><div class="comp-s"><div class="comp-sv">+7</div><div class="comp-sl">Mo. Growth</div></div></div><div class="comp-themes"><div class="comp-th">🚪 Walk-ins only</div></div><div class="divider"></div><div style="font-size:12px;color:var(--txt3)">💡 You're gaining on them faster than anyone. 34 reviews away at +12/mo = ~3 months. With QR: 6 weeks.</div></div>
+    </div>
+  </div>
+
+  <!-- ══════ 9. WHAT CLIENTS SAY (Themes) ══════ -->
+  <div class="scr" id="tab-themes">
+    <div class="krow k4">
+      <div class="kpi ct"><div class="kpi-lbl">🏷️ AI Themes</div><div class="kpi-val t">14</div><div class="kpi-sub">Extracted from reviews</div></div>
+      <div class="kpi"><div class="kpi-lbl">✅ Positive</div><div class="kpi-val">9</div><div class="kpi-sub">Amplify these</div></div>
+      <div class="kpi cr"><div class="kpi-lbl">⚠️ Negative</div><div class="kpi-val r">5</div><div class="kpi-sub">Fix these</div></div>
+      <div class="kpi cg"><div class="kpi-lbl">🔥 Top Theme</div><div class="kpi-val g" style="font-size:26px">Fade</div><div class="kpi-sub">×41 mentions</div></div>
+    </div>
+    <div class="g g2">
+      <div class="panel"><div class="ph"><div class="pt">✅ What clients love</div><div class="pm">Mention count</div></div><div class="pb">
+        <div class="gap-list">
+          <div style="display:flex;align-items:center;gap:11px;padding:7px 0;border-bottom:1px solid var(--b)"><span style="font-size:18px;width:26px;text-align:center">🔥</span><div style="flex:1"><div style="font-weight:700;font-size:13px">Great Fade</div><div style="font-size:11px;color:var(--txt3)">trending up ▲ this month</div></div><div style="text-align:right"><div style="font-family:'Bebas Neue';font-size:20px;color:var(--teal)">41</div><div class="prog-track" style="width:80px"><div class="prog-fill" style="width:100%;background:var(--teal)"></div></div></div></div>
+          <div style="display:flex;align-items:center;gap:11px;padding:7px 0;border-bottom:1px solid var(--b)"><span style="font-size:18px;width:26px;text-align:center">✂️</span><div style="flex:1"><div style="font-weight:700;font-size:13px">Clean Haircut</div><div style="font-size:11px;color:var(--txt3)">stable</div></div><div style="text-align:right"><div style="font-family:'Bebas Neue';font-size:20px;color:var(--teal)">38</div><div class="prog-track" style="width:80px"><div class="prog-fill" style="width:93%;background:var(--teal)"></div></div></div></div>
+          <div style="display:flex;align-items:center;gap:11px;padding:7px 0;border-bottom:1px solid var(--b)"><span style="font-size:18px;width:26px;text-align:center">🧔</span><div style="flex:1"><div style="font-weight:700;font-size:13px">Beard Work</div><div style="font-size:11px;color:var(--txt3)">rising ▲ — promote this more</div></div><div style="text-align:right"><div style="font-family:'Bebas Neue';font-size:20px;color:var(--teal)">22</div><div class="prog-track" style="width:80px"><div class="prog-fill" style="width:54%;background:var(--teal)"></div></div></div></div>
+          <div style="display:flex;align-items:center;gap:11px;padding:7px 0;border-bottom:1px solid var(--b)"><span style="font-size:18px;width:26px;text-align:center">💬</span><div style="flex:1"><div style="font-weight:700;font-size:13px">Friendly Vibe</div><div style="font-size:11px;color:var(--txt3)">you beat Elite Cutz on this</div></div><div style="text-align:right"><div style="font-family:'Bebas Neue';font-size:20px;color:var(--teal)">19</div><div class="prog-track" style="width:80px"><div class="prog-fill" style="width:46%;background:var(--teal)"></div></div></div></div>
+          <div style="display:flex;align-items:center;gap:11px;padding:7px 0"><span style="font-size:18px;width:26px;text-align:center">⚡</span><div style="flex:1"><div style="font-weight:700;font-size:13px">Quick Service</div><div style="font-size:11px;color:var(--txt3)">suffering from wait time issue</div></div><div style="text-align:right"><div style="font-family:'Bebas Neue';font-size:20px;color:var(--teal)">14</div><div class="prog-track" style="width:80px"><div class="prog-fill" style="width:34%;background:var(--teal)"></div></div></div></div>
+        </div>
+      </div></div>
+      <div class="panel"><div class="ph"><div class="pt">⚠️ What needs fixing</div><div class="pm">Mention count</div></div><div class="pb">
+        <div class="gap-list">
+          <div style="display:flex;align-items:center;gap:11px;padding:7px 0;border-bottom:1px solid var(--b)"><span style="font-size:18px;width:26px;text-align:center">⏳</span><div style="flex:1"><div style="font-weight:700;font-size:13px">Long Wait Time</div><div style="font-size:11px;color:var(--txt3)">Saturday peak · critical · costing you clients</div></div><div style="text-align:right"><div style="font-family:'Bebas Neue';font-size:20px;color:var(--red)">6</div><div class="prog-track" style="width:80px"><div class="prog-fill" style="width:100%;background:var(--red)"></div></div></div></div>
+          <div style="display:flex;align-items:center;gap:11px;padding:7px 0;border-bottom:1px solid var(--b)"><span style="font-size:18px;width:26px;text-align:center">❌</span><div style="flex:1"><div style="font-weight:700;font-size:13px">Not What I Asked</div><div style="font-size:11px;color:var(--txt3)">communication issue — show reference photos</div></div><div style="text-align:right"><div style="font-family:'Bebas Neue';font-size:20px;color:var(--red)">3</div><div class="prog-track" style="width:80px"><div class="prog-fill" style="width:50%;background:var(--red)"></div></div></div></div>
+          <div style="display:flex;align-items:center;gap:11px;padding:7px 0;border-bottom:1px solid var(--b)"><span style="font-size:18px;width:26px;text-align:center">💰</span><div style="flex:1"><div style="font-weight:700;font-size:13px">Price Confusion</div><div style="font-size:11px;color:var(--txt3)">post prices visibly — mirror, website, Google</div></div><div style="text-align:right"><div style="font-family:'Bebas Neue';font-size:20px;color:var(--red)">2</div><div class="prog-track" style="width:80px"><div class="prog-fill" style="width:33%;background:var(--red)"></div></div></div></div>
+          <div style="display:flex;align-items:center;gap:11px;padding:7px 0"><span style="font-size:18px;width:26px;text-align:center">🔄</span><div style="flex:1"><div style="font-weight:700;font-size:13px">Inconsistent Results</div><div style="font-size:11px;color:var(--txt3)">style reference cards for each barber</div></div><div style="text-align:right"><div style="font-family:'Bebas Neue';font-size:20px;color:var(--red)">2</div><div class="prog-track" style="width:80px"><div class="prog-fill" style="width:33%;background:var(--red)"></div></div></div></div>
+        </div>
+        <div class="divider"></div>
+        <div class="ins"><div class="ins-ttl">🧠 AI Insight on your biggest gap</div><div class="ins-txt">Your "wait time" complaints are all Saturday 11am–2pm. Adding even 1 extra barber for just those 3 hours could eliminate your #1 negative theme entirely — turning 6 complaints into potential 5-star reviews.</div></div>
+      </div></div>
+    </div>
+    <div class="panel" style="margin-top:0"><div class="ph"><div class="pt">📈 Theme Trend — 6 months</div></div><div class="pb"><div style="height:160px"><canvas id="c-theme-trend"></canvas></div></div></div>
+  </div>
+
+  <!-- ══════ 10. QR FUNNEL ══════ -->
+  <div class="scr" id="tab-qr">
+    <div class="krow k4">
+      <div class="kpi ct"><div class="kpi-lbl">📲 Total Scans</div><div class="kpi-val t">342</div><div class="kpi-ch up">▲ +48 this month</div></div>
+      <div class="kpi"><div class="kpi-lbl">⭐ Google Converts</div><div class="kpi-val">61</div><div class="kpi-sub">18% of scans</div></div>
+      <div class="kpi cr"><div class="kpi-lbl">🔒 Private Captured</div><div class="kpi-val r">108</div><div class="kpi-sub">32% went private route</div></div>
+      <div class="kpi cg"><div class="kpi-lbl">📈 Best Location</div><div class="kpi-val g" style="font-size:22px">Register</div><div class="kpi-sub">22% convert rate</div></div>
+    </div>
+    <div class="g g32">
+      <div class="panel"><div class="ph"><div class="pt">📈 Funnel Performance</div><div class="pm">30 days</div></div><div class="pb"><div style="height:200px"><canvas id="c-qr-chart"></canvas></div></div></div>
+      <div class="panel">
+        <div class="ph"><div class="pt">📌 Active QR Codes</div><button class="btn p" style="font-size:12px">+ New</button></div>
+        <div class="pb" style="padding:12px 16px">
+          <table class="dtbl">
+            <thead><tr><th>Location</th><th>Scans</th><th>Converts</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Main Register</strong><div style="font-size:10px;color:var(--txt3)">rankvibe.co/sc-main</div></td><td>198</td><td>22%</td><td><span class="tag t">Active</span></td></tr>
+              <tr><td><strong>Mirror Poster</strong><div style="font-size:10px;color:var(--txt3)">rankvibe.co/sc-mirror</div></td><td>102</td><td>15%</td><td><span class="tag t">Active</span></td></tr>
+              <tr><td><strong>Waiting Area</strong><div style="font-size:10px;color:var(--txt3)">rankvibe.co/sc-wait</div></td><td>42</td><td>11%</td><td><span class="tag g">Low</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="g g2">
+      <div class="panel"><div class="ph"><div class="pt">🖨️ QR Poster</div><div style="display:flex;gap:7px"><button class="btn">⬇️ Download</button><button class="btn p">🖨️ Print</button></div></div><div class="pb" style="text-align:center">
+        <div style="background:var(--raised);border:1px solid var(--b);border-radius:13px;padding:20px;max-width:280px;margin:0 auto;position:relative;overflow:hidden">
+          <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--teal),#0891B2)"></div>
+          <div style="font-family:'Bebas Neue';font-size:18px;letter-spacing:1px;margin-bottom:2px">Sharp Cutz Barbershop</div>
+          <div style="font-size:11px;color:var(--txt3);margin-bottom:16px">Loved your cut? Tell us in 30 seconds.</div>
+          <svg viewBox="0 0 130 130" width="130" height="130" style="display:block;margin:0 auto 14px" xmlns="http://www.w3.org/2000/svg">
+            <rect width="130" height="130" fill="#141720" rx="10"/>
+            <rect x="8" y="8" width="35" height="35" rx="4" fill="#00C9A7"/><rect x="13" y="13" width="25" height="25" rx="2" fill="#141720"/><rect x="17" y="17" width="17" height="17" rx="2" fill="#00C9A7"/>
+            <rect x="87" y="8" width="35" height="35" rx="4" fill="#00C9A7"/><rect x="92" y="13" width="25" height="25" rx="2" fill="#141720"/><rect x="96" y="17" width="17" height="17" rx="2" fill="#00C9A7"/>
+            <rect x="8" y="87" width="35" height="35" rx="4" fill="#00C9A7"/><rect x="13" y="92" width="25" height="25" rx="2" fill="#141720"/><rect x="17" y="96" width="17" height="17" rx="2" fill="#00C9A7"/>
+            <rect x="52" y="8" width="7" height="7" rx="1" fill="#00C9A7"/><rect x="63" y="8" width="7" height="7" rx="1" fill="#00C9A7"/><rect x="74" y="18" width="7" height="7" rx="1" fill="#00C9A7"/><rect x="52" y="28" width="7" height="7" rx="1" fill="#00C9A7"/>
+            <rect x="8" y="52" width="7" height="7" rx="1" fill="#00C9A7"/><rect x="18" y="63" width="7" height="7" rx="1" fill="#00C9A7"/><rect x="8" y="74" width="7" height="7" rx="1" fill="#00C9A7"/>
+            <rect x="47" y="47" width="36" height="36" rx="8" fill="#0A0B0D"/>
+            <text x="65" y="71" text-anchor="middle" font-size="20" fill="#00C9A7">✂️</text>
+            <rect x="52" y="87" width="7" height="7" rx="1" fill="#00C9A7"/><rect x="63" y="98" width="7" height="7" rx="1" fill="#00C9A7"/><rect x="74" y="87" width="7" height="7" rx="1" fill="#00C9A7"/>
+            <rect x="87" y="52" width="7" height="7" rx="1" fill="#00C9A7"/><rect x="98" y="63" width="7" height="7" rx="1" fill="#00C9A7"/><rect x="115" y="52" width="7" height="7" rx="1" fill="#00C9A7"/><rect x="87" y="74" width="7" height="7" rx="1" fill="#00C9A7"/>
+          </svg>
+          <div style="font-weight:700;font-size:13px;margin-bottom:5px">Scan to rate your cut</div>
+          <div style="font-size:11px;color:var(--teal);background:rgba(0,201,167,.1);border:1px solid rgba(0,201,167,.18);border-radius:100px;padding:3px 12px;display:inline-block">rankvibe.co/sharpcutz</div>
+        </div>
+      </div></div>
+      <div class="panel"><div class="ph"><div class="pt">🔗 Share Your Link</div></div><div class="pb">
+        <div style="font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px">Review URL</div>
+        <div style="display:flex;gap:7px;margin-bottom:16px"><div style="flex:1;background:var(--raised);border:1px solid var(--b);border-radius:8px;padding:8px 12px;font-size:13px;color:var(--teal)">rankvibe.co/sharpcutz</div><button class="btn p">Copy</button></div>
+        <div class="gap-list">
+          <div class="srow" style="padding:9px 0"><div><div class="slbl">📱 SMS after appointment</div><div class="ssub">Send review link via text after each cut</div></div><button class="btn" style="font-size:11px">Configure</button></div>
+          <div class="srow" style="padding:9px 0"><div><div class="slbl">📧 Weekly email to regulars</div><div class="ssub">+8 reviews/month estimated</div></div><button class="btn" style="font-size:11px">Configure</button></div>
+          <div class="srow" style="padding:9px 0;border-bottom:none"><div><div class="slbl">📷 Instagram story card</div><div class="ssub">Auto-generate a story with your QR</div></div><button class="btn" style="font-size:11px">Generate</button></div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- ══════ 11. ACTION PLAN ══════ -->
+  <div class="scr" id="tab-recs">
+    <div class="krow k4">
+      <div class="kpi ct"><div class="kpi-lbl">📋 Active Actions</div><div class="kpi-val t">9</div><div class="kpi-sub">AI-generated</div></div>
+      <div class="kpi cr"><div class="kpi-lbl">🚨 High Priority</div><div class="kpi-val r">3</div><div class="kpi-sub">Do this week</div></div>
+      <div class="kpi cg"><div class="kpi-lbl">📈 Projected Rank</div><div class="kpi-val g">#3</div><div class="kpi-sub">If all high-priority done</div></div>
+      <div class="kpi"><div class="kpi-lbl">✅ Completed</div><div class="kpi-val">12</div><div class="kpi-sub">All time</div></div>
+    </div>
+    <div class="g g21">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="panel"><div class="ph"><div class="pt">🚨 High Priority — Do This Week</div><div class="tag r">3 actions</div></div><div class="pb"><div class="gap-list">
+          <div class="rec hi"><div class="rec-ico" style="background:rgba(0,201,167,.1)">⭐</div><div style="flex:1"><div class="rec-ttl">Ask every happy client for a review</div><div class="rec-sub">QR converts 18%. Place at mirror, register, waiting area. Est. +6 reviews/month immediately.</div></div><div class="imp h">+6/mo</div></div>
+          <div class="rec hi"><div class="rec-ico" style="background:rgba(0,201,167,.1)">💬</div><div style="flex:1"><div class="rec-ttl">Reply to 3 unanswered Google reviews</div><div class="rec-sub">Google prioritises shops that engage. Takes 2 minutes with AI drafts already written.</div></div><div class="imp h">Ranking</div></div>
+          <div class="rec hi"><div class="rec-ico" style="background:rgba(255,90,95,.1)">⏱️</div><div style="flex:1"><div class="rec-ttl">Add 1 barber Saturday 11am–2pm</div><div class="rec-sub">6 reviews and 4 private feedbacks this month cite Saturday waits. Fixes your #1 negative theme.</div></div><div class="imp h">Retention</div></div>
+        </div></div></div>
+        <div class="panel"><div class="ph"><div class="pt">⚠️ Medium Priority — This Month</div><div class="tag g">4 actions</div></div><div class="pb"><div class="gap-list">
+          <div class="rec md"><div class="rec-ico" style="background:rgba(232,169,62,.1)">🏷️</div><div style="flex:1"><div class="rec-ttl">Highlight beard work in Google profile</div><div class="rec-sub">×22 mentions in reviews but not in your keywords or bio. Easy profile edit = more relevant searches.</div></div><div class="imp m">Visibility</div></div>
+          <div class="rec md"><div class="rec-ico" style="background:rgba(232,169,62,.1)">📸</div><div style="flex:1"><div class="rec-ttl">Add 5 fresh photos to Google Business</div><div class="rec-sub">Your last photo was 8 months ago. Fresh photos increase profile views up to 35%.</div></div><div class="imp m">Clicks</div></div>
+          <div class="rec md"><div class="rec-ico" style="background:rgba(232,169,62,.1)">💰</div><div style="flex:1"><div class="rec-ttl">Post your prices visibly — mirror & Google</div><div class="rec-sub">2 private feedbacks mention price surprise. Transparent pricing builds trust and stops complaints.</div></div><div class="imp m">Trust</div></div>
+          <div class="rec md"><div class="rec-ico" style="background:rgba(232,169,62,.1)">📅</div><div style="flex:1"><div class="rec-ttl">Update Google Business hours</div><div class="rec-sub">Last updated 4 months ago. Inaccurate hours = angry walk-ins = 1-star reviews.</div></div><div class="imp m">UX</div></div>
+        </div></div></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="panel"><div class="ph"><div class="pt">📊 Do these → reach here</div></div><div class="pb">
+          <div style="text-align:center;padding:10px 0 16px">
+            <div style="font-size:11px;color:var(--txt3);margin-bottom:4px">If all high priority completed</div>
+            <div style="font-family:'Bebas Neue';font-size:60px;color:var(--teal);line-height:1">#3</div>
+            <div style="font-size:13px;color:var(--txt2)">projected rank in ~3 months</div>
+          </div>
+          <div class="prog-track" style="margin-bottom:5px"><div class="prog-fill" style="width:60%;background:linear-gradient(90deg,var(--teal),#0891B2)"></div></div>
+          <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--txt3);margin-bottom:14px"><span>Now · #6</span><span>Goal · Top 3</span></div>
+          <div class="divider"></div>
+          <div style="font-size:12px;color:var(--txt3);line-height:1.65">Completing all high-priority actions could add <strong style="color:var(--txt)">+20–25 reviews/month</strong> and push you into Top 3 within <strong style="color:var(--teal)">90 days</strong>.</div>
+        </div></div>
+        <div class="panel"><div class="ph"><div class="pt">✅ Completed Actions</div><div class="pm">All time</div></div><div class="pb" style="padding:12px 16px">
+          <table class="dtbl"><thead><tr><th>Action</th><th>Impact</th></tr></thead><tbody>
+            <tr><td>Printed QR at register</td><td><span class="tag t">+4/mo</span></td></tr>
+            <tr><td>Replied to all reviews in batch</td><td><span class="tag t">Ranking ▲</span></td></tr>
+            <tr><td>Updated opening hours on Google</td><td><span class="tag t">UX fixed</span></td></tr>
+            <tr><td>Added beard specialist to bio</td><td><span class="tag t">+8% views</span></td></tr>
+          </tbody></table>
+        </div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════ 12. ANALYTICS ══════ -->
+  <div class="scr" id="tab-analytics">
+    <div class="krow k4">
+      <div class="kpi ct"><div class="kpi-lbl">📊 30-Day Reviews</div><div class="kpi-val t">12</div><div class="kpi-ch up">▲ +50% vs prev month</div></div>
+      <div class="kpi"><div class="kpi-lbl">⭐ Avg Rating (30D)</div><div class="kpi-val">4.7</div><div class="kpi-ch up">▲ +0.1</div></div>
+      <div class="kpi cb"><div class="kpi-lbl">📲 QR Converts</div><div class="kpi-val b">61</div><div class="kpi-sub">18% of scans</div></div>
+      <div class="kpi"><div class="kpi-lbl">🔒 Issues Saved</div><div class="kpi-val">5</div><div class="kpi-sub">Kept off Google</div></div>
+    </div>
+    <div class="g g2">
+      <div class="panel"><div class="ph"><div class="pt">📅 Reviews by Day of Week</div></div><div class="pb"><div style="height:170px"><canvas id="c-days"></canvas></div></div></div>
+      <div class="panel"><div class="ph"><div class="pt">📈 Monthly Review Volume</div></div><div class="pb"><div style="height:170px"><canvas id="c-monthly"></canvas></div></div></div>
+    </div>
+    <div class="g g3">
+      <div class="panel"><div class="ph"><div class="pt">🧠 Sentiment Trend</div></div><div class="pb"><div style="height:140px"><canvas id="c-sent-an"></canvas></div></div></div>
+      <div class="panel"><div class="ph"><div class="pt">📊 QR Conversion Rate</div></div><div class="pb"><div style="height:140px"><canvas id="c-qr-conv"></canvas></div></div></div>
+      <div class="panel"><div class="ph"><div class="pt">⭐ Rating Distribution</div></div><div class="pb"><div style="height:140px"><canvas id="c-rat-dist"></canvas></div></div></div>
+    </div>
+  </div>
+
+  <!-- ══════ 13. SETTINGS ══════ -->
+  <div class="scr" id="tab-settings">
+    <div class="g g21">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="panel"><div class="ph"><div class="pt">🏪 Business Profile</div><button class="btn p" style="font-size:12px">Save</button></div><div class="pb">
+          <div class="srow"><div><div class="slbl">Business Name</div><div class="ssub">Shows on QR posters and dashboard</div></div><input class="sinput" value="Sharp Cutz Barbershop"></div>
+          <div class="srow"><div><div class="slbl">Google Place ID</div><div class="ssub">Links your Google reviews to this account</div></div><input class="sinput" value="ChIJabc123xyz456"></div>
+          <div class="srow"><div><div class="slbl">Address</div></div><input class="sinput" value="42 East Side Blvd, Toronto ON"></div>
+          <div class="srow"><div><div class="slbl">Category</div></div><select class="sinput" style="cursor:pointer"><option>Barbershop</option><option>Salon</option></select></div>
+          <div class="srow" style="border:none"><div><div class="slbl">Tracking Radius</div><div class="ssub">Competitors within this distance</div></div><select class="sinput" style="cursor:pointer"><option>1 mile</option><option selected>2 miles</option><option>5 miles</option></select></div>
+        </div></div>
+        <div class="panel"><div class="ph"><div class="pt">🔔 Notifications</div></div><div class="pb">
+          <div class="srow"><div><div class="slbl">New review posted</div><div class="ssub">Instant alert</div></div><label class="tog"><input type="checkbox" checked><span class="tog-sl"></span></label></div>
+          <div class="srow"><div><div class="slbl">Negative review alert</div><div class="ssub">1–2 star reviews only</div></div><label class="tog"><input type="checkbox" checked><span class="tog-sl"></span></label></div>
+          <div class="srow"><div><div class="slbl">Weekly digest email</div><div class="ssub">Every Monday morning</div></div><label class="tog"><input type="checkbox" checked><span class="tog-sl"></span></label></div>
+          <div class="srow"><div><div class="slbl">Private feedback captured</div><div class="ssub">Instant alert</div></div><label class="tog"><input type="checkbox" checked><span class="tog-sl"></span></label></div>
+          <div class="srow"><div><div class="slbl">Competitor rank change</div><div class="ssub">When a rival moves up or down</div></div><label class="tog"><input type="checkbox"><span class="tog-sl"></span></label></div>
+          <div class="srow" style="border:none"><div><div class="slbl">AI reply suggestions</div><div class="ssub">Auto-draft on new reviews</div></div><label class="tog"><input type="checkbox" checked><span class="tog-sl"></span></label></div>
+        </div></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="panel"><div class="ph"><div class="pt">💳 Plan & Billing</div></div><div class="pb">
+          <div style="background:var(--raised);border:1px solid var(--b);border-radius:10px;padding:13px;margin-bottom:12px"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:7px"><div><div style="font-weight:700;font-size:14px">Starter Plan</div><div style="font-size:11px;color:var(--txt3)">$29/month</div></div><div class="tag t">Active</div></div><div class="divider"></div><div style="font-size:12px;color:var(--txt3);line-height:1.7">✅ QR funnels · ✅ AI replies (50/mo) · ✅ Reviews<br>✅ Basic analytics · ❌ Competitor intel · ❌ Head-to-head</div></div>
+          <div style="background:linear-gradient(135deg,rgba(0,201,167,.07),rgba(8,145,178,.04));border:1px solid rgba(0,201,167,.18);border-radius:10px;padding:13px;margin-bottom:12px"><div style="font-weight:700;font-size:14px;margin-bottom:3px">Pro Plan · $79/month</div><div style="font-size:12px;color:var(--txt3);line-height:1.6;margin-bottom:9px">Everything + competitor intel, head-to-head, market trends, SMS nudges, unlimited AI replies</div><button class="btn p" style="width:100%">Upgrade to Pro →</button></div>
+          <div style="font-size:11px;color:var(--txt3)">Next billing: June 27, 2026 · <span style="color:var(--teal);cursor:pointer">Manage</span></div>
+        </div></div>
+        <div class="panel"><div class="ph"><div class="pt">🤖 AI Settings</div></div><div class="pb">
+          <div class="srow"><div><div class="slbl">Default reply tone</div></div><select class="sinput" style="cursor:pointer"><option selected>Warm & Friendly</option><option>Formal</option><option>Playful</option></select></div>
+          <div class="srow"><div><div class="slbl">Auto-draft on new reviews</div></div><label class="tog"><input type="checkbox" checked><span class="tog-sl"></span></label></div>
+          <div class="srow"><div><div class="slbl">Include emoji in replies</div></div><label class="tog"><input type="checkbox" checked><span class="tog-sl"></span></label></div>
+          <div class="srow" style="border:none"><div><div class="slbl">Shop signature</div></div><input class="sinput" value="— The Sharp Cutz Team ✂️"></div>
+        </div></div>
+        <div class="panel"><div class="ph"><div class="pt">👤 Account</div></div><div class="pb">
+          <div class="srow"><div><div class="slbl">Owner Name</div></div><input class="sinput" value="Jordan Carter"></div>
+          <div class="srow"><div><div class="slbl">Email</div></div><input class="sinput" value="jordan@sharpcutz.com"></div>
+          <div class="srow" style="border:none"><div><div class="slbl">Password</div></div><input class="sinput" type="password" value="••••••••••"></div>
+          <div style="display:flex;gap:8px;margin-top:12px"><button class="btn p" style="font-size:12px">Save Account</button><button class="btn" style="color:var(--red);border-color:rgba(255,90,95,.2);font-size:12px">Delete Account</button></div>
+        </div></div>
+      </div>
+    </div>
+  </div>
+
+  </div><!-- /cnt -->
+</main>
+
+<script>
+const titles={home:'Weekly <span style="color:var(--teal)">Digest</span>',clients:'Lost <span style="color:var(--teal)">Clients</span>',reviews:'Reviews <span style="color:var(--teal)">Manager</span>',feedback:'Private <span style="color:var(--teal)">Feedback</span>',ai:'AI <span style="color:var(--teal)">Replies</span>',ranking:'Ranking & <span style="color:var(--teal)">Gaps</span>',headtohead:'Head to <span style="color:var(--teal)">Head</span>',intel:'Competitor <span style="color:var(--teal)">Intel</span>',themes:'What Clients <span style="color:var(--teal)">Say</span>',qr:'QR <span style="color:var(--teal)">Funnel</span>',recs:'Action <span style="color:var(--teal)">Plan</span>',analytics:'Growth <span style="color:var(--teal)">Analytics</span>',settings:'Account <span style="color:var(--teal)">Settings</span>'};
+
+function nav(el,id){
+  document.querySelectorAll('.sbi').forEach(i=>i.classList.remove('on'));
+  el.classList.add('on');
+  document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));
+  document.getElementById('tab-'+id).classList.add('on');
+  document.getElementById('tb-ttl').innerHTML=titles[id]||id;
+  initCharts(id);
+}
+
+Chart.defaults.color='#3D4455';
+Chart.defaults.font.family="'Outfit',sans-serif";
+Chart.defaults.font.size=11;
+const C={t:'#00C9A7',g:'#E8A93E',r:'#FF5A5F',b:'#4B9EF4',card:'#141720',raised:'#1A1F2B',border:'rgba(255,255,255,0.055)'};
+
+const refs={};
+function mk(id,type,data,opts){
+  if(refs[id])refs[id].destroy();
+  const el=document.getElementById(id);if(!el)return;
+  refs[id]=new Chart(el.getContext('2d'),{type,data,options:opts});
+}
+const base={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:C.card,borderColor:'rgba(255,255,255,0.08)',borderWidth:1,padding:8}},scales:{x:{grid:{color:C.border},border:{display:false},ticks:{color:'#3D4455'}},y:{grid:{color:C.border},border:{display:false},ticks:{color:'#3D4455'}}}};
+function gr(ctx,h){const g=ctx.createLinearGradient(0,0,0,h);g.addColorStop(0,'rgba(0,201,167,.16)');g.addColorStop(1,'rgba(0,201,167,0)');return g;}
+
+function initCharts(id){
+  if(id==='clients'){
+    mk('c-issues-trend','line',{labels:['W1','W2','W3','W4'],datasets:[{label:'Wait',data:[2,3,4,6],borderColor:C.r,fill:false,tension:.4,borderWidth:2,pointRadius:3},{label:'Wrong cut',data:[1,1,2,3],borderColor:C.g,fill:false,tension:.4,borderWidth:2,pointRadius:3,borderDash:[4,3]}]},{...base,plugins:{...base.plugins,legend:{display:true,position:'top',align:'end',labels:{boxWidth:10,boxHeight:2,padding:12,font:{size:11},color:'#3D4455'}}}});
+  }
+  if(id==='reviews'){
+    mk('c-rat-time','line',{labels:['Jan','Feb','Mar','Apr','May','Jun'],datasets:[{data:[4.3,4.4,4.4,4.5,4.6,4.6],borderColor:C.t,backgroundColor:'rgba(0,201,167,.06)',borderWidth:2,fill:true,tension:.4,pointRadius:4,pointBackgroundColor:C.t}]},{...base,scales:{...base.scales,y:{...base.scales.y,min:4.0,max:5.0}}});
+    mk('c-stars','bar',{labels:['5⭐','4⭐','3⭐','2⭐','1⭐'],datasets:[{data:[96,18,8,4,2],backgroundColor:[C.t,'rgba(0,201,167,.55)','rgba(232,169,62,.5)','rgba(255,90,95,.4)','rgba(255,90,95,.65)'],borderRadius:5,barPercentage:.6}]},{...base,indexAxis:'y'});
+  }
+  if(id==='feedback'){
+    mk('c-fbissues','doughnut',{labels:['Wait','Wrong cut','Price','Inconsistent','Barber'],datasets:[{data:[6,3,2,2,1],backgroundColor:[C.r,'rgba(255,90,95,.65)','rgba(255,90,95,.45)','rgba(255,90,95,.3)','rgba(255,90,95,.18)'],borderColor:'#141720',borderWidth:3}]},{cutout:'60%',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'right',labels:{boxWidth:9,boxHeight:9,padding:9,font:{size:11},color:'#3D4455'}},tooltip:{backgroundColor:C.card,borderColor:'rgba(255,255,255,0.08)',borderWidth:1}}});
+  }
+  if(id==='ranking'){
+    mk('c-rank-bar','bar',{labels:["Elite Cutz","Prestige","Razor's Edge","Kings","Lineup","Sharp Cutz","Fade Factory","Clipper Kings"],datasets:[{data:[247,219,213,181,162,128,117,98],backgroundColor:(ctx)=>ctx.index===5?C.t:'rgba(100,116,139,.3)',borderRadius:5,barPercentage:.65}]},{...base,plugins:{...base.plugins,tooltip:{...base.plugins.tooltip,callbacks:{label:c=>` ${c.raw} reviews`}}}});
+    mk('c-rank-hist','line',{labels:['Jan','Feb','Mar','Apr','May','Jun'],datasets:[{label:'Rank',data:[9,8,8,7,6,6],borderColor:C.t,backgroundColor:'rgba(0,201,167,.07)',fill:true,tension:.4,borderWidth:2,pointRadius:4,pointBackgroundColor:C.t}]},{...base,scales:{...base.scales,y:{...base.scales.y,reverse:true,min:1,max:12,ticks:{callback:v=>'#'+v,color:'#3D4455'},grid:{color:C.border},border:{display:false}}}});
+  }
+  if(id==='headtohead'){
+    mk('c-h2h-vel','bar',{labels:['Jan','Feb','Mar','Apr','May','Jun'],datasets:[{label:'Sharp Cutz',data:[7,8,9,10,11,12],backgroundColor:C.t,borderRadius:4,barPercentage:.5},{label:'Elite Cutz',data:[14,15,16,17,17,18],backgroundColor:'rgba(100,116,139,.35)',borderRadius:4,barPercentage:.5}]},{...base,plugins:{...base.plugins,legend:{display:true,position:'top',align:'end',labels:{boxWidth:9,boxHeight:2,padding:10,font:{size:11},color:'#3D4455'}}}});
+  }
+  if(id==='themes'){
+    mk('c-theme-trend','line',{labels:['Jan','Feb','Mar','Apr','May','Jun'],datasets:[{label:'Fade',data:[28,31,33,35,38,41],borderColor:C.t,fill:false,tension:.4,borderWidth:2,pointRadius:2},{label:'Beard',data:[10,13,16,18,20,22],borderColor:C.g,fill:false,tension:.4,borderWidth:2,pointRadius:2},{label:'Wait issues',data:[2,2,3,4,5,6],borderColor:C.r,fill:false,tension:.4,borderWidth:2,pointRadius:2}]},{...base,plugins:{...base.plugins,legend:{display:true,position:'top',align:'end',labels:{boxWidth:9,boxHeight:2,padding:10,font:{size:11},color:'#3D4455'}}}});
+  }
+  if(id==='qr'){
+    const qc=document.getElementById('c-qr-chart');
+    if(qc){const g=qc.getContext('2d');mk('c-qr-chart','line',{labels:['W1','W2','W3','W4'],datasets:[{label:'Scans',data:[74,88,96,84],borderColor:C.b,backgroundColor:'rgba(75,158,244,.06)',fill:true,tension:.4,borderWidth:2,pointRadius:3},{label:'Google Posts',data:[13,16,18,14],borderColor:C.t,fill:false,tension:.4,borderWidth:2,pointRadius:3},{label:'Private',data:[26,31,32,19],borderColor:C.g,fill:false,tension:.4,borderWidth:2,pointRadius:3,borderDash:[4,3]}]},{...base,plugins:{...base.plugins,legend:{display:true,position:'top',align:'end',labels:{boxWidth:9,boxHeight:2,padding:10,font:{size:11},color:'#3D4455'}}}});}
+  }
+  if(id==='analytics'){
+    mk('c-days','bar',{labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],datasets:[{data:[8,12,10,14,22,38,24],backgroundColor:(ctx)=>ctx.raw>=30?C.t:ctx.raw>=20?'rgba(0,201,167,.55)':'rgba(0,201,167,.28)',borderRadius:5,barPercentage:.65}]},{...base});
+    mk('c-monthly','bar',{labels:['Jan','Feb','Mar','Apr','May','Jun'],datasets:[{data:[6,7,8,9,10,12],backgroundColor:C.t,borderRadius:5,barPercentage:.6}]},{...base});
+    mk('c-sent-an','line',{labels:['Jan','Feb','Mar','Apr','May','Jun'],datasets:[{label:'Positive %',data:[82,84,85,86,87,87],borderColor:C.t,fill:true,backgroundColor:'rgba(0,201,167,.07)',tension:.4,borderWidth:2},{label:'Negative %',data:[8,7,7,6,5,5],borderColor:C.r,fill:false,tension:.4,borderWidth:2,borderDash:[4,3]}]},{...base,plugins:{...base.plugins,legend:{display:true,position:'top',align:'end',labels:{boxWidth:9,boxHeight:2,padding:10,font:{size:11},color:'#3D4455'}}}});
+    mk('c-qr-conv','line',{labels:['W1','W2','W3','W4'],datasets:[{label:'Convert %',data:[15,17,18,19],borderColor:C.t,fill:true,backgroundColor:'rgba(0,201,167,.07)',tension:.4,borderWidth:2,pointRadius:3}]},{...base,scales:{...base.scales,y:{...base.scales.y,min:0,max:30}}});
+    mk('c-rat-dist','bar',{labels:['5⭐','4⭐','3⭐','2⭐','1⭐'],datasets:[{data:[96,18,8,4,2],backgroundColor:[C.t,'rgba(0,201,167,.55)','rgba(232,169,62,.5)','rgba(255,90,95,.4)','rgba(255,90,95,.65)'],borderRadius:5,barPercentage:.6}]},{...base,indexAxis:'y'});
+  }
+}
+</script>
+</body>
+</html>
