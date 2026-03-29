@@ -369,7 +369,7 @@
             <!-- Hidden by default; shown only when visiting /?admin=1 -->
            <!-- <a id="golivepocket-btn" class="btn" href="/projects/golive_pocket.html">GoLivePocket</a> -->
           <!--  <a id="bg-remover-btn" class="btn" href="/bg-remover.html">BG-Remover</a> -->
-             <a id="brankvibe-owner-dashboard" class="btn" href="/brankvibe-owner-dashboard.html">RankVibe</a>
+            <a id="brankvibe-owner-dashboard-btn" class="btn" href="/brankvibe-owner-dashboard.html>RankVibe</a>
             
           </div>
         </div>
@@ -509,10 +509,12 @@
 
   const goLive = document.getElementById("golivepocket-btn");
   const bgRemover = document.getElementById("bg-remover-btn");
+  const RankVibe = document.getElementById("brankvibe-owner-dashboard-btn);
 
   if (!isAdmin) {
     if (goLive) goLive.style.display = "none";
     if (bgRemover) bgRemover.style.display = "none";
+    if (RankVibe) RankVibe.style.display = "none";
   }
 })();
 
