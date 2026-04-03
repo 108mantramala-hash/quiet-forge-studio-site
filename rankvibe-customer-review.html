@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Rate Your Experience — OutKasts Barbershop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --gold:#C9A84C;--gold-dim:rgba(201,168,76,0.15);--gold-glow:rgba(201,168,76,0.3);
+  --teal:#00C9A7;--teal-dim:rgba(0,201,167,0.12);--teal-glow:rgba(0,201,167,0.2);
+  --bg:#080809;--bg-card:#0F1012;--bg-surface:#161719;--bg-raised:#1A1C1F;
+  --border:rgba(255,255,255,0.07);--border-gold:rgba(201,168,76,0.25);--border-teal:rgba(0,201,167,0.2);
+  --text:#F0EDE8;--text-muted:rgba(240,237,232,0.45);--text-dim:rgba(240,237,232,0.25);
+  --red:#E05252;--radius:20px;--radius-sm:12px
+}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:.5}
+.page{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:0 20px 56px}
+.ambient{position:fixed;top:-120px;left:50%;transform:translateX(-50%);width:480px;height:360px;background:radial-gradient(ellipse,rgba(0,201,167,0.06) 0%,transparent 70%);pointer-events:none;z-index:0}
+.header{width:100%;max-width:440px;display:flex;align-items:center;justify-content:space-between;padding:28px 0 0}
+.logo{display:flex;align-items:center;gap:8px}
+.logo-mark{width:32px;height:32px;background:var(--teal);border-radius:8px;display:flex;align-items:center;justify-content:center}
+.logo-mark svg{width:18px;height:18px}
+.logo-text{font-family:'Outfit',sans-serif;font-weight:700;font-size:18px;color:var(--text);letter-spacing:-.3px}
+.logo-text span{color:var(--teal)}
+.secure-badge{font-size:11px;color:var(--text-muted);display:flex;align-items:center;gap:4px;background:var(--bg-surface);border:1px solid var(--border);padding:4px 10px;border-radius:100px}
+.shop-card{width:100%;max-width:440px;margin-top:24px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px 20px 18px;opacity:0;transform:translateY(16px);animation:fadeUp .5s ease .1s forwards}
+.shop-top{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.shop-icon{width:52px;height:52px;border-radius:13px;background:var(--teal-dim);border:1px solid var(--border-teal);display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0}
+.shop-info{flex:1}
+.shop-name{font-family:'Outfit',sans-serif;font-weight:700;font-size:19px;color:var(--text);letter-spacing:-.3px}
+.shop-addr{font-size:12px;color:var(--text-muted);margin-top:2px}
+.shop-rating{display:flex;align-items:center;gap:6px;margin-top:8px}
+.stars-sm{display:flex;gap:2px}
+.stars-sm svg{width:12px;height:12px;fill:var(--gold)}
+.rating-text{font-size:12px;color:var(--text-muted)}
+.barber-section{margin-top:14px;padding-top:14px;border-top:1px solid var(--border)}
+.barber-section-label{font-size:11px;font-weight:600;color:var(--text-muted);letter-spacing:.5px;text-transform:uppercase;margin-bottom:10px}
+.barber-scroll{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.barber-scroll::-webkit-scrollbar{display:none}
+.barber-chip{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;flex-shrink:0;padding:2px;-webkit-tap-highlight-color:transparent}
+.barber-av{width:54px;height:54px;border-radius:50%;border:2px solid var(--border);overflow:hidden;transition:border-color .2s;display:flex;align-items:center;justify-content:center;font-family:'Outfit',sans-serif;font-weight:700;font-size:18px;background:var(--bg-surface);position:relative}
+.barber-av img{width:100%;height:100%;object-fit:cover;object-position:top}
+.barber-chip.selected .barber-av{border-color:var(--teal);box-shadow:0 0 0 3px rgba(0,201,167,.15)}
+.barber-chip-name{font-size:11px;font-weight:600;color:var(--text-muted);transition:color .2s;text-align:center}
+.barber-chip.selected .barber-chip-name{color:var(--teal)}
+.check-ring{position:absolute;bottom:-2px;right:-2px;width:18px;height:18px;background:var(--teal);border-radius:50%;border:2px solid var(--bg-card);display:none;align-items:center;justify-content:center}
+.barber-chip.selected .check-ring{display:flex}
+.check-ring svg{width:10px;height:10px}
+.screen{display:none;width:100%;max-width:440px;flex-direction:column;align-items:center}
+.screen.active{display:flex}
+.rating-headline{margin-top:32px;text-align:center;opacity:0;animation:fadeUp .5s ease .2s forwards}
+.rating-headline h1{font-family:'Outfit',sans-serif;font-weight:800;font-size:28px;line-height:1.15;letter-spacing:-.6px}
+.rating-headline h1 span{color:var(--teal)}
+.rating-headline p{margin-top:9px;font-size:14px;color:var(--text-muted);line-height:1.5}
+.star-picker{margin-top:36px;display:flex;flex-direction:column;align-items:center;gap:18px;opacity:0;animation:fadeUp .5s ease .35s forwards;width:100%}
+.stars-row{display:flex;gap:10px}
+.star-btn{background:none;border:none;cursor:pointer;padding:4px;transition:transform .15s ease;-webkit-tap-highlight-color:transparent}
+.star-btn:active{transform:scale(.88)}
+.star-btn svg{width:50px;height:50px;transition:fill .15s ease,filter .15s ease;fill:var(--bg-raised);stroke:rgba(201,168,76,.25);stroke-width:1.5}
+.star-btn.lit svg{fill:var(--gold);stroke:var(--gold);filter:drop-shadow(0 0 8px rgba(201,168,76,.45))}
+.star-hint{font-size:14px;color:var(--text-muted);height:20px;transition:color .2s}
+.star-hint.show{color:var(--text)}
+.cta-btn{width:100%;height:56px;background:var(--teal);color:#060809;border:none;border-radius:var(--radius-sm);font-family:'Outfit',sans-serif;font-weight:700;font-size:17px;cursor:pointer;transition:background .2s,transform .12s,box-shadow .2s;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:6px;opacity:.4;pointer-events:none}
+.cta-btn.ready{opacity:1;pointer-events:all}
+.cta-btn.ready:active{transform:scale(.97);box-shadow:0 0 0 4px rgba(0,201,167,.2)}
+.routing-note{font-size:12px;color:var(--text-dim);text-align:center;margin-top:10px;line-height:1.5}
+.divider{width:100%;height:1px;background:var(--border);margin:26px 0}
+.how-row{display:flex;gap:8px;width:100%;opacity:0;animation:fadeUp .5s ease .5s forwards}
+.how-pill{flex:1;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:13px 10px;text-align:center}
+.how-pill .num{font-family:'Outfit',sans-serif;font-weight:700;font-size:19px;color:var(--teal)}
+.how-pill .lbl{font-size:11px;color:var(--text-muted);margin-top:3px;line-height:1.4}
+.celebrate-icon{width:88px;height:88px;background:var(--gold-dim);border:1px solid var(--border-gold);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 22px;font-size:40px;animation:pulse 2s ease infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 var(--gold-glow)}50%{box-shadow:0 0 0 16px rgba(201,168,76,0)}}
+.google-headline{font-family:'Outfit',sans-serif;font-weight:800;font-size:27px;letter-spacing:-.5px;line-height:1.15}
+.google-sub{margin-top:10px;font-size:14px;color:var(--text-muted);line-height:1.5}
+.selected-stars{display:flex;justify-content:center;gap:6px;margin:18px 0}
+.selected-stars svg{width:26px;height:26px;fill:var(--gold)}
+.google-btn{width:100%;height:56px;background:#fff;color:#1a1a1a;border:none;border-radius:var(--radius-sm);font-family:'Outfit',sans-serif;font-weight:700;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;margin-top:10px;transition:transform .12s}
+.google-btn:active{transform:scale(.97)}
+.google-btn svg{width:22px;height:22px}
+.redirect-note{font-size:12px;color:var(--text-dim);margin-top:12px;line-height:1.5}
+.countdown-bar{width:100%;height:3px;background:var(--border);border-radius:2px;margin-top:14px;overflow:hidden}
+.countdown-fill{height:100%;background:var(--gold);border-radius:2px;width:100%;animation:countdownShrink 5s linear forwards}
+@keyframes countdownShrink{to{width:0%}}
+.back-link{background:none;border:none;color:var(--text-muted);font-size:13px;cursor:pointer;text-decoration:underline;font-family:'DM Sans',sans-serif;margin-top:14px}
+.feedback-header{text-align:center;margin-bottom:24px}
+.feedback-icon{width:68px;height:68px;background:rgba(224,82,82,.1);border:1px solid rgba(224,82,82,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:30px}
+.feedback-header h2{font-family:'Outfit',sans-serif;font-weight:700;font-size:22px;letter-spacing:-.3px}
+.feedback-header p{margin-top:7px;font-size:13px;color:var(--text-muted);line-height:1.5}
+.selected-stars-sm{display:flex;justify-content:center;gap:3px;margin:10px 0 0}
+.selected-stars-sm svg{width:17px;height:17px;fill:var(--gold)}
+.form-field{margin-bottom:14px;width:100%}
+.form-label{display:block;font-size:12px;color:var(--text-muted);margin-bottom:7px;font-weight:500}
+.form-input,.form-textarea,.form-select{width:100%;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:13px 15px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;outline:none;transition:border-color .2s;appearance:none;-webkit-appearance:none}
+.form-input:focus,.form-textarea:focus,.form-select:focus{border-color:var(--border-teal)}
+.form-input::placeholder,.form-textarea::placeholder{color:var(--text-dim)}
+.form-textarea{resize:none;height:110px;line-height:1.6}
+.form-select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='rgba(240,237,232,0.4)' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 15px center;padding-right:38px}
+.form-select option{background:#1a1a1c;color:var(--text)}
+.submit-btn{width:100%;height:56px;background:var(--teal);color:#060809;border:none;border-radius:var(--radius-sm);font-family:'Outfit',sans-serif;font-weight:700;font-size:16px;cursor:pointer;margin-top:6px;transition:transform .12s;display:flex;align-items:center;justify-content:center;gap:8px}
+.submit-btn:active{transform:scale(.97)}
+.privacy-note{display:flex;align-items:flex-start;gap:8px;margin-top:12px;padding:11px 12px;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;width:100%}
+.privacy-note svg{width:13px;height:13px;flex-shrink:0;margin-top:1px;fill:var(--text-dim)}
+.privacy-note p{font-size:11px;color:var(--text-dim);line-height:1.5}
+.thanks-ring{width:96px;height:96px;border-radius:50%;background:rgba(76,175,130,.1);border:1px solid rgba(76,175,130,.3);display:flex;align-items:center;justify-content:center;margin:0 auto 22px;font-size:42px;animation:scaleIn .4s cubic-bezier(.34,1.56,.64,1) forwards}
+@keyframes scaleIn{from{transform:scale(.5);opacity:0}to{transform:scale(1);opacity:1}}
+.thanks-headline{font-family:'Outfit',sans-serif;font-weight:800;font-size:27px;letter-spacing:-.4px}
+.thanks-sub{margin-top:9px;font-size:14px;color:var(--text-muted);line-height:1.6}
+.thanks-divider{width:36px;height:2px;background:var(--teal);margin:22px auto;border-radius:2px}
+.thanks-barber-note{font-size:13px;color:var(--text-muted);line-height:1.6;max-width:300px;margin:0 auto}
+.footer{margin-top:44px;text-align:center;padding-bottom:16px}
+.footer p{font-size:11px;color:var(--text-dim);line-height:1.6}
+.footer a{color:var(--teal);text-decoration:none}
+@keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+.screen-enter{animation:fadeUp .4s ease forwards}
+@media(min-width:500px){.page{padding:0 0 64px}.shop-card,.screen,.header{max-width:420px}}
+</style>
+</head>
+<body>
+<div class="ambient"></div>
+<div class="page">
+
+  <header class="header">
+    <div class="logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 18 18" fill="none"><path d="M9 2L11.5 7H16L12.5 10.5L14 15.5L9 12.5L4 15.5L5.5 10.5L2 7H6.5L9 2Z" fill="#060809"/></svg>
+      </div>
+      <span class="logo-text">Rank<span>Vibe</span></span>
+    </div>
+    <div class="secure-badge">
+      <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M5 1L8 2.5V5c0 2-1.5 3.2-3 3.8C2.5 8.2 1 7 1 5V2.5L5 1Z" fill="currentColor" opacity=".7"/></svg>
+      Secure
+    </div>
+  </header>
+
+  <!-- Shop card with barber picker -->
+  <div class="shop-card">
+    <div class="shop-top">
+      <div class="shop-icon">✂️</div>
+      <div class="shop-info">
+        <div class="shop-name">OutKasts Barbershop</div>
+        <div class="shop-addr">📍 6004 Yonge St, North York</div>
+        <div class="shop-rating">
+          <div class="stars-sm">
+            <svg viewBox="0 0 12 12"><path d="M6 1l1.4 3h3l-2.4 1.8.9 3L6 7 3.1 8.8l.9-3L1.6 4h3L6 1Z"/></svg>
+            <svg viewBox="0 0 12 12"><path d="M6 1l1.4 3h3l-2.4 1.8.9 3L6 7 3.1 8.8l.9-3L1.6 4h3L6 1Z"/></svg>
+            <svg viewBox="0 0 12 12"><path d="M6 1l1.4 3h3l-2.4 1.8.9 3L6 7 3.1 8.8l.9-3L1.6 4h3L6 1Z"/></svg>
+            <svg viewBox="0 0 12 12"><path d="M6 1l1.4 3h3l-2.4 1.8.9 3L6 7 3.1 8.8l.9-3L1.6 4h3L6 1Z"/></svg>
+            <svg viewBox="0 0 12 12"><path d="M6 1l1.4 3h3l-2.4 1.8.9 3L6 7 3.1 8.8l.9-3L1.6 4h3L6 1Z"/></svg>
+          </div>
+          <span class="rating-text">4.6 · 128 reviews on Google</span>
+        </div>
+      </div>
+    </div>
+    <div class="barber-section">
+      <div class="barber-section-label">Who cut your hair today?</div>
+      <div class="barber-scroll" id="barberScroll">
+
+        <div class="barber-chip" data-barber="Khai" data-role="Owner &amp; Senior Barber" onclick="selectBarber(this)">
+          <div class="barber-av">
+            <img src="https://assets.cdn.filesafe.space/0H5B1ELDDHfaywbaci4Z/media/690915696b7a572c1c925b31.jpeg" alt="Khai" onerror="this.style.display='none'">
+            <div class="check-ring"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5 3.5-4" stroke="#060809" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          </div>
+          <span class="barber-chip-name">Khai</span>
+        </div>
+
+        <div class="barber-chip" data-barber="Eraj" data-role="Barber" onclick="selectBarber(this)">
+          <div class="barber-av">
+            <img src="https://assets.cdn.filesafe.space/0H5B1ELDDHfaywbaci4Z/media/68910eb1746eb87cdc606357.jpeg" alt="Eraj" onerror="this.style.display='none'">
+            <div class="check-ring"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5 3.5-4" stroke="#060809" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          </div>
+          <span class="barber-chip-name">Eraj</span>
+        </div>
+
+        <div class="barber-chip" data-barber="Jordan" data-role="Senior Barber" onclick="selectBarber(this)">
+          <div class="barber-av">
+            <img src="https://assets.cdn.filesafe.space/0H5B1ELDDHfaywbaci4Z/media/68910e9bec5b3d5802cfa922.jpeg" alt="Jordan" onerror="this.style.display='none'">
+            <div class="check-ring"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5 3.5-4" stroke="#060809" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          </div>
+          <span class="barber-chip-name">Jordan</span>
+        </div>
+
+        <div class="barber-chip" data-barber="Elham" data-role="Barber" onclick="selectBarber(this)">
+          <div class="barber-av">
+            <img src="https://assets.cdn.filesafe.space/0H5B1ELDDHfaywbaci4Z/media/6909099532cf68ea639d733b.jpeg" alt="Elham" onerror="this.style.display='none'">
+            <div class="check-ring"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5 3.5-4" stroke="#060809" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          </div>
+          <span class="barber-chip-name">Elham</span>
+        </div>
+
+        <div class="barber-chip" data-barber="KC" data-role="Barber" onclick="selectBarber(this)">
+          <div class="barber-av">
+            <img src="https://assets.cdn.filesafe.space/0H5B1ELDDHfaywbaci4Z/media/69090b546b7a57f26d90d776.jpeg" alt="KC" onerror="this.style.display='none'">
+            <div class="check-ring"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5 3.5-4" stroke="#060809" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          </div>
+          <span class="barber-chip-name">KC</span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- SCREEN 1: RATE -->
+  <div class="screen active" id="screen-rate">
+    <div class="rating-headline">
+      <h1>How was your<br><span id="headlineBarber">fresh cut?</span></h1>
+      <p>Tap the stars — takes 10 seconds.</p>
+    </div>
+    <div class="star-picker">
+      <div class="stars-row">
+        <button class="star-btn" data-val="1" onclick="selectStar(1)"><svg viewBox="0 0 24 24"><path d="M12 2l2.9 6H22l-5.6 4.1 2.1 6.9L12 15.4l-6.5 3.6 2.1-6.9L2 8h7.1L12 2Z"/></svg></button>
+        <button class="star-btn" data-val="2" onclick="selectStar(2)"><svg viewBox="0 0 24 24"><path d="M12 2l2.9 6H22l-5.6 4.1 2.1 6.9L12 15.4l-6.5 3.6 2.1-6.9L2 8h7.1L12 2Z"/></svg></button>
+        <button class="star-btn" data-val="3" onclick="selectStar(3)"><svg viewBox="0 0 24 24"><path d="M12 2l2.9 6H22l-5.6 4.1 2.1 6.9L12 15.4l-6.5 3.6 2.1-6.9L2 8h7.1L12 2Z"/></svg></button>
+        <button class="star-btn" data-val="4" onclick="selectStar(4)"><svg viewBox="0 0 24 24"><path d="M12 2l2.9 6H22l-5.6 4.1 2.1 6.9L12 15.4l-6.5 3.6 2.1-6.9L2 8h7.1L12 2Z"/></svg></button>
+        <button class="star-btn" data-val="5" onclick="selectStar(5)"><svg viewBox="0 0 24 24"><path d="M12 2l2.9 6H22l-5.6 4.1 2.1 6.9L12 15.4l-6.5 3.6 2.1-6.9L2 8h7.1L12 2Z"/></svg></button>
+      </div>
+      <div class="star-hint" id="starHint">Tap a star to rate</div>
+      <button class="cta-btn" id="ctaBtn" onclick="proceedFromRating()">Continue <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <p class="routing-note">⭐⭐⭐⭐⭐ Loved it? We'll send you to Google.<br>Any issues? We keep it private and fix it fast.</p>
+    </div>
+    <div class="divider"></div>
+    <div class="how-row">
+      <div class="how-pill"><div class="num">1</div><div class="lbl">Pick your barber</div></div>
+      <div class="how-pill"><div class="num">2</div><div class="lbl">Rate your cut</div></div>
+      <div class="how-pill"><div class="num">3</div><div class="lbl">Google or private feedback</div></div>
+    </div>
+  </div>
+
+  <!-- SCREEN 2: GOOGLE -->
+  <div class="screen" id="screen-google">
+    <div style="margin-top:36px;text-align:center;width:100%">
+      <div class="celebrate-icon">🎉</div>
+      <h2 class="google-headline">You made <span id="googleBarberName">their</span> day!</h2>
+      <p class="google-sub">Posting on Google takes 30 seconds and helps OutKasts rank higher — and helps <span id="googleBarberName2">your barber</span> get more clients.</p>
+      <div class="selected-stars" id="googleStars"></div>
+      <button class="google-btn" onclick="goToGoogle()">
+        <svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09Z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23Z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84Z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53Z" fill="#EA4335"/></svg>
+        Post my Google review
+      </button>
+      <div class="countdown-bar"><div class="countdown-fill"></div></div>
+      <p class="redirect-note" id="redirectNote">Auto-opening Google in <span id="countdownNum">5</span>s…</p>
+      <button class="back-link" onclick="showScreen('screen-rate')">← Change my rating</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 3: FEEDBACK -->
+  <div class="screen" id="screen-feedback">
+    <div class="feedback-header" style="width:100%">
+      <div class="feedback-icon">🙏</div>
+      <h2>We want to make it right</h2>
+      <div class="selected-stars-sm" id="feedbackStars"></div>
+      <p>Your feedback goes privately to <strong id="feedbackBarberName">your barber</strong> and the OutKasts team — never posted publicly.</p>
+    </div>
+    <div class="form-field">
+      <label class="form-label">What could've been better?</label>
+      <select class="form-select" id="issueType">
+        <option value="" disabled selected>Select a category</option>
+        <option value="cut_quality">Cut quality or technique</option>
+        <option value="wait_time">Wait time was too long</option>
+        <option value="service">Customer service</option>
+        <option value="consistency">Different from my usual style</option>
+        <option value="cleanliness">Shop cleanliness</option>
+        <option value="price">Pricing / value</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
+    <div class="form-field">
+      <label class="form-label">Barber <span style="color:var(--text-dim)">(auto-filled)</span></label>
+      <input class="form-input" id="feedbackBarberField" readonly style="opacity:.7;cursor:default">
+    </div>
+    <div class="form-field">
+      <label class="form-label">Tell us more <span style="color:var(--text-dim)">(optional)</span></label>
+      <textarea class="form-textarea" id="feedbackText" placeholder="What happened? More detail helps us fix it faster…"></textarea>
+    </div>
+    <div class="form-field">
+      <label class="form-label">Your email <span style="color:var(--text-dim)">(optional — only if you'd like a follow-up)</span></label>
+      <input class="form-input" type="email" id="contactEmail" placeholder="you@email.com" autocomplete="email">
+    </div>
+    <button class="submit-btn" onclick="submitFeedback()">
+      Send privately
+      <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M2 8l12-6-5 12-2-5-5-1Z" stroke="#060809" stroke-width="1.5" stroke-linejoin="round" fill="none"/></svg>
+    </button>
+    <div class="privacy-note">
+      <svg viewBox="0 0 14 14"><path d="M7 1l5 2v3.5C12 9.5 9.5 12 7 13 4.5 12 2 9.5 2 6.5V3L7 1Z"/></svg>
+      <p>Completely private. Never posted publicly. Goes directly to the OutKasts owner dashboard only.</p>
+    </div>
+    <button class="back-link" onclick="showScreen('screen-rate')">← Change my rating</button>
+  </div>
+
+  <!-- SCREEN 4: THANKS -->
+  <div class="screen" id="screen-thanks">
+    <div style="margin-top:60px;text-align:center;width:100%">
+      <div class="thanks-ring">✓</div>
+      <h2 class="thanks-headline" id="thanksHeadline">Feedback received.</h2>
+      <p class="thanks-sub" id="thanksSub">Thank you for your time. Your input makes a real difference.</p>
+      <div class="thanks-divider"></div>
+      <p class="thanks-barber-note" id="thanksNote">The OutKasts team appreciates your honesty. See you at the next cut! ✂️</p>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>Powered by <a href="https://quietforgestudio.org" target="_blank">Rankvibe</a> &nbsp;·&nbsp; <a href="#" onclick="return false">Privacy</a></p>
+  </footer>
+</div>
+
+<script>
+const CONFIG={
+  shopName:"OutKasts Barbershop",
+  googleReviewUrl:"https://g.page/r/YOUR_OUTKASTS_GOOGLE_REVIEW_LINK/review", // ← replace
+  feedbackEndpoint:null,
+  threshold:4
+};
+
+let selectedRating=0,selectedBarber='',countdownTimer=null;
+const hints=['','Pretty rough 😬','Needs work 😕','It was okay 😐','Really good! 😊','Absolutely fire! 🔥'];
+
+function selectBarber(chip){
+  document.querySelectorAll('.barber-chip').forEach(c=>c.classList.remove('selected'));
+  chip.classList.add('selected');
+  selectedBarber=chip.dataset.barber;
+  document.getElementById('headlineBarber').textContent=selectedBarber+"'s cut?";
+  document.getElementById('feedbackBarberField').value=selectedBarber+' · '+chip.dataset.role;
+  if(selectedRating>0)updateCta();
+}
+
+function selectStar(val){
+  selectedRating=val;
+  document.querySelectorAll('.star-btn').forEach(b=>b.classList.toggle('lit',parseInt(b.dataset.val)<=val));
+  const h=document.getElementById('starHint');
+  h.textContent=hints[val];h.classList.add('show');
+  updateCta();
+}
+
+function updateCta(){
+  const cta=document.getElementById('ctaBtn');
+  cta.classList.add('ready');
+  const arrow='<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  cta.innerHTML=(selectedRating>=4?'Share on Google ':' Send feedback ')+arrow;
+}
+
+function proceedFromRating(){
+  if(!selectedRating)return;
+  if(selectedRating>CONFIG.threshold)showGoogleScreen();
+  else showFeedbackScreen();
+}
+
+function starSVG(f){return`<svg viewBox="0 0 24 24" style="width:24px;height:24px;fill:${f?'var(--gold)':'var(--bg-surface)'}"><path d="M12 2l2.9 6H22l-5.6 4.1 2.1 6.9L12 15.4l-6.5 3.6 2.1-6.9L2 8h7.1L12 2Z"/></svg>`;}
+function renderStars(id,n){let h='';for(let i=1;i<=5;i++)h+=starSVG(i<=n);document.getElementById(id).innerHTML=h;}
+
+function showGoogleScreen(){
+  clearInterval(countdownTimer);
+  const name=selectedBarber||'your barber';
+  document.getElementById('googleBarberName').textContent=name+"'s";
+  document.getElementById('googleBarberName2').textContent=name;
+  renderStars('googleStars',selectedRating);
+  showScreen('screen-google');
+  let n=5;
+  const numEl=document.getElementById('countdownNum');
+  countdownTimer=setInterval(()=>{n--;if(numEl)numEl.textContent=n;if(n<=0){clearInterval(countdownTimer);goToGoogle();}},1000);
+}
+
+function goToGoogle(){
+  clearInterval(countdownTimer);
+  const note=document.getElementById('redirectNote');
+  if(note)note.textContent='Opening Google Reviews…';
+  setTimeout(()=>{window.open(CONFIG.googleReviewUrl,'_blank');},200);
+}
+
+function showFeedbackScreen(){
+  renderStars('feedbackStars',selectedRating);
+  const name=selectedBarber||'your barber';
+  document.getElementById('feedbackBarberName').textContent=name;
+  if(!document.getElementById('feedbackBarberField').value)document.getElementById('feedbackBarberField').value=name;
+  showScreen('screen-feedback');
+}
+
+async function submitFeedback(){
+  const issueType=document.getElementById('issueType').value;
+  if(!issueType){document.getElementById('issueType').style.borderColor='var(--red)';document.getElementById('issueType').focus();return;}
+  const payload={shop:CONFIG.shopName,barber:selectedBarber||'Not specified',rating:selectedRating,issueType,feedback:document.getElementById('feedbackText').value,email:document.getElementById('contactEmail').value,timestamp:new Date().toISOString()};
+  const btn=document.querySelector('.submit-btn');btn.innerHTML='Sending…';btn.disabled=true;
+  if(CONFIG.feedbackEndpoint){try{await fetch(CONFIG.feedbackEndpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});}catch(e){console.error(e);}}
+  else{await new Promise(r=>setTimeout(r,700));}
+  const name=selectedBarber||'your barber';
+  document.getElementById('thanksHeadline').textContent='Feedback received.';
+  document.getElementById('thanksSub').textContent='Thank you for your honesty. Your feedback stays private and helps us improve.';
+  document.getElementById('thanksNote').textContent=(name==='your barber'?'The OutKasts team':name)+' will personally review your feedback. We appreciate you.';
+  showScreen('screen-thanks');
+}
+
+function showScreen(id){
+  clearInterval(countdownTimer);
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const t=document.getElementById(id);
+  t.classList.add('active','screen-enter');
+  t.addEventListener('animationend',()=>t.classList.remove('screen-enter'),{once:true});
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+try{
+  const p=new URLSearchParams(window.location.search);
+  if(p.get('barber')){
+    const target=p.get('barber').toLowerCase();
+    const chip=[...document.querySelectorAll('.barber-chip')].find(c=>c.dataset.barber.toLowerCase()===target);
+    if(chip){chip.click();}
+  }
+  if(p.get('google'))CONFIG.googleReviewUrl=decodeURIComponent(p.get('google'));
+}catch(e){}
+</script>
+</body>
+</html>
