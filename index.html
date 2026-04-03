@@ -369,7 +369,10 @@
             <!-- Hidden by default; shown only when visiting /?admin=1 -->
            <!-- <a id="golivepocket-btn" class="btn" href="/projects/golive_pocket.html">GoLivePocket</a> -->
           <!--  <a id="bg-remover-btn" class="btn" href="/bg-remover.html">BG-Remover</a> -->
-            <a id="brankvibe-owner-dashboard-btn" class="btn" href="/rankvibe-full2.html">RankVibe</a>
+            <a id="rankvibe-owner-dashboard-btn" class="btn" href="/rankvibe-full2.html">RankVibe</a>
+            <a id="rankvibe-customer-review-btn" class="btn" href="/rankvibe-customer-review.html">RankVibeCustomerReview</a>
+
+           
             
           </div>
         </div>
@@ -509,12 +512,15 @@
 
   const goLive = document.getElementById("golivepocket-btn");
   const bgRemover = document.getElementById("bg-remover-btn");
-  const RankVibe = document.getElementById("brankvibe-owner-dashboard-btn);
+  const RankVibe = document.getElementById("rankvibe-owner-dashboard-btn");
+  const RankVibeCustomerReview = document.getElementById("rankvibe-customer-review-btn";
+
 
   if (!isAdmin) {
     if (goLive) goLive.style.display = "none";
     if (bgRemover) bgRemover.style.display = "none";
     if (RankVibe) RankVibe.style.display = "none";
+    if (RankVibeCustomerReview ) RankVibeCustomerReview.style.display = "none";
   }
 })();
 
